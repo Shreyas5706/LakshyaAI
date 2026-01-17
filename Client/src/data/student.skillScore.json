@@ -1,0 +1,30 @@
+[
+  {
+    "skill_id": "SK01",
+    "skill_name": "JavaScript",
+    "score": 78,
+    "level": "Intermediate",
+    "last_updated": "2025-01-12"
+  },
+  {
+    "skill_id": "SK02",
+    "skill_name": "React.js",
+    "score": 72,
+    "level": "Intermediate",
+    "last_updated": "2025-01-10"
+  },
+  {
+    "skill_id": "SK03",
+    "skill_name": "Python",
+    "score": 65,
+    "level": "Intermediate",
+    "last_updated": "2025-01-08"
+  },
+  {
+    "skill_id": "SK04",
+    "skill_name": "UI/UX Design",
+    "score": 58,
+    "level": "Beginner",
+    "last_updated": "2025-01-05"
+  }
+]

@@ -1,0 +1,90 @@
+.auth-slider {
+  background: white;
+  width: 100%;
+  max-width: 1100px;
+  min-height: 560px;
+  border-radius: 24px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  transition: all 0.7s ease;
+  position: relative;
+}
+
+/* ================= FORMS ================= */
+.auth-forms {
+  background: white;
+  transition: transform 0.7s ease;
+  z-index: 2;
+}
+
+/* Signup active → move forms RIGHT */
+.auth-slider.active .auth-forms {
+  transform: translateX(100%);
+}
+
+/* ================= IMAGE PANEL ================= */
+.auth-image {
+  background: #e0e7ff;
+  position: relative;
+  overflow: hidden;
+  border-radius: 200px 0 0 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.7s ease;
+}
+
+/* Image moves LEFT when signup */
+.auth-slider.active .auth-image {
+  transform: translateX(-100%);
+  border-radius: 0 200px 200px 0;
+}
+
+/* Image */
+.auth-image img {
+  width: 80%;
+  z-index: 1;
+}
+
+/* Dark overlay for readability */
+.auth-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 1;
+}
+
+/* ================= IMAGE TEXT ================= */
+.auth-image-text {
+  position: absolute;
+  text-align: center;
+  z-index: 2;
+  padding: 20px;
+  color: white;
+}
+
+.auth-image-text h2 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.auth-image-text p {
+  color: #e0e7ff;
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 768px) {
+  .auth-slider {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-image {
+    display: none;
+  }
+
+  .auth-slider.active .auth-forms {
+    transform: translateX(0);
+  }
+}
