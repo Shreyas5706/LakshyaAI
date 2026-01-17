@@ -1,0 +1,52 @@
+WORK LOG – PROJECT PROGRESS
+===========================
+
+Purpose: for backend progress tracking 
+--------
+High-level tracking of what module I worked on and when.
+
+--------------------------------------------------------
+
+Date: 12-1-26
+Module Worked On: Creating the basic strucutre for all the website
+What Was Done:
+
+--------------------------------------------------------
+
+Date: 17-1-26
+Module: Authentication
+Work Done:
+- Implemented complete backend authentication system
+- Added signup and login functionality
+- Implemented JWT-based authentication
+- Added role-based authorization middleware
+- Implemented forgot-password and reset-password flow
+- Integrated email sending using Nodemailer (Gmail SMTP)
+- Tested password reset end-to-end via real email
+- Added rate limiting on auth-related routes
+- Auth module completed and verified using Postman
+
+--------------------------------------------------------
+
+Date: _______________
+Module:
+Work Done:
+-
+
+--------------------------------------------------------
+
+Date: _______________
+Module:
+Work Done:
+-
+
+--------------------------------------------------------
+
+Notes / Ideas (Optional):
+-------------------------
+-
+-
+-
+
+--------------------------------------------------------
+

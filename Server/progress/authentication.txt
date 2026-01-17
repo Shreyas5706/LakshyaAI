@@ -1,0 +1,70 @@
+AUTH PROGRESS LOG
+=================
+
+Date: 17-1-26
+------
+
+Backend Authentication & Security – What is implemented
+
+1. User Authentication
+- User signup implemented
+- User login implemented
+- Password hashing using bcryptjs
+- JWT token generation on login
+
+2. JWT Authentication
+- JWT verification middleware added
+- Token read from Authorization header (Bearer token)
+- Decoded user data attached to request object
+
+3. Authorization
+- Role-based authorization middleware implemented
+- Routes can be restricted by roles (admin, student, counselor, etc.)
+
+4. Password Reset Functionality
+- Forgot password flow implemented
+- Secure reset token generation
+- Reset token hashed and stored in database
+- Token expiry time handled
+- Reset password endpoint implemented
+- Password updated securely and reset token cleared
+
+5. Email Integration
+- Email sending implemented using Nodemailer
+- Gmail SMTP with App Password used
+- Backend-only email testing done (no frontend)
+- Password reset link sent via email
+
+6. Rate Limiting & Security
+- Rate limiting middleware implemented
+- Applied to login endpoint
+- Applied to forgot-password endpoint
+- Helps prevent brute-force and abuse
+
+7. Error Handling
+- Centralized global error handling middleware added
+- Controllers pass errors using next(error)
+
+8. Environment Configuration
+- Environment variables used:
+  - PORT
+  - MONGO_URL
+  - JWT_SECRET
+  - EMAIL_SERVICE
+  - EMAIL_USER
+  - EMAIL_PASS
+  - EMAIL_FROM
+  - CLIENT_URL
+- .env file used (not committed)
+
+9. Testing
+- All authentication APIs tested using Postman
+- Signup, login, JWT protection tested
+- Password reset tested end-to-end via real email
+- MongoDB local connection verified
+
+STATUS:
+-------
+Backend authentication system is COMPLETE.
+No frontend dependency required.
+Further work can start on frontend integration, features, or deployment.
