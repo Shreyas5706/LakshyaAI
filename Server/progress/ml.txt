@@ -1,0 +1,111 @@
+LakshyaAI – ML Routing & Integration Progress
+=============================================
+
+Date: 20-01-2026
+
+Objective:
+----------
+Integrate the deployed ML backend with the Node.js backend in a clean,
+secure, and production-ready manner, without exposing the ML service
+directly to the client.
+
+--------------------------------------------------
+WORK COMPLETED TODAY
+--------------------------------------------------
+
+1. ML Backend Integration Design
+--------------------------------
+- Confirmed final architecture:
+  Client → Node Backend → ML Backend (FastAPI on Render)
+- Frontend never calls ML directly.
+- Node backend acts as the single ML gateway.
+
+2. ML Client Service
+--------------------
+- Created a dedicated ML client service (`mlClient.service.js`).
+- Responsibilities:
+  - Communicate with ML backend endpoints.
+  - Attach ML API key securely via request headers.
+  - Handle timeouts (Render cold starts).
+  - Normalize ML errors.
+- ML endpoints integrated:
+  - POST /predict/domain
+  - POST /predict/it-career
+  - GET /health
+
+3. ML Health Guard (Pre-call Validation)
+----------------------------------------
+- Implemented a health guard layer (`mlHealth.guard.js`).
+- Behavior:
+  - Checks ML backend health before predictions.
+  - Uses cached health status (TTL-based) to avoid repeated calls.
+  - Prevents prediction calls when ML is unhealthy.
+- Ensures graceful degradation (503 response if ML is down).
+
+4. Express Routing Fix & Cleanup
+--------------------------------
+- Debugged and fixed Express routing issues:
+  - Identified router aggregation vs app mounting problem.
+  - Removed duplicate `/api` prefixes inside router.
+- Final routing structure:
+  - Central index router mounted once at `/api`.
+  - Feature routes mounted relative to index router.
+- Verified routing using Node-only ML health endpoint.
+
+5. Node → ML Health Verification
+--------------------------------
+- Added Node-level ML health endpoint:
+  - GET /api/ml/health
+- Confirmed:
+  - Node can successfully reach ML backend.
+  - ML API key is correctly attached from Node.
+  - Health guard works as expected.
+
+6. Domain Prediction Flow (Step 1)
+----------------------------------
+- Implemented domain prediction endpoint:
+  - POST /api/career/domain
+- Input:
+  - education
+  - general (non-domain) skills
+  - interest
+- Behavior:
+  - Calls ML domain classifier only.
+  - Returns domain + confidence.
+  - Instructs client on next step (IT or Non-IT).
+- Confirmed:
+  - General skills are NOT mixed with IT skills.
+  - No premature career prediction is triggered.
+
+7. IT Career Prediction Flow (Step 2)
+-------------------------------------
+- Implemented IT career prediction endpoint:
+  - POST /api/career/it
+- Input:
+  - IT-specific skills only (e.g., Python, SQL).
+- Behavior:
+  - Calls ML IT career predictor.
+  - Returns ranked IT career recommendations.
+- Confirmed:
+  - Step-wise flow works correctly.
+  - Domain prediction and IT prediction are fully decoupled.
+
+--------------------------------------------------
+CURRENT STATUS
+--------------------------------------------------
+- ML routing layer is COMPLETE and STABLE.
+- Node ↔ ML communication verified.
+- Security (API key) enforced correctly.
+- Health checks and fallbacks implemented.
+- Ready for next phase (DB persistence / Non-IT / frontend).
+
+--------------------------------------------------
+NEXT PLANNED STEPS
+--------------------------------------------------
+- Persist career flow (domain + progress) in MongoDB.
+- Prevent step skipping using backend state.
+- Integrate Non-IT career predictor.
+- Add confidence-based branching.
+- Frontend integration.
+
+End of log.

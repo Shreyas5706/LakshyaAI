@@ -27,11 +27,22 @@ Work Done:
 - Auth module completed and verified using Postman
 
 --------------------------------------------------------
-
-Date: _______________
-Module:
+Date: 20-1-26
+Module: ML Backend Routing & Integration
 Work Done:
--
+- Integrated deployed ML backend with Node.js backend
+- Designed secure Client → Node → ML architecture (ML not exposed to client)
+- Implemented ML client service for communicating with ML APIs
+- Added secure ML API key handling via backend-only headers
+- Implemented ML health check mechanism with caching to prevent unnecessary calls
+- Verified Node → ML connectivity using health endpoint
+- Implemented domain prediction API (step 1 of career flow)
+- Ensured correct separation of general skills (domain prediction) and IT-specific skills
+- Implemented IT career prediction API (step 2 of career flow)
+- Fixed Express router aggregation and route prefix issues
+- Successfully tested complete ML routing flow using Postman via Node backend
+- ML routing layer verified and marked stable
+
 
 --------------------------------------------------------
 
