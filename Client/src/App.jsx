@@ -9,15 +9,14 @@ import ProtectedRoute from "./auth/ProtectedRoute";
 import StudentOnboardingform from "./pages/StudentOnboardingform";
 import StudentLayout from "./components/StudentLayout";
 import StudentDashboard from "./dashboards/StudentDashboard";
-
-/*import ProfileCreation from "./pages/student/ProfileCreation";
-import CareerRecommendation from "./pages/student/CareerRecommendation";
-import SkillGapAnalysis from "./pages/student/SkillGapAnalysis";
+import Profile from "./pages/student/Profile";
 import LearningRoadmap from "./pages/student/LearningRoadmap";
-import AIChatbot from "./pages/student/AIChatbot";
+import AIChatbot from "./pages/student/Chatbot";
 import CounselorBooking from "./pages/student/CounselorBooking";
-import CollegeRecommendation from "./pages/student/CollegeRecommendation";*/
-
+import CollegeRecommendation from "./pages/student/CollegeRecommendation";
+import CareerRecommendation from "./pages/student/CareerRecommendation";
+import SkillgapAnalysis from "./pages/student/SkillgapAnalysis";
+import Settings from "./pages/student/Settings";
 export default function App() {
   const [studentProfile, setStudentProfile] = useState(null);
 
@@ -31,17 +30,17 @@ export default function App() {
       <Route
         path="/onboardingform/student"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute role="student">
             <StudentOnboardingform />
           </ProtectedRoute>
         }
       />
 
-      {/* ================= STUDENT DASHBOARD LAYOUT ================= */}
+      {/* ================= STUDENT DASHBOARD (LAYOUT) ================= */}
       <Route
         path="/dashboard/student"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute role="student">
             <StudentLayout />
           </ProtectedRoute>
         }
@@ -52,44 +51,15 @@ export default function App() {
           element={<StudentDashboard studentProfile={studentProfile} />}
         />
 
-    
-
-        {/* Dashboard pages 
-        <Route
-          path="profile"
-          element={<ProfileCreation setStudentProfile={setStudentProfile} />}
-        />
-
-        <Route
-          path="career-recommendation"
-          element={<CareerRecommendation studentProfile={studentProfile} />}
-        />
-
-        <Route
-          path="skill-gap"
-          element={<SkillGapAnalysis studentProfile={studentProfile} />}
-        />
-
-        <Route
-          path="learning-roadmap"
-          element={<LearningRoadmap studentProfile={studentProfile} />}
-        />
-
-        <Route
-          path="ai-chatbot"
-          element={<AIChatbot studentProfile={studentProfile} />}
-        />
-
-        <Route
-          path="counselor-booking"
-          element={<CounselorBooking />}
-        />
-
-        <Route
-          path="college-recommendation"
-          element={<CollegeRecommendation studentProfile={studentProfile} />}
-        />
-      </Route>*/}
+        {/* Profile page */}
+        <Route path="profile" element={<Profile />} />
+         <Route path="learning-roadmap" element={<LearningRoadmap />} />
+         <Route path="ai-chatbot" element={<AIChatbot />} />
+         <Route path="counselor-booking" element={<CounselorBooking />}/>
+          <Route path="college-recommendation" element={<CollegeRecommendation />}/>
+          <Route path="Settings" element={<Settings/>}/>
+          <Route path="career-recommendation" element={<CareerRecommendation/>}/>
+          <Route path="skill-gap" element={<SkillgapAnalysis/>}/>
       </Route>
     </Routes>
   );

@@ -6,36 +6,69 @@ import Sidebar from "../pages/student/Sidebar";
 export default function StudentLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // 🚫 Disable body scroll (VERY IMPORTANT)
+  // 🚫 Disable body scroll (only main scrolls)
   useEffect(() => {
     document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "auto";
-    };
+    return () => (document.body.style.overflow = "auto");
   }, []);
 
   return (
-    <div className="h-screen w-full bg-[#F6FBFA] overflow-hidden">
-
-      {/* ===== STICKY HEADER ===== */}
+    <div className="layout-root">
+      {/* ===== HEADER (STICKY & TRANSPARENT) ===== */}
       <Header setSidebarOpen={setSidebarOpen} />
 
-      {/* ===== FIXED SIDEBAR ===== */}
-      <Sidebar open={sidebarOpen} />
+      {/* ===== SIDEBAR (FIXED LEFT) ===== */}
+      <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
 
-      {/* ===== SCROLLABLE CONTENT ONLY ===== */}
+      {/* ===== MAIN CONTENT (ONLY SCROLL AREA) ===== */}
       <main
-        className={`
-          pt-[72px]                     /* header height */
-          transition-all duration-300
-          ${sidebarOpen ? "ml-[240px]" : "ml-[72px]"}
-          h-[calc(100vh-72px)]
-          overflow-y-auto
-          px-6 py-6
-        `}
+        className={`main-content ${
+          sidebarOpen ? "sidebar-open" : "sidebar-closed"
+        }`}
       >
         <Outlet />
       </main>
+
+      <style>{css}</style>
     </div>
   );
 }
+
+/* ================= CSS ================= */
+
+const css = `
+/* ROOT */
+.layout-root{
+  height:100vh;
+  width:100%;
+  background:#F6FBFA;
+  overflow:hidden;
+}
+
+/* MAIN CONTENT */
+.main-content{
+  position: relative;
+  height:calc(100vh - 72px);
+  overflow-y:auto;
+  padding:24px;
+  transition: margin-left .3s ease;
+}
+
+/* Sidebar spacing */
+.sidebar-open{
+  margin-left:240px;
+}
+
+.sidebar-closed{
+  margin-left:72px;
+}
+
+/*  HIDE SCROLLBAR BUT KEEP SCROLL */
+.main-content::-webkit-scrollbar{
+  width:0;
+  height:0;
+}
+.main-content{
+  scrollbar-width:none;
+}
+`;
