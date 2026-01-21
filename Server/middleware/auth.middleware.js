@@ -8,7 +8,6 @@ const authMiddleware = (req, res, next) => {
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({ message: "No token provided" });
     }
-
     // Extract token
     const token = authHeader.split(" ")[1];
 
@@ -16,7 +15,9 @@ const authMiddleware = (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // Attach user info to request
-    req.user = decoded;
+    req.user = {
+      _id: decoded.id
+    };
 
     next();
   } catch (error) {

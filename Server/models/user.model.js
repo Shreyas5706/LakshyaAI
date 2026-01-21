@@ -1,4 +1,4 @@
-const  mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
   name: { type: String },
@@ -11,6 +11,21 @@ const UserSchema = new mongoose.Schema({
   },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
+  skillsHash: {
+    type: String,
+    default: null
+  },
+
+  skillsUpdatedAt: {
+    type: Date,
+    default: null
+  },
+
+  lastMlSkillsHash: {
+    type: String,
+    default: null
+  }
+
 }, { timestamps: true });
 
 module.exports = mongoose.model("User", UserSchema);

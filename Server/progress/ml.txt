@@ -109,3 +109,79 @@ NEXT PLANNED STEPS
 - Frontend integration.
 
 End of log.
+
+
+
+==================================================
+Date: 21-01-2026
+==================================================
+
+Objective:
+----------
+Improve performance and stability of ML routing by eliminating
+redundant ML calls using database-level caching, without changing
+existing APIs or ML model behavior.
+
+--------------------------------------------------
+WORK COMPLETED TODAY
+--------------------------------------------------
+
+1. ML Response Caching Design
+-----------------------------
+- Designed a dedicated ML response cache using MongoDB.
+- Cache key based on:
+  - modelType (DOMAIN_PREDICTION / IT_CAREER_PREDICTION)
+  - skillsHash (deterministic input signature)
+- Ensured caching is global and not user-specific.
+
+2. ML Cache Schema & Service
+----------------------------
+- Created MlCache schema with compound unique index:
+  - (modelType + skillsHash)
+- Implemented cache service layer:
+  - Read cached ML response before ML call.
+  - Write ML response after successful prediction.
+- Handled race conditions safely using MongoDB unique constraints.
+
+3. Domain Prediction Cache Integration
+--------------------------------------
+- Integrated cache check before domain ML call.
+- On cache hit:
+  - ML call is skipped.
+  - Cached response is returned instantly.
+- On cache miss:
+  - ML is called.
+  - Response is saved to cache.
+- Existing journey flow and hashing logic left untouched.
+
+4. IT Career Prediction Cache Integration
+-----------------------------------------
+- Applied identical caching logic to IT career prediction.
+- Ensured domain confirmation guard remains enforced.
+- Verified cache separation between domain and IT models.
+
+5. Validation & Testing
+-----------------------
+- Verified cache creation and persistence in MongoDB.
+- Confirmed ML backend is not hit on cache hits.
+- Tested multiple requests with identical and changed skills.
+- End-to-end flow validated for both DOMAIN and IT predictions.
+
+--------------------------------------------------
+CURRENT STATUS
+--------------------------------------------------
+- ML routing layer enhanced with DB-level response caching.
+- Redundant ML calls eliminated.
+- Performance and reliability improved.
+- Existing contracts and flow preserved.
+
+--------------------------------------------------
+NEXT PLANNED STEPS
+--------------------------------------------------
+- No immediate ML changes planned.
+- ML routing considered stable and locked.
+- Future work (optional):
+  - Cache TTL / invalidation
+  - Non-IT career routing
+
+End of log.

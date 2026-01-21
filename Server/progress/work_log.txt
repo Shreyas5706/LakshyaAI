@@ -46,10 +46,15 @@ Work Done:
 
 --------------------------------------------------------
 
-Date: _______________
-Module:
+Date: 21/01/2026
+Module: ML Routing & Caching
 Work Done:
--
+- Implemented database-level ML response caching for domain and IT career prediction
+- Integrated cache checks before ML calls using skillsHash
+- Ensured ML calls are skipped on cache hit
+- Verified cache creation, read, and write behavior via MongoDB
+- Tested end-to-end ML journey flow with caching enabled
+
 
 --------------------------------------------------------
 
