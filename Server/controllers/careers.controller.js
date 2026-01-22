@@ -2,16 +2,28 @@ const {
   predictDomain,
   predictItCareer,
 } = require("../services/mlclient.service.js");
+
 const {
   getCachedResponse,
   saveCachedResponse
 } = require("../services/mlcache.service");
+
+const careers = require("../database/seed/careers.json");
 
 const User = require('../models/user.model');
 const Journey = require('../models/journey.model.js');
 const generateSkillsHash = require('../utils/skillsHash');
 
 const { ensureMlHealthy } = require("../services/mlhealth.guard.js");
+
+/* ===============================
+   CAREER METADATA HELPERS
+================================= */
+const normalizeRoleToKey = (role) =>
+  role.toLowerCase().replace(/ /g, "_");
+
+const getCareerMeta = (key) =>
+  careers.find(c => c.key === key);
 
 /**
  * STEP 1: DOMAIN PREDICTION
@@ -33,6 +45,7 @@ const predictCareerDomain = async (req, res) => {
     }
 
     const newSkillsHash = generateSkillsHash(general_skills);
+
     // 🔁 CACHE CHECK — DOMAIN PREDICTION
     const cachedDomain = await getCachedResponse({
       modelType: "DOMAIN_PREDICTION",
@@ -60,6 +73,7 @@ const predictCareerDomain = async (req, res) => {
       skills: general_skills.join(" "),
       interest,
     });
+
     // 💾 SAVE DOMAIN ML RESPONSE TO CACHE
     await saveCachedResponse({
       modelType: "DOMAIN_PREDICTION",
@@ -73,7 +87,6 @@ const predictCareerDomain = async (req, res) => {
             : "ENTER_NON_IT_DETAILS"
       }
     });
-
 
     // 🧭 JOURNEY START / UPDATE
     await Journey.findOneAndUpdate(
@@ -140,6 +153,7 @@ const predictItCareerController = async (req, res) => {
     }
 
     const newSkillsHash = generateSkillsHash(it_skills);
+
     // 🔁 CACHE CHECK — IT CAREER
     const cachedItCareer = await getCachedResponse({
       modelType: "IT_CAREER_PREDICTION",
@@ -154,7 +168,6 @@ const predictItCareerController = async (req, res) => {
       });
     }
 
-
     if (user.lastMlSkillsHash === newSkillsHash) {
       return res.status(200).json({
         success: true,
@@ -167,13 +180,29 @@ const predictItCareerController = async (req, res) => {
       skills: it_skills,
       top_k: 3,
     });
-    // 💾 SAVE IT CAREER ML RESPONSE TO CACHE
+
+    // 🎯 ENRICH ML RESULTS WITH CAREER METADATA
+    const enrichedCareers = itResult.results.map(item => {
+      const key = normalizeRoleToKey(item.role);
+      const meta = getCareerMeta(key);
+
+      if (!meta) {
+        throw new Error(`Career metadata not found for role: ${item.role}`);
+      }
+
+      return {
+        ...item,
+        career: meta
+      };
+    });
+
+    // 💾 SAVE ENRICHED RESPONSE TO CACHE
     await saveCachedResponse({
       modelType: "IT_CAREER_PREDICTION",
       skillsHash: newSkillsHash,
       response: {
         domain: "IT",
-        careers: itResult.results
+        careers: enrichedCareers
       }
     });
 
@@ -185,7 +214,7 @@ const predictItCareerController = async (req, res) => {
     return res.status(200).json({
       success: true,
       domain: "IT",
-      careers: itResult.results,
+      careers: enrichedCareers,
     });
   } catch (err) {
     console.error("IT career prediction failed:", err.message);
