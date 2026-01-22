@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
-
+const { env }= require( "../config/env.js");
 
 
 // =======================
@@ -52,7 +52,7 @@ const login = async (req, res, next) => {
 
     const token = jwt.sign(
       { id: user._id, role: user.role },
-      process.env.JWT_SECRET,
+      env.jwtSecret,
       { expiresIn: "1d" }
     );
 
@@ -95,7 +95,7 @@ const forgotPassword = async (req, res, next) => {
 
     await user.save();
 
-    const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
+    const resetUrl = `${env.clientUrl}/reset-password/${resetToken}`;
 
     await sendEmail({
       to: user.email,
