@@ -1,4 +1,4 @@
-import dotenv from "dotenv";
+const dotenv = require("dotenv");
 
 dotenv.config();
 
@@ -22,7 +22,7 @@ requiredEnvVars.forEach((key) => {
 /* ===============================
    Exported Config Object
 ================================= */
-export const env = {
+const env = {
   // Server
   port: Number(process.env.PORT),
 
@@ -53,3 +53,5 @@ export const env = {
   // Environment
   nodeEnv: process.env.NODE_ENV || "development",
 };
+
+module.exports = { env };
