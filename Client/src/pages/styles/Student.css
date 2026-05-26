@@ -1,0 +1,42 @@
+/* student sidebar */
+.sidebar {
+  background: #020617;
+  color: #fff;
+}
+
+.sidebar h2 {
+  margin-bottom: 20px;
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar ul li {
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.sidebar ul li:hover {
+  background: #1e293b;
+}
+
+/* main content */
+.main-content h1 {
+  margin-bottom: 20px;
+}
+
+/* cards */
+.card {
+  background: #1e293b;
+  color: #fff;
+  margin-bottom: 15px;
+  padding: 20px;
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}

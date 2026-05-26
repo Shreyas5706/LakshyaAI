@@ -1,66 +1,67 @@
-import { Routes, Route } from "react-router-dom";
-import { useState } from "react";
-import "./index.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import LandingPage from "./pages/Landingpage";
-import Auth from "./pages/Auth";
-import ProtectedRoute from "./auth/ProtectedRoute";
+// public pages
+import LandingPage from "./pages/LandingPage";
+import Auth from "./pages/auth/Auth";
 
-import StudentOnboardingform from "./pages/StudentOnboardingform";
-import StudentLayout from "./components/StudentLayout";
-import StudentDashboard from "./dashboards/StudentDashboard";
-import Profile from "./pages/student/Profile";
-import LearningRoadmap from "./pages/student/LearningRoadmap";
-import AIChatbot from "./pages/student/Chatbot";
-import CounselorBooking from "./pages/student/CounselorBooking";
-import CollegeRecommendation from "./pages/student/CollegeRecommendation";
-import CareerRecommendation from "./pages/student/CareerRecommendation";
-import SkillgapAnalysis from "./pages/student/SkillgapAnalysis";
-import Settings from "./pages/student/Settings";
-export default function App() {
-  const [studentProfile, setStudentProfile] = useState(null);
+// protected route
+import ProtectedRoute from "./pages/auth/ProtectedRoute";
 
+// dashboards
+import StudentDashboard from "./pages/student/Dashboard";
+import OnboardingForm from "./pages/student/OnboardingForm";
+import CounselorDashboard from "./pages/counselor/Dashboard";
+import AdminDashboard from "./pages/admin/Dashboard";
+
+function App() {
   return (
-    <Routes>
-      {/* ================= PUBLIC ROUTES ================= */}
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/auth" element={<Auth />} />
+    <Router>
+      <Routes>
+        {/* public routes : open for all */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/auth" element={<Auth />} />
 
-      {/* ================= STUDENT ONBOARDING ================= */}
-      <Route
-        path="/onboardingform/student"
-        element={
-          <ProtectedRoute role="student">
-            <StudentOnboardingform />
-          </ProtectedRoute>
-        }
-      />
-
-      {/* ================= STUDENT DASHBOARD (LAYOUT) ================= */}
-      <Route
-        path="/dashboard/student"
-        element={
-          <ProtectedRoute role="student">
-            <StudentLayout />
-          </ProtectedRoute>
-        }
-      >
-        {/* Default dashboard */}
+        {/* student dashboard */}
         <Route
-          index
-          element={<StudentDashboard studentProfile={studentProfile} />}
+          path="/student/onboarding"
+          element={
+            <ProtectedRoute role="student">
+              <OnboardingForm />
+            </ProtectedRoute>
+          }
         />
 
-        {/* Profile page */}
-        <Route path="profile" element={<Profile />} />
-         <Route path="learning-roadmap" element={<LearningRoadmap />} />
-         <Route path="ai-chatbot" element={<AIChatbot />} />
-         <Route path="counselor-booking" element={<CounselorBooking />}/>
-          <Route path="college-recommendation" element={<CollegeRecommendation />}/>
-          <Route path="Settings" element={<Settings/>}/>
-          <Route path="career-recommendation" element={<CareerRecommendation/>}/>
-          <Route path="skill-gap" element={<SkillgapAnalysis/>}/>
-      </Route>
-    </Routes>
+        <Route
+          path="/student/dashboard"
+          element={
+            <ProtectedRoute role="student">
+              <StudentDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* counselor dashboard */}
+        <Route
+          path="/counselor/dashboard"
+          element={
+            <ProtectedRoute role="counselor">
+              <CounselorDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* admin dashboard */}
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute role="admin">
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </Router>
   );
 }
+
+export default App;
