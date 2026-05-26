@@ -6,7 +6,7 @@ const dashboardRoutes = require("./dashboard.routes.js");
 const careerRoutes = require ("./careers.routes.js");
 const mlHealthRoutes = require("./mlhealth.routes");
 const journeyRoutes = require('./journey.routes');
-const courseRoutes = require("./course.routes");
+const courseRoutes = require("./courses.routes");
 
 router.use("/auth", authRoutes);
 router.use("/dashboard", dashboardRoutes);

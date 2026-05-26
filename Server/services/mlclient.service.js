@@ -1,8 +1,8 @@
 const axios =require("axios");
 const { env }= require( "../config/env.js");
 // ENV CONFIG
-const ML_BASE_URL =env.ML_BASE_URL;
-const ML_API_KEY = env.ML_API_KEY;
+const ML_BASE_URL =env.ml.backendUrl;
+const ML_API_KEY = env.ml.apiKey;
 const TIMEOUT = Number(env.ML_TIMEOUT_MS || 12000);
 
 if (!ML_BASE_URL) {
