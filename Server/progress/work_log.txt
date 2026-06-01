@@ -58,6 +58,19 @@ Work Done:
 
 --------------------------------------------------------
 
+Date: 01/06/2026
+Module: Frontend-Backend Connection & Networking
+Work Done:
+- Installed Axios in Client React project
+- Enabled robust backend CORS middleware allowing both localhost and 127.0.0.1 origins
+- Fixed a major casing bug in Server port binding (env.PORT vs env.port) resolving port 5000 binding issues
+- Configured absolute .env path loading in Server to prevent node working directory mismatches
+- Switched Client Axios baseURL to 127.0.0.1 to bypass local IPv6 DNS resolution issues on Windows
+- Integrated developer-friendly DB connection error handling to prevent Express crashes when MongoDB is offline
+- Implemented a dynamic, pulsating Server Connection Status Indicator on the Landing Page Navbar
+
+--------------------------------------------------------
+
 Notes / Ideas (Optional):
 -------------------------
 -

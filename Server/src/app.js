@@ -1,10 +1,12 @@
 const express = require("express");
+const corsMiddleware = require("../middleware/cors.middleware");
 const errorHandler = require("../middleware/error.middleware");
 const routes = require("../routes");
 const { generalLimiter } = require("../middleware/rateLimit.middleware");
 
 const app = express();
 
+app.use(corsMiddleware);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

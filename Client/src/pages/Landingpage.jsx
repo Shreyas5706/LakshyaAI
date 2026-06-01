@@ -1,7 +1,9 @@
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Typewriter } from "react-simple-typewriter";
 import logo from "../assets/Logo.png";
 import video from "../assets/hero.mp4";
+import API from "../services/api";
 import "./styles/LandingPage.css";
 
 // Nav link component
@@ -15,6 +17,27 @@ function NavItem({ text, target }) {
 
 export default function LandingPage() {
   const navigate = useNavigate();
+  const [serverStatus, setServerStatus] = useState("connecting");
+
+  useEffect(() => {
+    const checkConnection = async () => {
+      try {
+        const response = await API.get("/health");
+        if (response.data && response.data.status === "ok") {
+          setServerStatus("online");
+        } else {
+          setServerStatus("offline");
+        }
+      } catch (error) {
+        console.error("Server connection check failed:", error);
+        setServerStatus("offline");
+      }
+    };
+
+    checkConnection();
+    const interval = setInterval(checkConnection, 10000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <>
@@ -25,6 +48,14 @@ export default function LandingPage() {
           <div className="nav-left">
             <img src={logo} className="logo" alt="Lakshya Logo" />
             <span className="brand">LAKSHYA</span>
+            <div className={`server-status-pill ${serverStatus}`}>
+              <span className="status-dot"></span>
+              <span className="status-text">
+                {serverStatus === "connecting" && "Connecting..."}
+                {serverStatus === "online" && "Server Connected"}
+                {serverStatus === "offline" && "Server Offline"}
+              </span>
+            </div>
           </div>
 
           <nav className="nav-center">

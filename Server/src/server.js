@@ -1,8 +1,9 @@
-require("dotenv").config();      // 1️⃣ Load env FIRST
+const path = require("path");
+require("dotenv").config({ path: path.join(__dirname, "../.env") });
 const app = require("./app");
 const connectDB = require("../config/db.js"); // adjust path if needed
 const { env }= require( "../config/env.js");
-const PORT = env.PORT || 3000;
+const PORT = env.port || 3000;
 
 connectDB();                     // 2️⃣ Connect DB
 
