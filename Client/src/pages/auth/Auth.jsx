@@ -1,7 +1,24 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API from "../../services/api";
+import { setCookie } from "../../utils/cookies";
 import "../styles/auth.css";
 import workspaceImg from "../../assets/3d-illustration-workspace.jpg";
+
+const GENDER_OPTIONS = ["Male", "Female", "Other"];
+const INDIAN_STATES = [
+  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
+  "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka",
+  "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram",
+  "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu",
+  "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal",
+  "Delhi", "Jammu and Kashmir", "Ladakh", "Puducherry", "Chandigarh"
+];
+const EDUCATION_LEVELS = ["10th", "12th", "Diploma", "Undergraduate", "Postgraduate"];
+const STREAMS = [
+  "Science (PCM)", "Science (PCB)", "Commerce", "Arts", "Computer Science",
+  "IT", "Mechanical", "Civil", "Electrical", "Medical", "Law", "MBA", "Design"
+];
 
 export default function Auth() {
   const navigate = useNavigate();
@@ -12,7 +29,14 @@ export default function Auth() {
   const [signupEmail, setSignupEmail] = useState("");
   const [signupPassword, setSignupPassword] = useState("");
   const [signupRole, setSignupRole] = useState("student");
+  const [signupAge, setSignupAge] = useState("");
+  const [signupGender, setSignupGender] = useState("");
+  const [signupState, setSignupState] = useState("");
+  const [signupCity, setSignupCity] = useState("");
+  const [signupEducationLevel, setSignupEducationLevel] = useState("");
+  const [signupStream, setSignupStream] = useState("");
   const [signupError, setSignupError] = useState("");
+
   // ================= LOGIN STATE =================
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
@@ -22,7 +46,7 @@ export default function Auth() {
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(pwd);
 
   // ================= SIGNUP =================
-  const handleSignup = () => {
+  const handleSignup = async () => {
     if (!signupName.trim()) {
       return setSignupError("Name is required");
     }
@@ -37,51 +61,116 @@ export default function Auth() {
       );
     }
 
-    localStorage.setItem(
-      "lakshyaUser",
-      JSON.stringify({
+    if (signupRole === "student") {
+      if (!signupAge || isNaN(signupAge) || Number(signupAge) < 10 || Number(signupAge) > 30) {
+        return setSignupError("Please enter a valid age between 10 and 30");
+      }
+      if (!signupGender) {
+        return setSignupError("Please select your gender");
+      }
+      if (!signupState) {
+        return setSignupError("Please select your state");
+      }
+      if (!signupCity.trim()) {
+        return setSignupError("Please enter your city");
+      }
+      if (!signupEducationLevel) {
+        return setSignupError("Please select your education level");
+      }
+      if (!signupStream) {
+        return setSignupError("Please select your stream");
+      }
+    }
+
+    try {
+      setSignupError("");
+      await API.post("/auth/signup", {
         name: signupName.trim(),
         email: signupEmail.trim(),
-        password: signupPassword.trim(),
+        password: signupPassword,
         role: signupRole,
-      })
-    );
-    setSignupError("");
-    setActive(false); // move to login
+        age: signupRole === "student" ? Number(signupAge) : undefined,
+        gender: signupRole === "student" ? signupGender : undefined,
+        state: signupRole === "student" ? signupState : undefined,
+        city: signupRole === "student" ? signupCity.trim() : undefined,
+        educationLevel: signupRole === "student" ? signupEducationLevel : undefined,
+        stream: signupRole === "student" ? signupStream : undefined,
+      });
+
+      // Move to login
+      setActive(false);
+      // Clear signup fields
+      setSignupName("");
+      setSignupEmail("");
+      setSignupPassword("");
+      setSignupAge("");
+      setSignupGender("");
+      setSignupState("");
+      setSignupCity("");
+      setSignupEducationLevel("");
+      setSignupStream("");
+    } catch (err) {
+      const msg = err.response?.data?.message || "Signup failed. Please try again.";
+      setSignupError(msg);
+    }
   };
 
   // ================= LOGIN =================
-  const handleLogin = () => {
-    const user = JSON.parse(localStorage.getItem("lakshyaUser"));
-
-    if (!user) {
-      return setLoginError("Please sign up first");
+  const handleLogin = async () => {
+    if (!loginEmail.trim()) {
+      return setLoginError("Email is required");
+    }
+    if (!loginPassword) {
+      return setLoginError("Password is required");
     }
 
-    if (
-      loginEmail.trim() === user.email &&
-      loginPassword.trim() === user.password
-    ) {
-      console.log("LOGIN CLICKED");
-      localStorage.setItem(
-        "lakshyaSession",
-        JSON.stringify({
-          role: user.role,
-          onboardingCompleted: false,
-        })
-      );
-
+    try {
       setLoginError("");
+      const response = await API.post("/auth/login", {
+        email: loginEmail.trim(),
+        password: loginPassword,
+      });
+
+      const { token, user } = response.data;
+
+      // Determine onboarding completed status:
+      // A student has completed onboarding if they already have skills in the backend
+      const onboardingCompleted =
+        user.role === "student" &&
+        user.skills &&
+        user.skills.length > 0;
+
+      setCookie("lakshyaSession", {
+        token,
+        role: user.role,
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          age: user.age,
+          gender: user.gender,
+          state: user.state,
+          city: user.city,
+          educationLevel: user.educationLevel,
+          stream: user.stream,
+        },
+        onboardingCompleted,
+      }, 1);
 
       if (user.role === "student") {
-        navigate("/student/onboarding");
+        if (onboardingCompleted) {
+          navigate("/student/dashboard");
+        } else {
+          navigate("/student/onboarding");
+        }
       } else if (user.role === "counselor") {
         navigate("/counselor/dashboard");
-      } else {
+      } else if (user.role === "admin") {
         navigate("/admin/dashboard");
       }
-    } else {
-      setLoginError("Invalid email or password");
+    } catch (err) {
+      const msg = err.response?.data?.message || "Invalid email or password";
+      setLoginError(msg);
     }
   };
 
@@ -111,6 +200,7 @@ export default function Auth() {
                         type="text"
                         placeholder="Full Name"
                         className="input"
+                        value={signupName}
                         onChange={(e) => setSignupName(e.target.value)}
                       />
                     </div>
@@ -128,11 +218,11 @@ export default function Auth() {
                     </div>
                     <div className="form-row">
                       <label>Email</label>
-
                       <input
                         type="email"
                         placeholder="email@example.com"
                         className="input"
+                        value={signupEmail}
                         onChange={(e) => setSignupEmail(e.target.value)}
                       />
                     </div>
@@ -142,9 +232,88 @@ export default function Auth() {
                         type="password"
                         placeholder="Create strong password"
                         className="input"
+                        value={signupPassword}
                         onChange={(e) => setSignupPassword(e.target.value)}
                       />
                     </div>
+
+                    {signupRole === "student" && (
+                      <div className="student-profile-fields" style={{ maxHeight: "200px", overflowY: "auto", paddingRight: "5px", display: "flex", flexDirection: "column", gap: "16px", border: "1px solid #e2e8f0", borderRadius: "8px", padding: "12px", background: "#f8fafc" }}>
+                        <h3 style={{ fontSize: "14px", fontWeight: "600", color: "#0f172a", marginBottom: "4px" }}>Student Profile Details</h3>
+                        <div className="form-row">
+                          <label>Age</label>
+                          <input
+                            type="number"
+                            placeholder="Age (e.g. 17)"
+                            className="input"
+                            value={signupAge}
+                            onChange={(e) => setSignupAge(e.target.value)}
+                          />
+                        </div>
+                        <div className="form-row">
+                          <label>Gender</label>
+                          <select
+                            className="input"
+                            value={signupGender}
+                            onChange={(e) => setSignupGender(e.target.value)}
+                          >
+                            <option value="">Select Gender</option>
+                            {GENDER_OPTIONS.map((g) => (
+                              <option key={g} value={g}>{g}</option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="form-row">
+                          <label>State</label>
+                          <select
+                            className="input"
+                            value={signupState}
+                            onChange={(e) => setSignupState(e.target.value)}
+                          >
+                            <option value="">Select State</option>
+                            {INDIAN_STATES.map((s) => (
+                              <option key={s} value={s}>{s}</option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="form-row">
+                          <label>City</label>
+                          <input
+                            type="text"
+                            placeholder="City (e.g. Mumbai)"
+                            className="input"
+                            value={signupCity}
+                            onChange={(e) => setSignupCity(e.target.value)}
+                          />
+                        </div>
+                        <div className="form-row">
+                          <label>Education</label>
+                          <select
+                            className="input"
+                            value={signupEducationLevel}
+                            onChange={(e) => setSignupEducationLevel(e.target.value)}
+                          >
+                            <option value="">Select Education Level</option>
+                            {EDUCATION_LEVELS.map((el) => (
+                              <option key={el} value={el}>{el}</option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="form-row">
+                          <label>Stream</label>
+                          <select
+                            className="input"
+                            value={signupStream}
+                            onChange={(e) => setSignupStream(e.target.value)}
+                          >
+                            <option value="">Select Stream</option>
+                            {STREAMS.map((st) => (
+                              <option key={st} value={st}>{st}</option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                    )}
 
                     <button
                       onClick={handleSignup}
@@ -181,6 +350,7 @@ export default function Auth() {
                         type="email"
                         placeholder="email@example.com"
                         className="input"
+                        value={loginEmail}
                         onChange={(e) => setLoginEmail(e.target.value)}
                       />
                     </div>
@@ -191,8 +361,18 @@ export default function Auth() {
                         type="password"
                         placeholder="password"
                         className="input"
+                        value={loginPassword}
                         onChange={(e) => setLoginPassword(e.target.value)}
                       />
+                    </div>
+
+                    <div style={{ textAlign: "right", marginTop: "-8px" }}>
+                      <span
+                        onClick={() => navigate("/forgot-password")}
+                        style={{ fontSize: "13px", color: "#14B8A6", cursor: "pointer", fontWeight: "600" }}
+                      >
+                        Forgot Password?
+                      </span>
                     </div>
 
                     <button

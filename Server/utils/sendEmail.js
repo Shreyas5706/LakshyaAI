@@ -2,15 +2,15 @@ const nodemailer = require("nodemailer");
 const { env }= require( "../config/env.js");
 const sendEmail = async ({ to, subject, text, html }) => {
   const transporter = nodemailer.createTransport({
-    service: env.EMAIL_SERVICE,
+    service: env.email.service,
     auth: {
-      user: env.EMAIL_USER,
-      pass: env.EMAIL_PASS,
+      user: env.email.user,
+      pass: env.email.pass,
     },
   });
 
   await transporter.sendMail({
-    from: env.EMAIL_FROM,
+    from: env.email.from,
     to,
     subject,
     text,

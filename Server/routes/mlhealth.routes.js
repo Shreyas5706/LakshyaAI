@@ -3,8 +3,10 @@ const {
   checkMlHealthFromNode,
 } = require("../controllers/mlhealth.controller");
 
+const authMiddleware = require("../middleware/auth.middleware");
+
 const router = express.Router();
 
-router.get("/health", checkMlHealthFromNode);
+router.get("/health", authMiddleware, checkMlHealthFromNode);
 
 module.exports = router;

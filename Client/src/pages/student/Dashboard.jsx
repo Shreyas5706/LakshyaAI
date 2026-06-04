@@ -21,6 +21,8 @@
 // useState  — stores values that can change (like the counter animation)
 // useEffect — runs code after the page loads (like starting animations)
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { getCookie, eraseCookie } from "../../utils/cookies";
 
 // Import the CSS file that styles this page
 import "./Dashboard.css";
@@ -66,6 +68,13 @@ const todayTask = {
 //    which page to go to next.
 // ============================================================
 function Dashboard({ onNavigate }) {
+  const navigate = useNavigate();
+  const [showProfileModal, setShowProfileModal] = useState(false);
+
+  // Retrieve user details from session cookie
+  const session = getCookie("lakshyaSession") || {};
+  const user = session.user || {};
+
   // ----------------------------------------------------------
   //  STATE: Student data read from localStorage
   //  We start with an empty object {} and fill it after load
@@ -76,6 +85,16 @@ function Dashboard({ onNavigate }) {
     skills: [],
     interests: [],
   });
+
+  const handlePasswordResetRequest = () => {
+    navigate("/forgot-password");
+  };
+
+  const handleLogout = () => {
+    eraseCookie("lakshyaSession");
+    localStorage.removeItem("lakshya_student");
+    navigate("/auth");
+  };
 
   // ----------------------------------------------------------
   //  STATE: The animated counter values for the stats row
@@ -260,7 +279,12 @@ function Dashboard({ onNavigate }) {
           </button>
         </div>
         {/* User avatar circle showing first letter of name */}
-        <div className="navbar-avatar">
+        <div 
+          className="navbar-avatar" 
+          onClick={() => setShowProfileModal(true)} 
+          style={{ cursor: "pointer" }}
+          title="View Profile"
+        >
           {student.name ? student.name.charAt(0).toUpperCase() : "S"}
         </div>
       </nav>
@@ -510,6 +534,95 @@ function Dashboard({ onNavigate }) {
         </div>
       </div>{" "}
       {/* end dashboard-content */}
+
+      {showProfileModal && (
+        <div className="profile-modal-overlay" onClick={() => setShowProfileModal(false)}>
+          <div className="profile-modal-card" onClick={(e) => e.stopPropagation()}>
+            <button className="profile-modal-close" onClick={() => setShowProfileModal(false)}>×</button>
+            <div className="profile-modal-header">
+              <div className="profile-modal-avatar">
+                {user.name ? user.name.charAt(0).toUpperCase() : "S"}
+              </div>
+              <h2>{user.name || "Student Profile"}</h2>
+              <span className="profile-modal-role-badge">Student</span>
+            </div>
+            
+            <div className="profile-modal-body">
+              <div className="profile-detail-grid">
+                <div className="detail-item">
+                  <span className="detail-label">Email</span>
+                  <span className="detail-value">{user.email || "N/A"}</span>
+                </div>
+                <div className="detail-item">
+                  <span className="detail-label">Age</span>
+                  <span className="detail-value">{user.age || "N/A"}</span>
+                </div>
+                <div className="detail-item">
+                  <span className="detail-label">Gender</span>
+                  <span className="detail-value">{user.gender || "N/A"}</span>
+                </div>
+                <div className="detail-item">
+                  <span className="detail-label">City</span>
+                  <span className="detail-value">{user.city || "N/A"}</span>
+                </div>
+                <div className="detail-item">
+                  <span className="detail-label">State</span>
+                  <span className="detail-value">{user.state || "N/A"}</span>
+                </div>
+                <div className="detail-item">
+                  <span className="detail-label">Education</span>
+                  <span className="detail-value">{user.educationLevel || "N/A"}</span>
+                </div>
+                <div className="detail-item">
+                  <span className="detail-label">Stream</span>
+                  <span className="detail-value">{user.stream || "N/A"}</span>
+                </div>
+              </div>
+
+              <div className="profile-section-tags">
+                <h3>Interests 🎨</h3>
+                <div className="tag-list">
+                  {student.interests && student.interests.length > 0 ? (
+                    student.interests.map((interest) => (
+                      <span key={interest} className="tag-pill interest-pill">{interest}</span>
+                    ))
+                  ) : (
+                    <span className="tag-none">No interests selected yet</span>
+                  )}
+                </div>
+              </div>
+
+              <div className="profile-section-tags">
+                <h3>Skills 💪</h3>
+                <div className="tag-list">
+                  {student.skills && student.skills.length > 0 ? (
+                    student.skills.map((skill) => (
+                      <span key={skill} className="tag-pill skill-pill">{skill}</span>
+                    ))
+                  ) : (
+                    <span className="tag-none">No skills selected yet</span>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="profile-modal-footer">
+              <button 
+                className="btn-modal btn-reset-password"
+                onClick={handlePasswordResetRequest}
+              >
+                🔐 Reset Password
+              </button>
+              <button 
+                className="btn-modal btn-logout"
+                onClick={handleLogout}
+              >
+                🚪 Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div> /* end dashboard-page */
   );
 }

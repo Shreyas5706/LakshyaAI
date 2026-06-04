@@ -71,6 +71,22 @@ Work Done:
 
 --------------------------------------------------------
 
+Date: 04/06/2026
+Module: Authentication Integration, Client Cookie Sessions & Password Recovery Redesign
+Work Done:
+- Added extended profile details (age, gender, state, city, educationLevel, stream) to Mongoose UserSchema.
+- Updated signup and login controllers to process and return these profile details.
+- Bypassed nodemailer SMTP in forgot-password to return the reset token directly to the client to avoid dev authentication issues (SMTP 535 blocks).
+- Replaced basic Forgot & Reset Password views on React client with custom-styled card views matching LAKSHYA's dashboard theme.
+- Added a glassmorphic navbar on Forgot & Reset Password screens containing logo brand headers and "Back to Home" navigation buttons.
+- Integrated request-level cookie tracking in server authMiddleware (supporting both Authorization header and lakshyaSession cookie headers).
+- Updated ProtectedRoute, Auth forms, and Dashboard pages in React client to read, write, and clear user session state via browser cookies instead of localStorage.
+- Integrated a structured review summary card showing onboarding parameters at the final step of OnboardingForm.jsx.
+- Resolved Windows port binding and stale process bugs by killing the zombie port 5000 process (PID 3688) and starting a clean, non-cached dev server.
+- Built and ran HTTP end-to-end integration tests to verify the signup, login, password recovery bypass, token reset, and new login credentials flow.
+
+--------------------------------------------------------
+
 Notes / Ideas (Optional):
 -------------------------
 -

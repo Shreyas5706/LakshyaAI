@@ -4,6 +4,7 @@ import { Typewriter } from "react-simple-typewriter";
 import logo from "../assets/Logo.png";
 import video from "../assets/hero.mp4";
 import API from "../services/api";
+import { getCookie } from "../utils/cookies";
 import "./styles/LandingPage.css";
 
 // Nav link component
@@ -18,6 +19,7 @@ function NavItem({ text, target }) {
 export default function LandingPage() {
   const navigate = useNavigate();
   const [serverStatus, setServerStatus] = useState("connecting");
+  const session = getCookie("lakshyaSession");
 
   useEffect(() => {
     const checkConnection = async () => {
@@ -38,6 +40,21 @@ export default function LandingPage() {
     const interval = setInterval(checkConnection, 10000);
     return () => clearInterval(interval);
   }, []);
+
+  const handleDashboardRedirect = () => {
+    if (!session) return;
+    if (session.role === "student") {
+      if (session.onboardingCompleted) {
+        navigate("/student/dashboard");
+      } else {
+        navigate("/student/onboarding");
+      }
+    } else if (session.role === "counselor") {
+      navigate("/counselor/dashboard");
+    } else if (session.role === "admin") {
+      navigate("/admin/dashboard");
+    }
+  };
 
   return (
     <>
@@ -67,14 +84,22 @@ export default function LandingPage() {
           </nav>
 
           <div className="nav-right">
-            <button
-              className="signup-btn"
-              onClick={() => navigate("/auth")}
-            >
-              Sign Up
-            </button>
+            {session ? (
+              <button
+                className="signup-btn"
+                onClick={handleDashboardRedirect}
+              >
+                Go to Dashboard
+              </button>
+            ) : (
+              <button
+                className="signup-btn"
+                onClick={() => navigate("/auth")}
+              >
+                Sign Up
+              </button>
+            )}
           </div>
-
         </div>
       </header>
 

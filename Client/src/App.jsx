@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // public pages
 import LandingPage from "./pages/LandingPage";
 import Auth from "./pages/auth/Auth";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
 
 // protected route
 import ProtectedRoute from "./pages/auth/ProtectedRoute";
@@ -20,6 +22,8 @@ function App() {
         {/* public routes : open for all */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
 
         {/* student dashboard */}
         <Route

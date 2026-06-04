@@ -11,6 +11,38 @@ const UserSchema = new mongoose.Schema({
   },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
+  skills: {
+    type: [String],
+    default: []
+  },
+  interests: {
+    type: [String],
+    default: []
+  },
+  age: {
+    type: Number,
+    default: null
+  },
+  gender: {
+    type: String,
+    default: null
+  },
+  state: {
+    type: String,
+    default: null
+  },
+  city: {
+    type: String,
+    default: null
+  },
+  educationLevel: {
+    type: String,
+    default: null
+  },
+  stream: {
+    type: String,
+    default: null
+  },
   skillsHash: {
     type: String,
     default: null

@@ -244,3 +244,69 @@ font-weight:600;
     transform: translateX(0);
   }
 }
+
+/* ================= AUTH NAVBAR ================= */
+.auth-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  z-index: 1000;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+}
+
+.auth-nav-inner {
+  max-width: 1200px;
+  margin: auto;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.auth-nav-logo-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.auth-nav-logo-group:hover {
+  transform: scale(1.02);
+}
+
+.auth-nav-logo {
+  height: 44px;
+  width: auto;
+}
+
+.auth-nav-brand {
+  font-size: 20px;
+  font-weight: 800;
+  color: #064E3B;
+  letter-spacing: 0.8px;
+}
+
+.auth-nav-back-btn {
+  padding: 8px 22px;
+  border-radius: 20px;
+  border: 1.5px solid #064E3B;
+  color: #064E3B;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.auth-nav-back-btn:hover {
+  background: #064E3B;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(6, 78, 91, 0.15);
+}

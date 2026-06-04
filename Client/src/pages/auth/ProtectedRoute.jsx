@@ -1,8 +1,9 @@
 import { Navigate, useLocation } from "react-router-dom";
+import { getCookie } from "../../utils/cookies";
 
 export default function ProtectedRoute({ children, role }) {
-  // get user session from local storage : (login data)
-  const session = JSON.parse(localStorage.getItem("lakshyaSession"));
+  // get user session from cookie : (login data)
+  const session = getCookie("lakshyaSession");
 
   // get current page path : (where user is now)
   const location = useLocation();

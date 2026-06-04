@@ -20,6 +20,8 @@
 // step we are on, or what the student typed in a field.
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import API from "../../services/api";
+import { getCookie, setCookie } from "../../utils/cookies";
 // We import the CSS file that styles this page
 import "../styles/OnboardingForm.css";
 
@@ -186,7 +188,7 @@ const COLLEGE_TYPES = ["Government", "Private", "Either"];
 //  Step 4: Career Goal
 //  Step 5: Confirmation
 // ============================================================
-const TOTAL_STEPS = 6;
+const TOTAL_STEPS = 5;
 
 // ============================================================
 //  MAIN COMPONENT: OnboardingForm
@@ -205,17 +207,21 @@ function OnboardingForm({ onComplete }) {
   // We start at step 1
   const [currentStep, setCurrentStep] = useState(1);
 
+  // Retrieve user basic details from cookie
+  const session = getCookie("lakshyaSession") || {};
+  const sessionUser = session.user || {};
+
   // formData stores everything the student fills in.
   // It's an object (like a box) with many fields inside.
   const [formData, setFormData] = useState({
-    name: "",
-    age: "",
-    gender: "",
-    state: "",
-    city: "",
+    name: sessionUser.name || "",
+    age: sessionUser.age ? String(sessionUser.age) : "",
+    gender: sessionUser.gender || "",
+    state: sessionUser.state || "",
+    city: sessionUser.city || "",
 
-    educationLevel: "",
-    stream: "",
+    educationLevel: sessionUser.educationLevel || "",
+    stream: sessionUser.stream || "",
 
     class10Percentage: "",
     class12Percentage: "",
@@ -244,6 +250,20 @@ function OnboardingForm({ onComplete }) {
 
   // isSubmitted becomes true after the student clicks "Let's Go!"
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  useEffect(() => {
+    if (isSubmitted) {
+      const timer = setTimeout(() => {
+        if (onComplete) {
+          onComplete();
+        } else {
+          navigate("/student/dashboard");
+        }
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isSubmitted, navigate, onComplete]);
 
   // ----------------------------------------------------------
   //  FUNCTION: handleBasicInfoChange
@@ -413,51 +433,6 @@ function OnboardingForm({ onComplete }) {
     const newErrors = {};
 
     if (currentStep === 1) {
-      // Name must not be empty
-      if (formData.name.trim() === "") {
-        newErrors.name = "Hey, we need your name to get started! 😊";
-      }
-
-      // Age validation
-      if (formData.age.trim() === "") {
-        newErrors.age = "Please enter your age.";
-      } else if (
-        isNaN(formData.age) ||
-        Number(formData.age) < 10 ||
-        Number(formData.age) > 30
-      ) {
-        newErrors.age = "Please enter a valid age between 10 and 30.";
-      }
-
-      // City must not be empty
-      if (formData.city.trim() === "") {
-        newErrors.city = "Which city are you from? 🏙️";
-      }
-
-      // Gender
-      if (!formData.gender) {
-        newErrors.gender = "Let us know your gender 😊";
-      }
-
-      // State
-      if (!formData.state) {
-        newErrors.state =
-          "Pick your state so we can suggest better colleges 📍";
-      }
-
-      // Education
-      if (!formData.educationLevel) {
-        newErrors.educationLevel = "What are you currently studying? 🎓";
-      }
-
-      // Stream
-      if (!formData.stream) {
-        newErrors.stream =
-          "Select your stream — this helps us guide you better 🚀";
-      }
-    }
-
-    if (currentStep === 2) {
       // Student must pick at least 1 interest
       if (formData.interests.length === 0) {
         newErrors.interests =
@@ -465,14 +440,14 @@ function OnboardingForm({ onComplete }) {
       }
     }
 
-    if (currentStep === 3) {
+    if (currentStep === 2) {
       // Student must pick at least 1 skill
       if (formData.skills.length === 0) {
         newErrors.skills = "Select at least one skill you already have! 💪";
       }
     }
 
-    if (currentStep === 4) {
+    if (currentStep === 3) {
       // Career goal must be selected
       if (formData.careerGoal.trim() === "") {
         newErrors.careerGoal =
@@ -484,8 +459,6 @@ function OnboardingForm({ onComplete }) {
     setErrors(newErrors);
 
     // If there are no errors, the object will be empty
-    // Object.keys() gives us the list of keys
-    // If length is 0, there are no errors
     return Object.keys(newErrors).length === 0;
   }
 
@@ -542,34 +515,24 @@ function OnboardingForm({ onComplete }) {
   //  localStorage is like a notebook inside the browser
   //  that remembers things even after the tab is closed.
   // ----------------------------------------------------------
-  function handleSubmit() {
+  async function handleSubmit() {
     // JSON.stringify converts the object into text so we can save it
-    // localStorage can only save text, not JavaScript objects
     localStorage.setItem("lakshya_student", JSON.stringify(formData));
-    const session = JSON.parse(localStorage.getItem("lakshyaSession"));
+    const session = getCookie("lakshyaSession") || {};
+
+    try {
+      // Save selected skills to backend database
+      await API.put("/skills/skills", { skills: formData.skills });
+    } catch (err) {
+      console.error("Failed to save skills on backend:", err);
+    }
 
     // Mark the form as submitted — this shows the success animation
-
-    localStorage.setItem(
-      "lakshyaSession",
-      JSON.stringify({
-        ...session,
-        onboardingCompleted: true,
-      })
-    );
+    setCookie("lakshyaSession", {
+      ...session,
+      onboardingCompleted: true,
+    }, 1);
     setIsSubmitted(true);
-
-    // If a parent component gave us an "onComplete" function,
-    // call it after a short delay (so the student sees the animation)
-    useEffect(() => {
-      if (isSubmitted) {
-        const timer = setTimeout(() => {
-          navigate("/student/dashboard");
-        }, 5000);
-
-        return () => clearTimeout(timer);
-      }
-    }, [isSubmitted]);
   }
 
   // ----------------------------------------------------------
@@ -657,130 +620,7 @@ function OnboardingForm({ onComplete }) {
           Step {currentStep} of {TOTAL_STEPS}
         </p>
 
-        {/* ============================================== */}
-        {/* STEP 1: Basic Information                      */}
-        {/* ============================================== */}
         {currentStep === 1 && (
-          <div className="form-step">
-            <h2 className="step-title">Let's start with the basics 👋</h2>
-            <p className="step-description">
-              Just a few quick details — this helps us guide you better 🎯
-            </p>
-
-            <div className="form-group">
-              <label className="form-label">Your full name</label>
-              <input
-                name="name"
-                className={"form-input" + (errors.name ? " input-error" : "")}
-                placeholder="e.g. Arjun Sharma"
-                value={formData.name}
-                onChange={handleBasicInfoChange}
-              />
-              {errors.name && <p className="error-message">{errors.name}</p>}
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">Your age</label>
-              <input
-                name="age"
-                type="number"
-                className={"form-input" + (errors.age ? " input-error" : "")}
-                placeholder="e.g. 17"
-                value={formData.age}
-                onChange={handleBasicInfoChange}
-              />
-              {errors.age && <p className="error-message">{errors.age}</p>}
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">Where are you from?</label>
-              <input
-                name="city"
-                className={"form-input" + (errors.city ? " input-error" : "")}
-                placeholder="e.g. Ahmedabad"
-                value={formData.city}
-                onChange={handleBasicInfoChange}
-              />
-              {errors.city && <p className="error-message">{errors.city}</p>}
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">Select your gender</label>
-              <select
-                name="gender"
-                value={formData.gender}
-                onChange={handleBasicInfoChange}
-                className={"form-input" + (errors.gender ? " input-error" : "")}
-              >
-                <option value="">Choose one</option>
-                {GENDER_OPTIONS.map((g) => (
-                  <option key={g}>{g}</option>
-                ))}
-              </select>
-              {errors.gender && (
-                <p className="error-message">{errors.gender}</p>
-              )}
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">Which state are you in?</label>
-              <select
-                name="state"
-                value={formData.state}
-                onChange={handleBasicInfoChange}
-                className={"form-input" + (errors.state ? " input-error" : "")}
-              >
-                <option value="">Pick your state</option>
-                {INDIAN_STATES.map((s) => (
-                  <option key={s}>{s}</option>
-                ))}
-              </select>
-              {errors.state && <p className="error-message">{errors.state}</p>}
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">
-                What are you currently studying?
-              </label>
-              <select
-                name="educationLevel"
-                value={formData.educationLevel}
-                onChange={handleBasicInfoChange}
-                className={
-                  "form-input" + (errors.educationLevel ? " input-error" : "")
-                }
-              >
-                <option value="">Select your level</option>
-                {EDUCATION_LEVELS.map((e) => (
-                  <option key={e}>{e}</option>
-                ))}
-              </select>
-              {errors.educationLevel && (
-                <p className="error-message">{errors.educationLevel}</p>
-              )}
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">Which stream are you from?</label>
-              <select
-                name="stream"
-                value={formData.stream}
-                onChange={handleBasicInfoChange}
-                className={"form-input" + (errors.stream ? " input-error" : "")}
-              >
-                <option value="">Choose your stream</option>
-                {STREAMS.map((s) => (
-                  <option key={s}>{s}</option>
-                ))}
-              </select>
-              {errors.stream && (
-                <p className="error-message">{errors.stream}</p>
-              )}
-            </div>
-          </div>
-        )}
-
-        {currentStep === 2 && (
           <div className="form-step">
             <h2 className="step-title">What do you enjoy? 🎨</h2>
             <p className="step-description">
@@ -815,7 +655,7 @@ function OnboardingForm({ onComplete }) {
           </div>
         )}
 
-        {currentStep === 3 && (
+        {currentStep === 2 && (
           <div className="form-step">
             <h2 className="step-title">What are you good at? 💪</h2>
             <p className="step-description">
@@ -848,7 +688,7 @@ function OnboardingForm({ onComplete }) {
           </div>
         )}
 
-        {currentStep === 4 && (
+        {currentStep === 3 && (
           <div className="form-step">
             <h2 className="step-title">What's your dream career? 🚀</h2>
             <p className="step-description">
@@ -888,7 +728,7 @@ function OnboardingForm({ onComplete }) {
           </div>
         )}
 
-        {currentStep === 5 && (
+        {currentStep === 4 && (
           <div className="form-step">
             <h2 className="step-title">Tell us a bit more 🧠</h2>
             <p className="step-description">
@@ -959,12 +799,47 @@ function OnboardingForm({ onComplete }) {
           </div>
         )}
 
-        {currentStep === 6 && (
+        {currentStep === 5 && (
           <div className="form-step">
             <h2 className="step-title">Looks good, {formData.name}! 🌟</h2>
             <p className="step-description">
-              This is your profile — ready to build your career roadmap 🚀
+              Please review your details before building your career roadmap 🚀
             </p>
+            
+            <div className="onboarding-summary-box" style={{ background: "#f8fafc", borderRadius: "16px", padding: "20px", border: "1px solid #e2e8f0", marginTop: "20px", display: "flex", flexDirection: "column", gap: "16px", maxHeight: "350px", overflowY: "auto", textAlign: "left" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", borderBottom: "1px solid #e2e8f0", paddingBottom: "12px" }}>
+                <div><strong>Age:</strong> {formData.age || "N/A"}</div>
+                <div><strong>Gender:</strong> {formData.gender || "N/A"}</div>
+                <div><strong>City:</strong> {formData.city || "N/A"}</div>
+                <div><strong>State:</strong> {formData.state || "N/A"}</div>
+                <div style={{ gridColumn: "span 2" }}><strong>Education:</strong> {formData.educationLevel || "N/A"} ({formData.stream || "N/A"})</div>
+              </div>
+              
+              <div>
+                <strong>Interests:</strong>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginTop: "6px" }}>
+                  {formData.interests.map(i => (
+                    <span key={i} style={{ background: "#fdf2f8", color: "#be185d", padding: "4px 10px", borderRadius: "20px", fontSize: "12px", border: "1px solid #fbcfe8" }}>{i}</span>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <strong>Skills:</strong>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginTop: "6px" }}>
+                  {formData.skills.map(s => (
+                    <span key={s} style={{ background: "#f0fdf4", color: "#15803d", padding: "4px 10px", borderRadius: "20px", fontSize: "12px", border: "1px solid #bbf7d0" }}>{s}</span>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <strong>Dream Career:</strong>
+                <div style={{ marginTop: "4px", fontSize: "15px", color: "#0f172a", fontWeight: "600" }}>
+                  🎯 {formData.careerGoal}
+                </div>
+              </div>
+            </div>
           </div>
         )}
 

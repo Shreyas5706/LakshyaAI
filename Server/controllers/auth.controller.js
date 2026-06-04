@@ -10,7 +10,19 @@ const { env }= require( "../config/env.js");
 // SIGNUP
 // =======================
 const signup = async (req, res, next) => {
-  const { name, email, password, role } = req.body;
+  console.log("--> [SIGNUP REQUEST] Received payload:", req.body);
+  const {
+    name,
+    email,
+    password,
+    role,
+    age,
+    gender,
+    state,
+    city,
+    educationLevel,
+    stream
+  } = req.body;
 
   try {
     const existingUser = await User.findOne({ email });
@@ -20,12 +32,20 @@ const signup = async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await User.create({
+    const newUser = await User.create({
       name,
       email,
       password: hashedPassword,
       role,
+      age,
+      gender,
+      state,
+      city,
+      educationLevel,
+      stream
     });
+
+    console.log("New user registered successfully:", newUser);
 
     res.status(201).json({ message: "Signup successful" });
   } catch (error) {
@@ -37,6 +57,7 @@ const signup = async (req, res, next) => {
 // LOGIN
 // =======================
 const login = async (req, res, next) => {
+  console.log("--> [LOGIN REQUEST] Received email:", req.body?.email);
   const { email, password } = req.body;
 
   try {
@@ -62,6 +83,15 @@ const login = async (req, res, next) => {
         id: user._id,
         email: user.email,
         role: user.role,
+        name: user.name,
+        age: user.age,
+        gender: user.gender,
+        state: user.state,
+        city: user.city,
+        educationLevel: user.educationLevel,
+        stream: user.stream,
+        skills: user.skills || [],
+        interests: user.interests || [],
       },
     });
   } catch (error) {
@@ -95,16 +125,11 @@ const forgotPassword = async (req, res, next) => {
 
     await user.save();
 
-    const resetUrl = `${env.clientUrl}/reset-password/${resetToken}`;
-
-    await sendEmail({
-      to: user.email,
-      subject: "Password Reset Request",
-      text: `You requested a password reset. Click the link to reset your password:\n\n${resetUrl}\n\nThis link is valid for 15 minutes.`,
-    });
+    console.log(`Password reset requested for email: ${email}. Generated token: ${resetToken}`);
 
     res.status(200).json({
-      message: "Password reset link sent to email",
+      message: "Password reset token generated successfully",
+      resetToken: resetToken,
     });
 
   } catch (error) {
