@@ -3,6 +3,7 @@ const express = require("express");
 const {
   predictCareerDomain,
   predictItCareerController,
+  predictNonItCareerController,
 } = require("../controllers/careers.controller.js");
 
 const { checkMlHealthFromNode } = require("../controllers/mlhealth.controller.js");
@@ -27,6 +28,15 @@ router.post(
   loadJourney,
   requireDomainConfirmed,
   predictItCareerController
+);
+
+// STEP 2 (ALTERNATIVE): Non-IT career prediction (JOURNEY ENFORCED)
+router.post(
+  "/non-it",
+  authMiddleware,
+  loadJourney,
+  requireDomainConfirmed,
+  predictNonItCareerController
 );
 
 module.exports = router;

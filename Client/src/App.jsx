@@ -12,6 +12,7 @@ import ProtectedRoute from "./pages/auth/ProtectedRoute";
 // dashboards
 import StudentDashboard from "./pages/student/Dashboard";
 import OnboardingForm from "./pages/student/OnboardingForm";
+import CareerRecommendation from "./pages/student/CareerRecommendation";
 import CounselorDashboard from "./pages/counselor/Dashboard";
 import AdminDashboard from "./pages/admin/Dashboard";
 
@@ -31,6 +32,15 @@ function App() {
           element={
             <ProtectedRoute role="student">
               <OnboardingForm />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/student/career"
+          element={
+            <ProtectedRoute role="student">
+              <CareerRecommendation />
             </ProtectedRoute>
           }
         />

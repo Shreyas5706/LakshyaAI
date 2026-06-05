@@ -12,6 +12,7 @@ const requiredEnvVars = [
   "JWT_SECRET",
   "ML_API_KEY",
   "ML_BACKEND_URL",
+  "GEMINI_API_KEY",
 ];
 
 requiredEnvVars.forEach((key) => {
@@ -50,6 +51,9 @@ const env = {
     backendUrl: process.env.ML_BACKEND_URL,
     timeoutMs: Number(process.env.ML_TIMEOUT_MS) || 12000,
   },
+
+  // Gemini AI
+  geminiApiKey: process.env.GEMINI_API_KEY,
 
   // Environment
   nodeEnv: process.env.NODE_ENV || "development",

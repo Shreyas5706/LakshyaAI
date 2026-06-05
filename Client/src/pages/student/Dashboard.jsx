@@ -230,6 +230,14 @@ function Dashboard({ onNavigate }) {
   function handleNavigate(pageName) {
     if (onNavigate) {
       onNavigate(pageName);
+    } else {
+      if (pageName === "career") {
+        navigate("/student/career");
+      } else if (pageName === "dashboard") {
+        navigate("/student/dashboard");
+      } else {
+        console.warn(`Navigation mapping not found for page: ${pageName}`);
+      }
     }
   }
 

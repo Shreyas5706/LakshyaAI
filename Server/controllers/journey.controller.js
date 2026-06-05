@@ -73,6 +73,42 @@ const confirmDomain = async (req, res) => {
   }
 };
 
+/**
+ * GET JOURNEY STATUS
+ * Returns the current status of the student's career journey
+ */
+const getJourneyStatus = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    let journey = await Journey.findOne({ userId });
+
+    if (!journey) {
+      journey = await Journey.create({
+        userId,
+        currentStep: 'NOT_STARTED'
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      journey: {
+        predictedDomain: journey.predictedDomain,
+        confirmedDomain: journey.confirmedDomain,
+        isDomainConfirmed: journey.isDomainConfirmed,
+        currentStep: journey.currentStep
+      }
+    });
+  } catch (err) {
+    console.error('Failed to get journey status:', err.message);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve journey status'
+    });
+  }
+};
+
 module.exports = {
-  confirmDomain
+  confirmDomain,
+  getJourneyStatus
 };
