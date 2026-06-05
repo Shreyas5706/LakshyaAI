@@ -685,3 +685,287 @@
   box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
 }
 
+/* =====================================================
+   LOCKED WIDGET STYLING
+===================================================== */
+.locked-widget-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.locked-widget-wrapper .skills-bar-list {
+  filter: blur(4px);
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.locked-overlay-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  padding: 20px;
+  text-align: center;
+}
+
+.lock-icon-large {
+  font-size: 36px;
+  margin-bottom: 12px;
+  animation: bounceLock 2s infinite ease-in-out;
+}
+
+@keyframes bounceLock {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.btn-locked-action {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-locked-action:hover {
+  background: #1d4ed8;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+/* =====================================================
+   ROADMAP TIMELINE TRACKER
+===================================================== */
+.dashboard-timeline-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.dashboard-timeline-step {
+  display: flex;
+  gap: 15px;
+}
+
+.timeline-step-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.step-num {
+  width: 28px;
+  height: 28px;
+  background: #f1f5f9;
+  border: 2px solid #cbd5e1;
+  color: #64748b;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  z-index: 2;
+}
+
+.dashboard-timeline-step.active .step-num {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: white;
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
+}
+
+.step-connector {
+  width: 2px;
+  flex-grow: 1;
+  background: #cbd5e1;
+  margin-top: 4px;
+  margin-bottom: -15px; /* connects to next step dot */
+}
+
+.timeline-step-info {
+  background: #f8fafc;
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  flex-grow: 1;
+}
+
+.dashboard-timeline-step.active .timeline-step-info {
+  border-color: #bfdbfe;
+  background: #f0f7ff;
+}
+
+.timeline-step-name {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: #1e293b;
+}
+
+.timeline-step-detail {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
+}
+
+/* =====================================================
+   GLOWING PULSE BUTTON
+===================================================== */
+.pulse-glowing-btn {
+  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+  animation: pulseGlow 2s infinite;
+}
+
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+}
+
+/* =====================================================
+   EDIT MODE FORM STYLING
+===================================================== */
+.btn-edit-profile {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-edit-profile:hover {
+  background: #cbd5e1;
+}
+
+.profile-edit-form h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 15px 0;
+  color: #0f172a;
+}
+
+.form-grid-modal {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.span-2 {
+  grid-column: span 2;
+}
+
+.form-group-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-group-modal label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.form-group-modal input,
+.form-group-modal select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-size: 13px;
+  outline: none;
+  background: white;
+  color: #334155;
+  transition: border-color 0.2s;
+}
+
+.form-group-modal input:focus,
+.form-group-modal select:focus {
+  border-color: #2563eb;
+}
+
+.btn-row-modal {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 15px;
+}
+
+.btn-cancel {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+.btn-cancel:hover {
+  background: #cbd5e1;
+}
+
+.btn-save {
+  background: #2563eb;
+  color: white;
+  border: none;
+}
+
+.btn-save:hover {
+  background: #1d4ed8;
+}
+
+.success-toast {
+  background: #f0fdf4;
+  color: #15803d;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  border: 1px solid #bbf7d0;
+  margin-bottom: 12px;
+}
+
+.error-toast {
+  background: #fef2f2;
+  color: #b91c1c;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  border: 1px solid #fecaca;
+  margin-bottom: 12px;
+}
+
+.password-management-section {
+  border-top: 1px dashed #cbd5e1;
+  margin-top: 15px;
+  padding-top: 15px;
+}
+
+.password-edit-form {
+  background: #f8fafc;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+

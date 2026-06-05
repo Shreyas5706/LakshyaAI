@@ -521,10 +521,29 @@ function OnboardingForm({ onComplete }) {
     const session = getCookie("lakshyaSession") || {};
 
     try {
-      // Save selected skills to backend database
-      await API.put("/skills/skills", { skills: formData.skills });
+      // Save all profile parameters to backend database
+      const profileData = {
+        age: formData.age ? Number(formData.age) : undefined,
+        gender: formData.gender,
+        state: formData.state,
+        city: formData.city,
+        educationLevel: formData.educationLevel,
+        stream: formData.stream,
+        interests: formData.interests,
+        skills: formData.skills
+      };
+      
+      const res = await API.put("/auth/profile", profileData);
+      
+      // Update session cookie with the returned user profile details
+      if (res.data?.success && res.data?.user) {
+        session.user = {
+          ...session.user,
+          ...res.data.user
+        };
+      }
     } catch (err) {
-      console.error("Failed to save skills on backend:", err);
+      console.error("Failed to save onboarding data on backend:", err);
     }
 
     // Mark the form as submitted — this shows the success animation

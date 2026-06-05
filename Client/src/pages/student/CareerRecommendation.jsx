@@ -295,7 +295,7 @@ function CareerRecommendation() {
           <button className="nav-link" onClick={() => navigate("/student/dashboard")}>Dashboard</button>
           <button className="nav-link active-link">Career</button>
           <button className="nav-link" onClick={() => navigate("/student/dashboard")}>Skills</button>
-          <button className="nav-link" onClick={() => navigate("/student/dashboard")}>Learn</button>
+          <button className="nav-link" onClick={() => navigate("/student/learn")}>Learn</button>
           <button className="nav-link" onClick={() => navigate("/student/dashboard")}>Progress</button>
         </div>
         <div className="navbar-avatar" onClick={() => navigate("/student/dashboard")} style={{ cursor: "pointer" }}>

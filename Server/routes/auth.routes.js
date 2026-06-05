@@ -6,6 +6,7 @@ const {
   login,
   forgotPassword,
   resetPassword,
+  updateProfile,
 } = require("../controllers/auth.controller");
 
 const {
@@ -13,10 +14,13 @@ const {
   forgotPasswordLimiter,
 } = require("../middleware/rateLimit.middleware");
 
+const authMiddleware = require("../middleware/auth.middleware");
+
 router.post("/signup", signup);
 router.post("/login", loginLimiter , login);
 router.post("/forgot-password", forgotPasswordLimiter , forgotPassword);
 router.post("/reset-password/:token", resetPassword);
+router.put("/profile", authMiddleware, updateProfile);
 
 
 module.exports = router;

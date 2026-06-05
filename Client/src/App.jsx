@@ -13,6 +13,11 @@ import ProtectedRoute from "./pages/auth/ProtectedRoute";
 import StudentDashboard from "./pages/student/Dashboard";
 import OnboardingForm from "./pages/student/OnboardingForm";
 import CareerRecommendation from "./pages/student/CareerRecommendation";
+import Courses from "./pages/student/Courses";
+import SkillgapAnalysis from "./pages/student/SkillgapAnalysis";
+import Chatbot from "./pages/student/Chatbot";
+import CollegeRecommendation from "./pages/student/CollegeRecommendation";
+import Profile from "./pages/student/Profile";
 import CounselorDashboard from "./pages/counselor/Dashboard";
 import AdminDashboard from "./pages/admin/Dashboard";
 
@@ -50,6 +55,51 @@ function App() {
           element={
             <ProtectedRoute role="student">
               <StudentDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/student/learn"
+          element={
+            <ProtectedRoute role="student">
+              <Courses />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/student/skills"
+          element={
+            <ProtectedRoute role="student">
+              <SkillgapAnalysis />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/student/chatbot"
+          element={
+            <ProtectedRoute role="student">
+              <Chatbot />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/student/colleges"
+          element={
+            <ProtectedRoute role="student">
+              <CollegeRecommendation />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/student/profile"
+          element={
+            <ProtectedRoute role="student">
+              <Profile />
             </ProtectedRoute>
           }
         />

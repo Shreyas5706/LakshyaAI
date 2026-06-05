@@ -174,10 +174,109 @@ const resetPassword = async (req, res, next) => {
   }
 };
 
+// =======================
+// UPDATE PROFILE AND PASSWORD
+// =======================
+const updateProfile = async (req, res, next) => {
+  const userId = req.user._id;
+  console.log("--> [UPDATE PROFILE REQUEST] Received for userId:", userId, req.body);
+  const {
+    name,
+    age,
+    gender,
+    state,
+    city,
+    educationLevel,
+    stream,
+    skills,
+    interests,
+    password,        // new password (optional)
+    currentPassword  // required if password is provided
+  } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update simple fields if they are in req.body
+    if (name !== undefined) user.name = name;
+    if (age !== undefined) user.age = age ? Number(age) : null;
+    if (gender !== undefined) user.gender = gender;
+    if (state !== undefined) user.state = state;
+    if (city !== undefined) user.city = city;
+    if (educationLevel !== undefined) user.educationLevel = educationLevel;
+    if (stream !== undefined) user.stream = stream;
+
+    // Update skills & generate skillsHash if skills are provided
+    if (skills !== undefined && Array.isArray(skills)) {
+      user.skills = skills;
+      const generateSkillsHash = require("../utils/skillsHash");
+      const newHash = generateSkillsHash(skills);
+      user.skillsHash = newHash;
+      user.skillsUpdatedAt = new Date();
+      // Ensure we keep this in sync
+      user.lastMlSkillsHash = newHash;
+    }
+
+    // Update interests
+    if (interests !== undefined && Array.isArray(interests)) {
+      user.interests = interests;
+    }
+
+    // Change password logic
+    if (password) {
+      if (!currentPassword) {
+        return res.status(400).json({ message: "Current password is required to change password" });
+      }
+      const isMatch = await bcrypt.compare(currentPassword, user.password);
+      if (!isMatch) {
+        return res.status(401).json({ message: "Incorrect current password" });
+      }
+      // Password validation
+      const pwdRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+      if (!pwdRegex.test(password)) {
+        return res.status(400).json({
+          message: "Password must be at least 8 characters long and contain uppercase, lowercase, number, and special character"
+        });
+      }
+
+      user.password = await bcrypt.hash(password, 10);
+    }
+
+    await user.save();
+    console.log("User profile updated successfully in MongoDB:", user._id);
+
+    return res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      user: {
+        id: user._id,
+        email: user.email,
+        role: user.role,
+        name: user.name,
+        age: user.age,
+        gender: user.gender,
+        state: user.state,
+        city: user.city,
+        educationLevel: user.educationLevel,
+        stream: user.stream,
+        skills: user.skills || [],
+        interests: user.interests || []
+      }
+    });
+  } catch (error) {
+    console.error("Error in updateProfile:", error);
+    next(error);
+  }
+};
+
 
 module.exports = {
   signup,
   login,
   forgotPassword,
   resetPassword,
+  updateProfile,
 };

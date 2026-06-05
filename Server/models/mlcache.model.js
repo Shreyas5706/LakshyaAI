@@ -4,7 +4,7 @@ const mlCacheSchema = new mongoose.Schema(
   {
     modelType: {
       type: String,
-      enum: ["DOMAIN_PREDICTION", "IT_CAREER_PREDICTION"],
+      enum: ["DOMAIN_PREDICTION", "IT_CAREER_PREDICTION", "NON_IT_CAREER_PREDICTION"],
       required: true,
       index: true
     },
