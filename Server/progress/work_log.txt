@@ -97,6 +97,19 @@ Work Done:
 - Refactored prediction controllers to accept profile payloads directly in the request body, resolving 400 validation errors due to incomplete database documents, and syncing variables back to MongoDB.
 - Built React CareerRecommendation component and CSS styles containing Render cold-start polling loader animations, steps, and unified timeline roadmaps.
 - Registered student career paths in App.jsx and wired up click handlers on StudentDashboard.
+--------------------------------------------------------
+Date: 05/06/2026
+Module: Student Dashboard Personalization, User Profile Management & Curated Courses (Learn)
+Work Done:
+- Refactored GET /dashboard API to return user, journey progress, and cached career recommendations.
+- Added PUT /auth/profile API to update profile details (age, gender, state, city, educationLevel, stream) and change account password (with current password verification).
+- Updated OnboardingForm submission to write all parameters to MongoDB and sync session cookies.
+- Refactored Student Dashboard with conditional styling: locks widgets (Tasks, Skills) and shows glowing prediction CTA for non-predicted users, and displays personalized daily tasks, target skills progress, and roadmap timelines for predicted users.
+- Added inline profile details editor and password change form directly in the Dashboard Profile modal.
+- Parse-seeded 163 active courses from careers.csv to MongoDB database.
+- Created Courses grid page featuring search queries, pricing filters (Free/Paid), role-targeted recommendations, scrollable description popup modals, and close overlays.
+- Protected all student sub-routes (/student/learn, /student/skills, /student/chatbot, /student/colleges, /student/profile) in App.jsx under ProtectedRoute auth guards.
+- Cleaned up repository files by removing temporary seeder scripts and CSV files.
 
 --------------------------------------------------------
 
