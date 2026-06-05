@@ -87,6 +87,19 @@ Work Done:
 
 --------------------------------------------------------
 
+Date: 05/06/2026
+Module: Career Recommendation UI & Gemini 2.5 Flash Integration
+Work Done:
+- Switched Gemini model to gemini-2.5-flash to align with the supported APIs of newer Google Cloud API keys.
+- Increased request timeouts to 30s to allow complex roadmap structures to generate without connection breaks.
+- Implemented a replenishment pipeline: Discards predicted IT careers with <30% confidence and queries Gemini to recommend high-quality paths in their place.
+- Added journey state resetting when Step 1 (Domain Prediction) is re-run, resolving re-prediction confirm domain errors.
+- Refactored prediction controllers to accept profile payloads directly in the request body, resolving 400 validation errors due to incomplete database documents, and syncing variables back to MongoDB.
+- Built React CareerRecommendation component and CSS styles containing Render cold-start polling loader animations, steps, and unified timeline roadmaps.
+- Registered student career paths in App.jsx and wired up click handlers on StudentDashboard.
+
+--------------------------------------------------------
+
 Notes / Ideas (Optional):
 -------------------------
 -

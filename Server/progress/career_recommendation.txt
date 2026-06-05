@@ -1,0 +1,45 @@
+CAREER RECOMMENDATION & GEMINI INTEGRATION PROGRESS LOG
+======================================================
+
+Date: 05/06/2026
+----------------
+
+Detailed description of what was implemented:
+
+1. Unified Career Recommendation Architecture
+   - Built a consistent interface for displaying recommended career roles, salary ranges, future prospects, and transitions, regardless of whether the path was predicted by the ML model or suggested by Gemini.
+   - Flow: Client Onboarding Inputs -> Server Domain Prediction (ML Model) -> Confirm Domain -> IT/Non-IT branch -> Gemini explanations & roadmaps -> Unified frontend cards and roadmap timeline.
+
+2. Backend Gemini AI Integration (gemini-2.5-flash)
+   - Created `Server/utils/aiHelper.js` to communicate with Google Gemini API using REST.
+   - Identified that new Google AI Studio API key formats (prefixed with `AQ.`) require the use of the `gemini-2.5-flash` model. Configured `gemini-2.5-flash` as the default model.
+   - Increased request timeout to 30 seconds (`30000ms`) to prevent local HTTP connection timeouts during complex text generation.
+   - Structured JSON response formats enforced utilizing Gemini's native `responseMimeType: "application/json"` parameters.
+
+3. Low-Confidence ML Replenishment
+   - Implemented a replenishment check in `predictItCareerController`.
+   - Filters python ML model outputs, discarding any recommendations with a confidence score less than 30% (<0.30).
+   - Gemini receives the high-confidence predictions and dynamically suggests alternative IT careers matching the user's profile to bring the total recommended paths back to exactly 3.
+
+4. Unique roadmaps & Salary Customization
+   - Configured strict prompt guidelines to prevent generic, repetitive templates.
+   - Each career path is generated with distinct, realistic compensation ranges (e.g. entry-level vs experienced in India) and highly custom 3-step vertical roadmap timelines.
+
+5. Re-Prediction confirmation Reset [BUGFIX]
+   - Modified `predictCareerDomain` to reset `confirmedDomain` to `null` and `isDomainConfirmed` to `false` when step 1 (domain prediction) is re-run.
+   - Fixes the bug where users trying to predict careers a second time got stuck at the confirmation screen due to the backend throwing a 400 "Domain already confirmed" error.
+
+6. Flexible Body-Level Validation & DB Profile Syncing
+   - Refactored prediction controllers to accept payload details (`education`, `skills`, `interest`) directly in the HTTP request body, falling back to the MongoDB user document only if they are missing.
+   - Resolves the 400 validation errors caused by incomplete user documents in the database.
+   - Automatically saves and updates profile parameters on the backend User model upon successful career prediction.
+
+7. High-Fidelity UI Frontend page
+   - Created `Client/src/pages/student/CareerRecommendation.jsx` and `Client/src/pages/student/CareerRecommendation.css`.
+   - Wrote a cold-start polling loader that checks `/api/ml/health` and displays a waking-up animation if the Render server is container-sleeping.
+   - Built forms, checkbox select grids, confirmation panels, and the final 3-card tabbed results dashboard featuring visual timeline roadmaps.
+   - Mapped `/student/career` route in `App.jsx` and connected click handlers in `Dashboard.jsx`.
+
+STATUS:
+-------
+Career prediction UI and ML-Gemini pipeline is COMPLETE, verified, and fully clean-building.
