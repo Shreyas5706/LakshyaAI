@@ -1,0 +1,35 @@
+AI CAREER COUNSELOR CHATBOT PROGRESS LOG
+=========================================
+
+Date: 08/06/2026
+----------------
+
+Detailed description of what was implemented:
+
+1. Environment Configuration & Validation
+   - Added `GROQ_API_KEY` to `Server/.env` file.
+   - Updated `Server/config/env.js` to crash early at startup if `GROQ_API_KEY` is missing and export `groqApiKey` dynamically.
+
+2. Secure Groq API Service
+   - Created `Server/services/groq.service.js` which houses standard API wrappers using `axios` to query Groq's completions endpoint (`https://api.groq.com/openai/v1/chat/completions`).
+   - Configured `llama-3.1-8b-instant` as the default model, supplying sub-second, highly smart responses with a 20s request timeout.
+
+3. Context-Aware Student System Prompting
+   - Built `Server/controllers/chatbot.controller.js` to pull full student profiles from MongoDB:
+     - User onboarding properties: name, age, city/state, stream, education.
+     - User competency matrices: current skills list and selected interests.
+     - User AI recommendations: predicted domain and actual 3 recommended career cards (including salary figures, growth metrics, missing skills, and detailed roadmaps) retrieved from the compound MongoDB `MlCache` using the student's `lastMlSkillsHash`.
+   - Aggregates this profile into a system prompt that enforces professional counseling rules, Indian tech job contexts, and direct alignment with their recommended roadmaps.
+
+4. Secured Chatbot Routing Group
+   - Added `Server/routes/chatbot.routes.js` with `POST /` route, protected by `authMiddleware` to isolate chats to logged-in students.
+   - Mounted the chatbot route group dynamically under `/api/chatbot` in `Server/routes/index.js`.
+
+5. Automated Verification Script
+   - Created `Server/scratch/test_chatbot.js` which connects to local MongoDB, extracts/creates a mock student record with predicted careers, compiles the target system instructions, and executes a real prompt against Groq API.
+   - Verified that Groq correctly addresses the user by name, references their current python skills, and gives detailed, contextual instructions about their recommended roadmap.
+
+STATUS:
+-------
+Backend Groq integration and counselor context routing are COMPLETE, fully tested, and verified.
+Ready for frontend UI modifications on `Chatbot.jsx`.

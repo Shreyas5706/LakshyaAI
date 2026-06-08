@@ -112,6 +112,16 @@ Work Done:
 - Cleaned up repository files by removing temporary seeder scripts and CSV files.
 
 --------------------------------------------------------
+Date: 08/06/2026
+Module: AI Career Counselor Chatbot (Backend Setup)
+Work Done:
+- Added `GROQ_API_KEY` to environmental configuration under `.env` and `Server/config/env.js`.
+- Implemented `Server/services/groq.service.js` to handle Axios connection to Groq chat completions using the extremely fast `llama-3.1-8b-instant` model.
+- Created `Server/controllers/chatbot.controller.js` to dynamically retrieve user details, prediction journey step, and recommended career roadmaps, compiling them into a highly contextualized system prompt.
+- Developed the `Server/routes/chatbot.routes.js` router protected by `authMiddleware` and mounted it under `/api/chatbot`.
+- Built and ran a verification script `Server/scratch/test_chatbot.js` proving successful database context extraction, system prompt composition, and live Groq response generation.
+
+--------------------------------------------------------
 
 Notes / Ideas (Optional):
 -------------------------

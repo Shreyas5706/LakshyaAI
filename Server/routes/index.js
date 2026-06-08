@@ -8,6 +8,7 @@ const mlHealthRoutes = require("./mlhealth.routes");
 const journeyRoutes = require('./journey.routes');
 const courseRoutes = require("./courses.routes");
 const skillsRoutes = require("./skills.routes.js");
+const chatbotRoutes = require("./chatbot.routes");
 
 router.use("/auth", authRoutes);
 router.use("/dashboard", dashboardRoutes);
@@ -16,5 +17,6 @@ router.use("/ml", mlHealthRoutes);
 router.use('/journey', journeyRoutes);
 router.use("/courses", courseRoutes);
 router.use("/skills", skillsRoutes);
+router.use("/chatbot", chatbotRoutes);
 
 module.exports = router;
