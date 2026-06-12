@@ -406,8 +406,8 @@ function Dashboard({ onNavigate }) {
           <button className="nav-link" onClick={() => handleNavigate("learn")}>
             Learn
           </button>
-          <button className="nav-link" onClick={() => handleNavigate("progress")}>
-            Progress
+          <button className="nav-link" onClick={() => handleNavigate("chatbot")}>
+            AI Assistant
           </button>
         </div>
         <div 
@@ -655,10 +655,10 @@ function Dashboard({ onNavigate }) {
               <div className="nav-card-arrow">→</div>
             </button>
 
-            <button className="nav-card nav-card-progress" onClick={() => handleNavigate("progress")}>
-              <div className="nav-card-icon">📈</div>
-              <div className="nav-card-title">Progress</div>
-              <div className="nav-card-desc">Track your growth over time</div>
+            <button className="nav-card nav-card-progress" onClick={() => handleNavigate("chatbot")}>
+              <div className="nav-card-icon">🤖</div>
+              <div className="nav-card-title">AI Assistant</div>
+              <div className="nav-card-desc">Talk to your career counselor</div>
               <div className="nav-card-arrow">→</div>
             </button>
           </div>

@@ -80,7 +80,7 @@ const handleChat = async (req, res) => {
           if (Array.isArray(item.explanation.roadmap)) {
             studentContext += `   - Transition Roadmap:\n`;
             item.explanation.roadmap.forEach((step) => {
-              studentContext += `     Step ${step.step}: ${step.title} - ${step.description}\n`;
+              studentContext += `     Step ${step.step}: ${step.title}\n`;
             });
           }
         }
@@ -100,13 +100,18 @@ ${studentContext}
 -----------------------------------------
 
 Guidelines:
-1. Refer to the student's name, current skills, and target career paths/roadmaps naturally in conversation.
+1. Do NOT address the student by name in every single message. It feels unnatural and repetitive. Use their name only in initial greetings or when making a highly relevant, personal statement.
 2. Be action-oriented: Give specific, practical steps (e.g., suggesting resources, languages, or tools based on their roadmaps).
 3. If they haven't completed the career prediction, politely guide them to the 'Career' tab to run their ML domain and career assessment.
 4. Keep your responses encouraging, professional, and clear. Use bold text and bullet points to structure your advice.
 5. Do NOT output code blocks unless they explicitly ask for code assistance.
 6. Keep your responses concise (around 150-250 words) to ensure the chat window is readable.
 7. Avoid repeating the same background facts unless relevant to their direct query.
+8. Integrate contextually relevant emojis (e.g. 🎯, 🚀, 💻, 📈, 📚) to make your responses engaging, friendly, and visually structured.
+9. Leverage interactive markdown formations:
+   - When suggesting next steps or action items, output them as markdown checkboxes (e.g., \`- [ ] Master HTML/CSS basics\` or \`- [ ] Review missing SQL skills\`).
+   - When referencing other sections of LAKSHYA AI, embed clickable internal links in the format \`[Button Label](/student/path)\`, e.g. \`[Explore Courses](/student/learn)\`, \`[Analyze Skills](/student/skills)\`, or \`[Take Assessment](/student/career)\`. These will render as buttons.
+   - Use blockquotes (lines starting with \`> \`) for key warnings, crucial takeaways, or tips.
 `;
 
     // 6. Map message objects from client to standard OpenAI format
@@ -120,9 +125,12 @@ Guidelines:
       };
     });
 
+    // Keep only the last 6 messages to prevent token rate limits (TPM)
+    const limitedMessages = formattedMessages.slice(-6);
+
     const finalMessages = [
       { role: "system", content: systemPrompt },
-      ...formattedMessages,
+      ...limitedMessages,
     ];
 
     // 7. Call Groq Service

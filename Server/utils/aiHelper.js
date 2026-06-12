@@ -29,7 +29,7 @@ const callGemini = async (promptText) => {
       headers: {
         "Content-Type": "application/json",
       },
-      timeout: 30000, // 30 seconds timeout
+      timeout: 60000, // 60 seconds timeout
     });
 
     const candidateText = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;

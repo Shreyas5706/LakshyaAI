@@ -238,7 +238,7 @@ function Courses() {
           <button className="nav-link" onClick={() => navigate("/student/career")}>Career</button>
           <button className="nav-link" onClick={() => navigate("/student/skills")}>Skills</button>
           <button className="nav-link active-link">Learn</button>
-          <button className="nav-link" onClick={() => navigate("/student/progress")}>Progress</button>
+          <button className="nav-link" onClick={() => navigate("/student/chatbot")}>AI Assistant</button>
         </div>
         <div className="navbar-avatar" onClick={() => navigate("/student/dashboard")} style={{ cursor: "pointer" }}>
           {user?.name ? user.name.charAt(0).toUpperCase() : "S"}
