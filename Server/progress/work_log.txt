@@ -122,6 +122,21 @@ Work Done:
 - Built and ran a verification script `Server/scratch/test_chatbot.js` proving successful database context extraction, system prompt composition, and live Groq response generation.
 
 --------------------------------------------------------
+Date: 12/06/2026
+Module: AI Career Counselor Chatbot Client UI & Integration Refinements
+Work Done:
+- Designed and built the student chatbot layout (Chatbot.jsx and Chatbot.css) using a full-width two-column layout showing student profile, skills, and matched careers context alongside the chat panel.
+- Wired up client-side chat history state to the POST /api/chatbot Express backend endpoint.
+- Implemented an advanced custom message formatter in Chatbot.jsx to render markdown highlights, checklist checkboxes, styled callout boxes, and internal app link buttons.
+- Resolved a payload mismatch where the client-side role key clashed with the controller's mapper, triggering Groq 400 content missing errors.
+- Fixed scroll container bounce by replacing global scrollIntoView with localized container scrollTo/scrollTop properties.
+- Resolved navbar inconsistencies by replacing the generic "Progress" tabs across all student pages (Dashboard, CareerRecommendation, Courses, SkillgapAnalysis, CollegeRecommendation, Profile) to go to "AI Assistant" (chatbot).
+- Optimized Groq prompt token usage and TPM rate limits by condesing roadmap step strings in system prompt and capping the history sent to Groq to the last 6 messages.
+- Added client-side auto-retry logic in Axios sender to retry once after 1.5 seconds if hitting a 429 status code.
+- Fixed a syntax error in chatbot.controller.js caused by unescaped backticks in template literals.
+- Increased the Axios timeout threshold for Gemini API calls to 60 seconds (60000ms) in aiHelper.js to prevent transient 503 gateway timeouts during non-IT career predictions.
+
+--------------------------------------------------------
 
 Notes / Ideas (Optional):
 -------------------------
@@ -130,4 +145,3 @@ Notes / Ideas (Optional):
 -
 
 --------------------------------------------------------
-
