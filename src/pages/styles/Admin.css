@@ -1,0 +1,42 @@
+/* sidebar */
+.sidebar {
+  background: #1e293b;
+  color: #fff;
+}
+
+.sidebar h2 {
+  margin-bottom: 20px;
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar ul li {
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.sidebar ul li:hover {
+  background: #334155;
+}
+
+/* content */
+.main-content h1 {
+  margin-bottom: 20px;
+}
+
+/* cards */
+.card {
+  background: #f1f5f9;
+  color: #0f172a;
+  margin-bottom: 15px;
+  padding: 20px;
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
