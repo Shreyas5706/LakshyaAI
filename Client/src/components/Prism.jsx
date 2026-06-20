@@ -172,17 +172,23 @@ const Prism = ({
 
         o = tanh4(o * o * (uGlow * uBloom) / 1e5);
 
-        vec3 col = o.rgb;
-        float n = rand(gl_FragCoord.xy + vec2(iTime));
-        col += (n - 0.5) * uNoise;
-        col = clamp(col, 0.0, 1.0);
+       vec3 primary   = vec3(0.337, 0.282, 0.467); // #564877
+vec3 secondary = vec3(0.639, 0.639, 1.000); // #A3A3FF
+vec3 accent    = vec3(0.808, 0.710, 0.718); // #CEB5B7
 
-        float L = dot(col, vec3(0.2126, 0.7152, 0.0722));
-        col = clamp(mix(vec3(L), col, uSaturation), 0.0, 1.0);
+vec3 col = mix(primary, secondary, o.r);
 
-        if(abs(uHueShift) > 0.0001){
-          col = clamp(hueRotation(uHueShift) * col, 0.0, 1.0);
-        }
+col = mix(col, accent, o.g * 0.45);
+
+col += secondary * o.b * 0.35;
+
+float n = rand(gl_FragCoord.xy + vec2(iTime));
+col += (n - 0.5) * uNoise * 0.15;
+
+col = clamp(col, 0.0, 1.0);
+
+float L = dot(col, vec3(0.2126, 0.7152, 0.0722));
+col = clamp(mix(vec3(L), col, uSaturation), 0.0, 1.0);
 
         gl_FragColor = vec4(col, o.a);
       }

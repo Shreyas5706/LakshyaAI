@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Typewriter } from "react-simple-typewriter";
 import logo from "../assets/Logo.png";
-import video from "../assets/hero.mp4";
 import API from "../services/api";
 import { getCookie } from "../utils/cookies";
 import "./styles/LandingPage.css";
@@ -14,6 +13,9 @@ import BorderGlow from "../components/BorderGlow";
 import studentImg from "../assets/student.png";
 import facultyImg from "../assets/faculty.png";
 import adminImg from "../assets/admin.png";
+import heroAvatar from "../assets/hero-avatar.png";
+import aboutAvatar from "../assets/about-avatar.png";
+import footerAvatar from "../assets/footer-avatar.png";
 import { FaLinkedinIn, FaInstagram, FaTwitter } from "react-icons/fa";
 
 // Nav link component
@@ -108,6 +110,13 @@ export default function LandingPage() {
       {/* ================= HERO ================= */}
       <section id="home" className="hero-section">
         <div className="hero-visual">
+          <div className="hero-avatar-container">
+            <img
+              src={heroAvatar}
+              alt="Lakshya Student"
+              className="hero-avatar"
+            />
+          </div>
           <Prism
             animationType="rotate"
             timeScale={0.5}
@@ -118,6 +127,7 @@ export default function LandingPage() {
             colorFrequency={1}
             noise={0}
             glow={1}
+            bloom={2}
           />
 
           <div className="hero-text-overlay">
@@ -154,7 +164,7 @@ export default function LandingPage() {
         <div>
           <section id="features" className="section features-section">
             <GradientText
-              colors={["#13B19F", "#4DD4C4", "#0F172A"]}
+              colors={["#564877", "#9596C4", "#C381B0"]}
               animationSpeed={8}
               showBorder={false}
               className="custom-class"
@@ -189,14 +199,14 @@ export default function LandingPage() {
                 ].map(([title, desc]) => (
                   <BorderGlow
                     edgeSensitivity={30}
-                    glowColor="19 177 159"
+                    glowColor="163 163 255"
                     backgroundColor="#FFFFFF"
                     borderRadius={28}
                     glowRadius={40}
                     glowIntensity={1}
                     coneSpread={25}
                     animated={false}
-                    colors={["#13B19F", "#4DD4C4", "#0F172A"]}
+                    colors={["#564877", "#9596C4", "#C381B0"]}
                   >
                     <div className="feature-content" key={title}>
                       <h3 className="feature-h3">{title}</h3>
@@ -226,7 +236,7 @@ export default function LandingPage() {
         <div>
           <section id="user-roles" className="section roles-section">
             <GradientText
-              colors={["#13B19F", "#4DD4C4", "#0F172A"]}
+              colors={["#564877", "#9596C4", "#C381B0"]}
               animationSpeed={8}
               showBorder={false}
               className="custom-class"
@@ -263,7 +273,6 @@ export default function LandingPage() {
       </AnimatedContent>
 
       {/* ================= ABOUT ================= */}
-
       <AnimatedContent
         distance={100}
         direction="vertical"
@@ -276,47 +285,59 @@ export default function LandingPage() {
         threshold={0.1}
         delay={0}
       >
-        <div>
-          <section id="about-us" className="section about-section">
-            <GradientText
-              colors={["#13B19F", "#4DD4C4", "#0F172A"]}
-              animationSpeed={8}
-              showBorder={false}
-              className="custom-class"
-            >
-              About
-            </GradientText>
-
-            <p className="about-text">
-              LDRP Institute of Technology and Research, Gandhinagar was
-              established in 2005–2006 and is a leading institute of technical
-              education in Gujarat.
-            </p>
-
-            <p className="about-text">
-              The institute focuses on quality education, research, and
-              innovation while producing skilled professionals.
-            </p>
-
-            <p className="about-text">
-              It is a constituent institute of Kadi Sarva Vishwavidyalaya (KSV),
-              approved by UGC.
-            </p>
-
-            <div className="about-grid">
-              {[
-                ["Established", "2005–2006"],
-                ["Affiliated University", "KSV"],
-                ["Programs Offered", "B.E., M.B.A., M.C.A."],
-              ].map(([title, value]) => (
-                <div className="about-card" key={title}>
-                  <div className="about-value">{value}</div>
-                  <div className="about-label">{title}</div>
-                </div>
-              ))}
+        <section id="about-us" className="section about-section">
+          <div className="about-layout">
+            {/* Left Side Image */}
+            <div className="about-image-side">
+              <img src={aboutAvatar} alt="About" className="about-avatar" />
             </div>
-          </section>
-        </div>
+
+            {/* Right Side Content */}
+            <div className="about-content-side">
+              <GradientText
+                colors={["#564877", "#9596C4", "#C381B0"]}
+                animationSpeed={8}
+                showBorder={false}
+                className="about-heading"
+              >
+                About Us
+              </GradientText>
+
+              <div className="about-description-card">
+                <p>
+                  LDRP Institute of Technology and Research, Gandhinagar was
+                  established in 2005–2006 and is a leading institute of
+                  technical education in Gujarat.
+                </p>
+
+                <p>
+                  The institute focuses on quality education, research and
+                  innovation while producing skilled professionals.
+                </p>
+
+                <p>
+                  It is a constituent institute of Kadi Sarva Vishwavidyalaya
+                  (KSV), approved by UGC.
+                </p>
+              </div>
+
+              <div className="about-grid">
+                {[
+                  ["2005+", "Established"],
+                  ["10+", "Departments"],
+                  ["5000+", "Students"],
+                ].map(([value, label]) => (
+                  <div className="about-stat" key={label}>
+                    <h3>{value}</h3>
+                    <span>{label}</span>
+                  </div>
+                ))}
+              </div>
+
+              <button className="about-btn">Learn More</button>
+            </div>
+          </div>
+        </section>
       </AnimatedContent>
 
       {/* ================= FOOTER ================= */}
@@ -325,8 +346,13 @@ export default function LandingPage() {
           <div className="footer-wave"></div>
 
           <div className="footer-grid">
+            <img
+              src={footerAvatar}
+              alt="Footer Avatar"
+              className="footer-avatar"
+            />
             {/* Brand */}
-            <div>
+            <div className="footer-brand-column">
               <div className="footer-brand">
                 <img src={logo} className="footer-logo" alt="logo" />
 
@@ -343,7 +369,7 @@ export default function LandingPage() {
             </div>
 
             {/* Links */}
-            <div>
+            <div className="footer-links-column">
               <h3 className="footer-heading">Quick Links</h3>
 
               {[
@@ -360,7 +386,7 @@ export default function LandingPage() {
             </div>
 
             {/* Contact */}
-            <div>
+            <div className="footer-contact-column">
               <h3 className="footer-heading">Contact</h3>
 
               <p className="footer-link">Gandhinagar, Gujarat</p>
@@ -370,7 +396,7 @@ export default function LandingPage() {
             </div>
 
             {/* Social */}
-            <div>
+            <div className="footer-social-column">
               <h3 className="footer-heading">Follow Us</h3>
 
               <div className="social-icons">

@@ -1,8 +1,8 @@
 .auth-wrapper {
   min-height: 100vh;
   display: flex;
-  align-items: center;      /* vertical center */
-  justify-content: center;  /* horizontal center */
+  align-items: center; /* vertical center */
+  justify-content: center; /* horizontal center */
 }
 /* ================= MAIN CONTAINER ================= */
 .auth-slider {
@@ -14,8 +14,8 @@
   overflow: hidden;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.08);
-   margin-top: 40px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+  margin-top: 40px;
   margin-left: 40px;
 }
 
@@ -42,7 +42,7 @@
 .auth-card h1 {
   font-size: 32px;
   font-weight: 700;
-  color: #064E3B;
+  color: #564877;
 }
 
 .auth-card p {
@@ -69,7 +69,7 @@
 .field label {
   font-size: 16px;
   font-weight: 300;
-  color: #064E3B;
+  color: #564877;
 }
 
 /* ================= INPUT ================= */
@@ -77,19 +77,19 @@
   width: 100%;
   height: 48px;
   padding: 0 14px;
-  border: 1px solid #a7f3d0;
+  border: 1px solid #ceb5b7;
   border-radius: 8px;
   font-size: 15px;
   font-weight: 500;
-  background: #f0fdfa;
-  transition: all .25s ease;
+  background: #f8f7ff;
+  transition: all 0.25s ease;
 }
 
 .input:focus {
   outline: none;
-  border-color: #14B8A6;
+  border-color: #a3a3ff;
   background: white;
-  box-shadow: 0 0 0 3px rgba(20,184,166,0.18);
+  box-shadow: 0 0 0 3px rgba(163, 163, 255, 0.25);
 }
 
 /* ================= BUTTONS ================= */
@@ -99,34 +99,34 @@
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: all .25s ease;
+  transition: all 0.25s ease;
 }
 
 /* CREATE ACCOUNT BUTTON */
 .auth-forms .create-btn {
-  background: #064E3B;
+  background: #564877;
   color: white;
   border: none;
 }
 
 .auth-forms .create-btn:hover {
-  background: #022c22;
+  background: #4a3d66;
 }
 
 /* ROLE BUTTON */
 .auth-forms .role-btn {
-  border: 2px solid #14B8A6;
-  color: #14B8A6;
+  border: 2px solid #a3a3ff;
+  color: #564877;
   background: transparent;
 }
 
 .auth-forms .role-btn:hover {
-  background: #ecfdf5;
+  background: #f3f1ff;
 }
 
 /* ================= IMAGE PANEL ================= */
 .auth-image {
-  background: linear-gradient(135deg,#14B8A6,#064E3B);
+  background: linear-gradient(135deg, #564877 0%, #8f8cac 50%, #a3a3ff 100%);
   position: relative;
   overflow: hidden;
   border-radius: 120px 0 0 120px;
@@ -151,7 +151,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(6,78,59,0.55);
+  background: rgba(86, 72, 119, 0.55);
   z-index: 1;
 }
 
@@ -188,46 +188,46 @@
 
 .auth-image-text button:hover {
   background: white;
-  color: #064E3B;
+  color: #564877;
 }
 
-.form-row{
-display:flex;
-align-items:center;
-gap:15px;
+.form-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
-.form-row label{
-width:110px;
-font-weight:600;
-color:#064E3B;
+.form-row label {
+  width: 110px;
+  font-weight: 600;
+  color: #564877;
 }
 
 .form-row input,
-.form-row select{
-flex:1;
-height:42px;
-border:1px solid #14B8A6;
-border-radius:6px;
-padding:0 10px;
+.form-row select {
+  flex: 1;
+  height: 42px;
+  border: 1px solid #ceb5b7;
+  border-radius: 6px;
+  padding: 0 10px;
 }
 
-.primary-btn{
-background:#14B8A6;
-color:white;
-border:none;
-height:45px;
-border-radius:6px;
-font-weight:600;
+.primary-btn {
+  background: #564877;
+  color: white;
+  border: none;
+  height: 45px;
+  border-radius: 6px;
+  font-weight: 600;
 }
 
-.secondary-btn{
-background:#064E3B;
-color:white;
-border:none;
-height:45px;
-border-radius:6px;
-font-weight:600;
+.secondary-btn {
+  background: #564877;
+  color: white;
+  border: none;
+  height: 45px;
+  border-radius: 6px;
+  font-weight: 600;
 }
 
 /* ================= MOBILE ================= */
@@ -246,23 +246,31 @@ font-weight:600;
 }
 
 /* ================= AUTH NAVBAR ================= */
+
 .auth-navbar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  background: rgba(255, 255, 255, 0.85);
+
+  background: rgba(255, 255, 255, 0.9);
+
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+
+  border-bottom: 1px solid rgba(206, 181, 183, 0.5);
+
   z-index: 1000;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+
+  box-shadow: 0 4px 20px rgba(86, 72, 119, 0.08);
 }
 
 .auth-nav-inner {
   max-width: 1200px;
   margin: auto;
+
   padding: 10px 24px;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -271,9 +279,12 @@ font-weight:600;
 .auth-nav-logo-group {
   display: flex;
   align-items: center;
+
   gap: 12px;
+
   cursor: pointer;
-  transition: transform 0.2s ease;
+
+  transition: transform 0.25s ease;
 }
 
 .auth-nav-logo-group:hover {
@@ -288,25 +299,41 @@ font-weight:600;
 .auth-nav-brand {
   font-size: 20px;
   font-weight: 800;
-  color: #064E3B;
+
+  color: #564877;
+
   letter-spacing: 0.8px;
 }
 
+/* ================= BACK BUTTON ================= */
+
 .auth-nav-back-btn {
   padding: 8px 22px;
-  border-radius: 20px;
-  border: 1.5px solid #064E3B;
-  color: #064E3B;
-  background: transparent;
+
+  border-radius: 24px;
+
+  border: 1.5px solid #8f8cac;
+
+  color: #564877;
+
+  background: rgba(255, 255, 255, 0.7);
+
   font-size: 14px;
   font-weight: 600;
+
   cursor: pointer;
+
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .auth-nav-back-btn:hover {
-  background: #064E3B;
+  background: linear-gradient(135deg, #564877, #8f8cac);
+
   color: white;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(6, 78, 91, 0.15);
+
+  border-color: transparent;
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 8px 20px rgba(86, 72, 119, 0.25);
 }

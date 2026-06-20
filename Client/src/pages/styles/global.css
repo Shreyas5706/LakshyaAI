@@ -1,6 +1,7 @@
 /* ========================= */
 /* RESET + BASE STYLES       */
 /* ========================= */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap");
 
 * {
   margin: 0;
@@ -8,11 +9,19 @@
   box-sizing: border-box;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   width: 100%;
-  font-family: "Segoe UI", sans-serif;
-  background : linear-gradient(135deg,#ecfdf5,#ccfbf1);
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(
+    180deg,
+    #f8f8fc 0%,
+    #f3f1ff 30%,
+    #ede9ff 60%,
+    #f8f8fc 100%
+  );
   color: #f1f5f9;
   margin: 0;
 }
@@ -31,4 +40,3 @@ html, body, #root {
 * {
   scrollbar-width: none;
 }
-

@@ -3,21 +3,65 @@ import { useNavigate } from "react-router-dom";
 import API from "../../services/api";
 import { setCookie } from "../../utils/cookies";
 import "../styles/auth.css";
-import workspaceImg from "../../assets/3d-illustration-workspace.jpg";
+import workspaceImg from "../../assets/Auth-avatar.png";
 
 const GENDER_OPTIONS = ["Male", "Female", "Other"];
 const INDIAN_STATES = [
-  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
-  "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka",
-  "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram",
-  "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu",
-  "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal",
-  "Delhi", "Jammu and Kashmir", "Ladakh", "Puducherry", "Chandigarh"
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal",
+  "Delhi",
+  "Jammu and Kashmir",
+  "Ladakh",
+  "Puducherry",
+  "Chandigarh",
 ];
-const EDUCATION_LEVELS = ["10th", "12th", "Diploma", "Undergraduate", "Postgraduate"];
+const EDUCATION_LEVELS = [
+  "10th",
+  "12th",
+  "Diploma",
+  "Undergraduate",
+  "Postgraduate",
+];
 const STREAMS = [
-  "Science (PCM)", "Science (PCB)", "Commerce", "Arts", "Computer Science",
-  "IT", "Mechanical", "Civil", "Electrical", "Medical", "Law", "MBA", "Design"
+  "Science (PCM)",
+  "Science (PCB)",
+  "Commerce",
+  "Arts",
+  "Computer Science",
+  "IT",
+  "Mechanical",
+  "Civil",
+  "Electrical",
+  "Medical",
+  "Law",
+  "MBA",
+  "Design",
 ];
 
 export default function Auth() {
@@ -62,7 +106,12 @@ export default function Auth() {
     }
 
     if (signupRole === "student") {
-      if (!signupAge || isNaN(signupAge) || Number(signupAge) < 10 || Number(signupAge) > 30) {
+      if (
+        !signupAge ||
+        isNaN(signupAge) ||
+        Number(signupAge) < 10 ||
+        Number(signupAge) > 30
+      ) {
         return setSignupError("Please enter a valid age between 10 and 30");
       }
       if (!signupGender) {
@@ -93,7 +142,8 @@ export default function Auth() {
         gender: signupRole === "student" ? signupGender : undefined,
         state: signupRole === "student" ? signupState : undefined,
         city: signupRole === "student" ? signupCity.trim() : undefined,
-        educationLevel: signupRole === "student" ? signupEducationLevel : undefined,
+        educationLevel:
+          signupRole === "student" ? signupEducationLevel : undefined,
         stream: signupRole === "student" ? signupStream : undefined,
       });
 
@@ -110,7 +160,8 @@ export default function Auth() {
       setSignupEducationLevel("");
       setSignupStream("");
     } catch (err) {
-      const msg = err.response?.data?.message || "Signup failed. Please try again.";
+      const msg =
+        err.response?.data?.message || "Signup failed. Please try again.";
       setSignupError(msg);
     }
   };
@@ -136,26 +187,28 @@ export default function Auth() {
       // Determine onboarding completed status:
       // A student has completed onboarding if they already have skills in the backend
       const onboardingCompleted =
-        user.role === "student" &&
-        user.skills &&
-        user.skills.length > 0;
+        user.role === "student" && user.skills && user.skills.length > 0;
 
-      setCookie("lakshyaSession", {
-        token,
-        role: user.role,
-        user: {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          age: user.age,
-          gender: user.gender,
-          state: user.state,
-          city: user.city,
-          educationLevel: user.educationLevel,
-          stream: user.stream,
+      setCookie(
+        "lakshyaSession",
+        {
+          token,
+          role: user.role,
+          user: {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            age: user.age,
+            gender: user.gender,
+            state: user.state,
+            city: user.city,
+            educationLevel: user.educationLevel,
+            stream: user.stream,
+          },
+          onboardingCompleted,
         },
-        onboardingCompleted,
-      }, 1);
+        1
+      );
 
       if (user.role === "student") {
         if (onboardingCompleted) {
@@ -238,8 +291,31 @@ export default function Auth() {
                     </div>
 
                     {signupRole === "student" && (
-                      <div className="student-profile-fields" style={{ maxHeight: "200px", overflowY: "auto", paddingRight: "5px", display: "flex", flexDirection: "column", gap: "16px", border: "1px solid #e2e8f0", borderRadius: "8px", padding: "12px", background: "#f8fafc" }}>
-                        <h3 style={{ fontSize: "14px", fontWeight: "600", color: "#0f172a", marginBottom: "4px" }}>Student Profile Details</h3>
+                      <div
+                        className="student-profile-fields"
+                        style={{
+                          maxHeight: "200px",
+                          overflowY: "auto",
+                          paddingRight: "5px",
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "16px",
+                          border: "1px solid #e2e8f0",
+                          borderRadius: "8px",
+                          padding: "12px",
+                          background: "#f8fafc",
+                        }}
+                      >
+                        <h3
+                          style={{
+                            fontSize: "14px",
+                            fontWeight: "600",
+                            color: "#0f172a",
+                            marginBottom: "4px",
+                          }}
+                        >
+                          Student Profile Details
+                        </h3>
                         <div className="form-row">
                           <label>Age</label>
                           <input
@@ -259,7 +335,9 @@ export default function Auth() {
                           >
                             <option value="">Select Gender</option>
                             {GENDER_OPTIONS.map((g) => (
-                              <option key={g} value={g}>{g}</option>
+                              <option key={g} value={g}>
+                                {g}
+                              </option>
                             ))}
                           </select>
                         </div>
@@ -272,7 +350,9 @@ export default function Auth() {
                           >
                             <option value="">Select State</option>
                             {INDIAN_STATES.map((s) => (
-                              <option key={s} value={s}>{s}</option>
+                              <option key={s} value={s}>
+                                {s}
+                              </option>
                             ))}
                           </select>
                         </div>
@@ -291,11 +371,15 @@ export default function Auth() {
                           <select
                             className="input"
                             value={signupEducationLevel}
-                            onChange={(e) => setSignupEducationLevel(e.target.value)}
+                            onChange={(e) =>
+                              setSignupEducationLevel(e.target.value)
+                            }
                           >
                             <option value="">Select Education Level</option>
                             {EDUCATION_LEVELS.map((el) => (
-                              <option key={el} value={el}>{el}</option>
+                              <option key={el} value={el}>
+                                {el}
+                              </option>
                             ))}
                           </select>
                         </div>
@@ -308,7 +392,9 @@ export default function Auth() {
                           >
                             <option value="">Select Stream</option>
                             {STREAMS.map((st) => (
-                              <option key={st} value={st}>{st}</option>
+                              <option key={st} value={st}>
+                                {st}
+                              </option>
                             ))}
                           </select>
                         </div>
@@ -320,13 +406,6 @@ export default function Auth() {
                       className="create-btn w-full"
                     >
                       Sign Up
-                    </button>
-
-                    <button
-                      onClick={() => setActive(false)}
-                      className="w-full mt-2 border border-indigo-600 text-indigo-600 py-3 rounded-xl font-semibold hover:bg-indigo-50"
-                    >
-                      Already have an account? Sign In
                     </button>
                   </div>
                 </div>
@@ -369,24 +448,19 @@ export default function Auth() {
                     <div style={{ textAlign: "right", marginTop: "-8px" }}>
                       <span
                         onClick={() => navigate("/forgot-password")}
-                        style={{ fontSize: "13px", color: "#14B8A6", cursor: "pointer", fontWeight: "600" }}
+                        style={{
+                          fontSize: "13px",
+                          color: "#14B8A6",
+                          cursor: "pointer",
+                          fontWeight: "600",
+                        }}
                       >
                         Forgot Password?
                       </span>
                     </div>
 
-                    <button
-                      onClick={handleLogin}
-                      className="w-full mt-2 border border-indigo-600 text-indigo-600 py-3 rounded-xl font-semibold hover:bg-indigo-50"
-                    >
-                      Continue
-                    </button>
-
-                    <button
-                      onClick={() => setActive(true)}
-                      className="create-btn w-full"
-                    >
-                      Create Account
+                    <button onClick={handleLogin} className="create-btn w-full">
+                      Login
                     </button>
                   </div>
                 </div>
@@ -414,7 +488,7 @@ export default function Auth() {
                 onClick={() => setActive(!active)}
                 className="border border-white text-white px-8 py-3 rounded-xl font-semibold hover:bg-white hover:text-indigo-600 transition"
               >
-                {active ? "Sign In" : "Sign Up"}
+                {active ? "Sign In" : "Create Account"}
               </button>
             </div>
           </div>
