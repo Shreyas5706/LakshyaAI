@@ -14,6 +14,7 @@ import BorderGlow from "../components/BorderGlow";
 import studentImg from "../assets/student.png";
 import facultyImg from "../assets/faculty.png";
 import adminImg from "../assets/admin.png";
+import { FaLinkedinIn, FaInstagram, FaTwitter } from "react-icons/fa";
 
 // Nav link component
 function NavItem({ text, target }) {
@@ -319,55 +320,80 @@ export default function LandingPage() {
       </AnimatedContent>
 
       {/* ================= FOOTER ================= */}
-      <footer id="contact" className="footer">
-        <div className="footer-grid">
-          <div>
-            <div className="footer-brand">
-              <img src={logo} className="footer-logo" alt="logo" />
-              <span className="footer-title">Lakshya</span>
-              <span className="footer-sub">@KSV</span>
+      <footer id="contact" className="footer-section">
+        <div className="footer-card">
+          <div className="footer-wave"></div>
+
+          <div className="footer-grid">
+            {/* Brand */}
+            <div>
+              <div className="footer-brand">
+                <img src={logo} className="footer-logo" alt="logo" />
+
+                <div>
+                  <h3 className="footer-title">Lakshya</h3>
+                  <span className="footer-sub">@KSV</span>
+                </div>
+              </div>
+
+              <p className="footer-text">
+                Inspiring students to innovate, collaborate and track academic
+                excellence through a modern ERP platform.
+              </p>
             </div>
 
-            <p className="footer-text">
-              Inspiring students to innovate, collaborate and track academic
-              excellence.
-            </p>
+            {/* Links */}
+            <div>
+              <h3 className="footer-heading">Quick Links</h3>
+
+              {[
+                ["Home", "home"],
+                ["Features", "features"],
+                ["User Roles", "user-roles"],
+                ["About Us", "about-us"],
+                ["Contact", "contact"],
+              ].map(([text, target]) => (
+                <a key={text} href={`#${target}`} className="footer-link">
+                  {text}
+                </a>
+              ))}
+            </div>
+
+            {/* Contact */}
+            <div>
+              <h3 className="footer-heading">Contact</h3>
+
+              <p className="footer-link">Gandhinagar, Gujarat</p>
+              <p className="footer-link">KSV University</p>
+              <p className="footer-link">info@lakshya.com</p>
+              <p className="footer-link">+91 79 0000 0000</p>
+            </div>
+
+            {/* Social */}
+            <div>
+              <h3 className="footer-heading">Follow Us</h3>
+
+              <div className="social-icons">
+                <a href="/">
+                  <FaLinkedinIn />
+                </a>
+
+                <a href="/">
+                  <FaInstagram />
+                </a>
+
+                <a href="/">
+                  <FaTwitter />
+                </a>
+              </div>
+            </div>
           </div>
 
-          <div>
-            <h3 className="footer-heading">Quick Links</h3>
-            {[
-              ["Home", "home"],
-              ["Features", "features"],
-              ["User Roles", "user-roles"],
-              ["About Us", "about-us"],
-              ["Contact", "contact"],
-            ].map(([text, target]) => (
-              <a key={text} href={`#${target}`} className="footer-link">
-                {text}
-              </a>
-            ))}
-          </div>
+          <div className="footer-bottom">
+            <span>© 2026 Lakshya ERP. All Rights Reserved.</span>
 
-          <div>
-            <h3 className="footer-heading">Contact</h3>
-            <p className="footer-text">Gandhinagar, Gujarat</p>
-            <p className="footer-text">KSV University</p>
-            <p className="footer-text">info@collegeerp.in</p>
-            <p className="footer-text">+91 79 0000 0000</p>
+            <span>Designed for Academic Excellence</span>
           </div>
-
-          <div>
-            <h3 className="footer-heading">Follow</h3>
-            <p className="footer-link">LinkedIn</p>
-            <p className="footer-link">Instagram</p>
-            <p className="footer-link">Twitter</p>
-          </div>
-        </div>
-
-        <div className="footer-bottom">
-          <span>© 2026 College ERP System • Affiliated to KSV University</span>
-          <span>Designed for Academic Excellence</span>
         </div>
       </footer>
     </>
