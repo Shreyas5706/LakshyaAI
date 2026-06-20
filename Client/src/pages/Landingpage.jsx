@@ -6,6 +6,15 @@ import video from "../assets/hero.mp4";
 import API from "../services/api";
 import { getCookie } from "../utils/cookies";
 import "./styles/LandingPage.css";
+import GradientText from "../components/GradientText";
+import Prism from "../components/Prism";
+import TextType from "../components/TextType";
+import AnimatedContent from "../components/AnimatedContent";
+import BorderGlow from "../components/BorderGlow";
+import studentImg from "../assets/student.png";
+import facultyImg from "../assets/faculty.png";
+import adminImg from "../assets/admin.png";
+import { FaLinkedinIn, FaInstagram, FaTwitter } from "react-icons/fa";
 
 // Nav link component
 function NavItem({ text, target }) {
@@ -61,7 +70,6 @@ export default function LandingPage() {
       {/* ================= NAVBAR ================= */}
       <header className="navbar">
         <div className="nav-inner">
-
           <div className="nav-left">
             <img src={logo} className="logo" alt="Lakshya Logo" />
             <span className="brand">LAKSHYA</span>
@@ -85,17 +93,11 @@ export default function LandingPage() {
 
           <div className="nav-right">
             {session ? (
-              <button
-                className="signup-btn"
-                onClick={handleDashboardRedirect}
-              >
+              <button className="signup-btn" onClick={handleDashboardRedirect}>
                 Go to Dashboard
               </button>
             ) : (
-              <button
-                className="signup-btn"
-                onClick={() => navigate("/auth")}
-              >
+              <button className="signup-btn" onClick={() => navigate("/auth")}>
                 Sign Up
               </button>
             )}
@@ -105,168 +107,294 @@ export default function LandingPage() {
 
       {/* ================= HERO ================= */}
       <section id="home" className="hero-section">
+        <div className="hero-visual">
+          <Prism
+            animationType="rotate"
+            timeScale={0.5}
+            height={3.5}
+            baseWidth={5.5}
+            scale={3.6}
+            hueShift={0}
+            colorFrequency={1}
+            noise={0}
+            glow={1}
+          />
 
-        <video autoPlay muted loop playsInline className="hero-video">
-          <source src={video} type="video/mp4" />
-        </video>
-
-        <div className="hero-content">
-          <h1 className="hero-title">
-            <Typewriter
-              words={["Welcome to LAKSHYA"]}
-              loop={1}
-              cursor
-              cursorStyle="|"
-              typeSpeed={80}
-              deleteSpeed={50}
-              delaySpeed={2000}
+          <div className="hero-text-overlay">
+            <TextType
+              text={["WELCOM TO LAKSHYA", "Smart Academic Automation Platform"]}
+              typingSpeed={75}
+              pauseDuration={1500}
+              showCursor
+              cursorCharacter="_"
+              deletingSpeed={50}
+              variableSpeedEnabled={false}
+              variableSpeedMin={60}
+              variableSpeedMax={120}
+              cursorBlinkDuration={0.5}
             />
-          </h1>
-
-          <p className="hero-subtitle">
-            Smart Academic Automation Platform
-          </p>
+          </div>
         </div>
-
       </section>
 
       {/* ================= FEATURES ================= */}
-      <section id="features" className="section features-section">
-        <h2 className="section-title">Features</h2>
 
-        <div className="grid-3">
-          {[
-            ["Instant Marks Notification","Automatically sends marks and remarks to students and parents."],
-            ["Attendance Risk Alert","Monitors attendance and alerts when low."],
-            ["KSV Exam Eligibility Checker","Checks eligibility based on rules."],
-            ["Academic Health Score","Calculates performance score."],
-            ["Missed Class Recovery Tracker","Provides recovery materials."],
-            ["Parent–Faculty Messaging","Secure communication system."],
-            ["Internal Marks Dispute System","Resolve marks queries."],
-            ["Monthly Academic Summary","Monthly progress reports."],
-            ["Student Profile Vault","Central academic record system."]
-          ].map(([title, desc]) => (
-            <div className="card feature-card" key={title}>
-              <h3 className="feature-h3">{title}</h3>
-              <p className="feature-para">{desc}</p>
+      <AnimatedContent
+        distance={100}
+        direction="vertical"
+        reverse={false}
+        duration={0.8}
+        ease="power3.out"
+        initialOpacity={0}
+        animateOpacity
+        scale={1}
+        threshold={0.1}
+        delay={0}
+      >
+        <div>
+          <section id="features" className="section features-section">
+            <GradientText
+              colors={["#13B19F", "#4DD4C4", "#0F172A"]}
+              animationSpeed={8}
+              showBorder={false}
+              className="custom-class"
+            >
+              Features
+            </GradientText>
+
+            <div style={{ padding: "2em" }}>
+              <div className="grid-3">
+                {[
+                  [
+                    "Instant Marks Notification",
+                    "Automatically sends marks and remarks to students and parents.",
+                  ],
+                  [
+                    "Attendance Risk Alert",
+                    "Monitors attendance and alerts when low.",
+                  ],
+                  [
+                    "KSV Exam Eligibility Checker",
+                    "Checks eligibility based on rules.",
+                  ],
+                  ["Academic Health Score", "Calculates performance score."],
+                  [
+                    "Missed Class Recovery Tracker",
+                    "Provides recovery materials.",
+                  ],
+                  ["Parent–Faculty Messaging", "Secure communication system."],
+                  ["Internal Marks Dispute System", "Resolve marks queries."],
+                  ["Monthly Academic Summary", "Monthly progress reports."],
+                  ["Student Profile Vault", "Central academic record system."],
+                ].map(([title, desc]) => (
+                  <BorderGlow
+                    edgeSensitivity={30}
+                    glowColor="19 177 159"
+                    backgroundColor="#FFFFFF"
+                    borderRadius={28}
+                    glowRadius={40}
+                    glowIntensity={1}
+                    coneSpread={25}
+                    animated={false}
+                    colors={["#13B19F", "#4DD4C4", "#0F172A"]}
+                  >
+                    <div className="feature-content" key={title}>
+                      <h3 className="feature-h3">{title}</h3>
+                      <p className="feature-para">{desc}</p>
+                    </div>
+                  </BorderGlow>
+                ))}
+              </div>
             </div>
-          ))}
+          </section>
         </div>
-      </section>
+      </AnimatedContent>
 
       {/* ================= USER ROLES ================= */}
-      <section id="user-roles" className="section roles-section">
-        <h2 className="section-title">System User Roles</h2>
-
-        <div className="grid-roles">
-          {[
-            [
-              "Student",
-              "Accesses academic records, attendance, marks, eligibility, recovery materials, certificates, and profile information."
-            ],
-            [
-              "Faculty",
-              "Manages marks, attendance, monitors students, handles queries, and communicates with parents."
-            ],
-            [
-              "Admin",
-              "Supervises academic system, manages rules, monitors performance, and controls operations."
-            ]
-          ].map(([title, desc]) => (
-            <div className="card role-card" key={title}>
-              <h3 className="role-h3">{title}</h3>
-              <p className="role-para">{desc}</p>
+      <AnimatedContent
+        distance={100}
+        direction="vertical"
+        reverse={false}
+        duration={0.8}
+        ease="power3.out"
+        initialOpacity={0}
+        animateOpacity
+        scale={1}
+        threshold={0.1}
+        delay={0}
+      >
+        <div>
+          <section id="user-roles" className="section roles-section">
+            <GradientText
+              colors={["#13B19F", "#4DD4C4", "#0F172A"]}
+              animationSpeed={8}
+              showBorder={false}
+              className="custom-class"
+            >
+              User Roles
+            </GradientText>
+            <div className="grid-roles">
+              {[
+                [
+                  "Student",
+                  studentImg,
+                  "Accesses academic records, attendance, marks, eligibility, recovery materials, certificates, and profile information.",
+                ],
+                [
+                  "Faculty",
+                  facultyImg,
+                  "Manages marks, attendance, monitors students, handles queries, and communicates with parents.",
+                ],
+                [
+                  "Admin",
+                  adminImg,
+                  "Supervises academic system, manages rules, monitors performance, and controls operations.",
+                ],
+              ].map(([title, image, desc]) => (
+                <div className="card role-card" key={title}>
+                  <img src={image} alt={title} className="role-image" />
+                  <h3 className="role-h3">{title}</h3>
+                  <p className="role-para">{desc}</p>
+                </div>
+              ))}
             </div>
-          ))}
+          </section>
         </div>
-      </section>
+      </AnimatedContent>
 
       {/* ================= ABOUT ================= */}
-      <section id="about-us" className="section about-section">
-        <h2 className="section-title">
-          About LDRP Institute of Technology & Research
-        </h2>
 
-        <p className="about-text">
-          LDRP Institute of Technology and Research, Gandhinagar was established in 2005–2006 and is a leading institute of technical education in Gujarat.
-        </p>
+      <AnimatedContent
+        distance={100}
+        direction="vertical"
+        reverse={false}
+        duration={0.8}
+        ease="power3.out"
+        initialOpacity={0}
+        animateOpacity
+        scale={1}
+        threshold={0.1}
+        delay={0}
+      >
+        <div>
+          <section id="about-us" className="section about-section">
+            <GradientText
+              colors={["#13B19F", "#4DD4C4", "#0F172A"]}
+              animationSpeed={8}
+              showBorder={false}
+              className="custom-class"
+            >
+              About
+            </GradientText>
 
-        <p className="about-text">
-          The institute focuses on quality education, research, and innovation while producing skilled professionals.
-        </p>
+            <p className="about-text">
+              LDRP Institute of Technology and Research, Gandhinagar was
+              established in 2005–2006 and is a leading institute of technical
+              education in Gujarat.
+            </p>
 
-        <p className="about-text">
-          It is a constituent institute of Kadi Sarva Vishwavidyalaya (KSV), approved by UGC.
-        </p>
+            <p className="about-text">
+              The institute focuses on quality education, research, and
+              innovation while producing skilled professionals.
+            </p>
 
-        <div className="about-grid">
-          {[
-            ["Established", "2005–2006"],
-            ["Affiliated University", "KSV"],
-            ["Programs Offered", "B.E., M.B.A., M.C.A."]
-          ].map(([title, value]) => (
-            <div className="about-card" key={title}>
-              <div className="about-value">{value}</div>
-              <div className="about-label">{title}</div>
+            <p className="about-text">
+              It is a constituent institute of Kadi Sarva Vishwavidyalaya (KSV),
+              approved by UGC.
+            </p>
+
+            <div className="about-grid">
+              {[
+                ["Established", "2005–2006"],
+                ["Affiliated University", "KSV"],
+                ["Programs Offered", "B.E., M.B.A., M.C.A."],
+              ].map(([title, value]) => (
+                <div className="about-card" key={title}>
+                  <div className="about-value">{value}</div>
+                  <div className="about-label">{title}</div>
+                </div>
+              ))}
             </div>
-          ))}
+          </section>
         </div>
-      </section>
+      </AnimatedContent>
 
       {/* ================= FOOTER ================= */}
-      <footer id="contact" className="footer">
+      <footer id="contact" className="footer-section">
+        <div className="footer-card">
+          <div className="footer-wave"></div>
 
-        <div className="footer-grid">
+          <div className="footer-grid">
+            {/* Brand */}
+            <div>
+              <div className="footer-brand">
+                <img src={logo} className="footer-logo" alt="logo" />
 
-          <div>
-            <div className="footer-brand">
-              <img src={logo} className="footer-logo" alt="logo" />
-              <span className="footer-title">Lakshya</span>
-              <span className="footer-sub">@KSV</span>
+                <div>
+                  <h3 className="footer-title">Lakshya</h3>
+                  <span className="footer-sub">@KSV</span>
+                </div>
+              </div>
+
+              <p className="footer-text">
+                Inspiring students to innovate, collaborate and track academic
+                excellence through a modern ERP platform.
+              </p>
             </div>
 
-            <p className="footer-text">
-              Inspiring students to innovate, collaborate and track academic excellence.
-            </p>
+            {/* Links */}
+            <div>
+              <h3 className="footer-heading">Quick Links</h3>
+
+              {[
+                ["Home", "home"],
+                ["Features", "features"],
+                ["User Roles", "user-roles"],
+                ["About Us", "about-us"],
+                ["Contact", "contact"],
+              ].map(([text, target]) => (
+                <a key={text} href={`#${target}`} className="footer-link">
+                  {text}
+                </a>
+              ))}
+            </div>
+
+            {/* Contact */}
+            <div>
+              <h3 className="footer-heading">Contact</h3>
+
+              <p className="footer-link">Gandhinagar, Gujarat</p>
+              <p className="footer-link">KSV University</p>
+              <p className="footer-link">info@lakshya.com</p>
+              <p className="footer-link">+91 79 0000 0000</p>
+            </div>
+
+            {/* Social */}
+            <div>
+              <h3 className="footer-heading">Follow Us</h3>
+
+              <div className="social-icons">
+                <a href="/">
+                  <FaLinkedinIn />
+                </a>
+
+                <a href="/">
+                  <FaInstagram />
+                </a>
+
+                <a href="/">
+                  <FaTwitter />
+                </a>
+              </div>
+            </div>
           </div>
 
-          <div>
-            <h3 className="footer-heading">Quick Links</h3>
-            {[
-              ["Home", "home"],
-              ["Features", "features"],
-              ["User Roles", "user-roles"],
-              ["About Us", "about-us"],
-              ["Contact", "contact"]
-            ].map(([text, target]) => (
-              <a key={text} href={`#${target}`} className="footer-link">
-                {text}
-              </a>
-            ))}
-          </div>
+          <div className="footer-bottom">
+            <span>© 2026 Lakshya ERP. All Rights Reserved.</span>
 
-          <div>
-            <h3 className="footer-heading">Contact</h3>
-            <p className="footer-text">Gandhinagar, Gujarat</p>
-            <p className="footer-text">KSV University</p>
-            <p className="footer-text">info@collegeerp.in</p>
-            <p className="footer-text">+91 79 0000 0000</p>
+            <span>Designed for Academic Excellence</span>
           </div>
-
-          <div>
-            <h3 className="footer-heading">Follow</h3>
-            <p className="footer-link">LinkedIn</p>
-            <p className="footer-link">Instagram</p>
-            <p className="footer-link">Twitter</p>
-          </div>
-
         </div>
-
-        <div className="footer-bottom">
-          <span>© 2026 College ERP System • Affiliated to KSV University</span>
-        <span>Designed for Academic Excellence</span>
-        </div>
-
       </footer>
     </>
   );

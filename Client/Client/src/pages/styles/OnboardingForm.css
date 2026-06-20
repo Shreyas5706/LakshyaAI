@@ -1,0 +1,950 @@
+/* ============================================================
+   OnboardingForm.css
+   This file controls how every element on the onboarding
+   page LOOKS — colors, fonts, sizes, spacing, animations.
+
+   How CSS works:
+   - We write the name of the HTML element or class (called a "selector")
+   - Then inside { } we write the styling rules
+   - Example: .btn { color: white; } means all elements with
+     class "btn" will have white text.
+
+   We use CSS Custom Properties (also called CSS variables) at the
+   top inside :root — so we can reuse colors and fonts easily
+   without repeating them everywhere.
+   ============================================================ */
+
+/* ============================================================
+   FONTS — We import a nice font from Google Fonts
+   "Nunito" is a friendly, rounded font — perfect for students
+   ============================================================ */
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap");
+
+/* ============================================================
+   CSS VARIABLES (Custom Properties)
+   Think of these like named containers for values.
+   Instead of typing "#6C63FF" everywhere, we write var(--primary)
+   This makes it easy to change the whole color scheme in one place.
+   ============================================================ */
+:root {
+  /* Main brand color — a rich indigo/violet */
+  --primary: #6c63ff;
+
+  /* A slightly darker version for hover effects */
+  --primary-dark: #574fd6;
+
+  /* A very light version for backgrounds and highlights */
+  --primary-light: #eef0ff;
+
+  /* Success green — used for "selected" states */
+  --success: #22c55e;
+
+  /* Light green background for selected skill cards */
+  --success-light: #dcfce7;
+
+  /* Error/warning red */
+  --danger: #ef4444;
+
+  /* Light background color for the whole page */
+  --bg-page: #f4f6ff;
+
+  /* White — used for cards and panels */
+  --white: #ffffff;
+
+  /* Dark text color for headings */
+  --text-dark: #1e1b4b;
+
+  /* Medium gray for body text */
+  --text-medium: #4b5563;
+
+  /* Light gray for placeholder text and subtle borders */
+  --text-light: #9ca3af;
+
+  /* Border color for input boxes */
+  --border: #e5e7eb;
+
+  /* Border color on hover/focus */
+  --border-active: #6c63ff;
+
+  /* The font we use for body text and labels */
+  --font-body: "Nunito", sans-serif;
+
+  /* The font we use for big headings */
+  --font-heading: "Syne", sans-serif;
+
+  /* Rounded corners for cards */
+  --radius-card: 16px;
+
+  /* Rounded corners for input boxes */
+  --radius-input: 10px;
+
+  /* Rounded corners for small buttons/chips */
+  --radius-chip: 50px;
+
+  /* A soft shadow for cards — gives depth */
+  --shadow-card: 0 4px 24px rgba(108, 99, 255, 0.08);
+
+  /* A slightly bigger shadow for hover effects */
+  --shadow-hover: 0 8px 32px rgba(108, 99, 255, 0.18);
+}
+
+/* ============================================================
+   GLOBAL RESET
+   Browsers add some default spacing and sizing that we don't want.
+   "box-sizing: border-box" makes width calculations predictable.
+   ============================================================ */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-page);
+  color: var(--text-dark);
+}
+
+/* ============================================================
+   WRAPPER — The outermost container
+   This is the big box that holds the left and right panels.
+   We use "display: flex" to put the left and right side by side.
+   "min-height: 100vh" means it always covers the full screen height.
+   ============================================================ */
+.onboarding-wrapper {
+  display: flex; /* Put children side by side */
+  min-height: 100vh; /* Full viewport height */
+  background-color: var(--bg-page);
+}
+
+/* One feature row (icon + text) */
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  opacity: 0.9;
+}
+
+/* The emoji icon in each feature row */
+.feature-icon {
+  font-size: 20px;
+  /* Circular background for the icon */
+  background: rgba(255, 255, 255, 0.15);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%; /* Makes it a circle */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0; /* Don't let the circle shrink */
+}
+
+/* ============================================================
+   RIGHT PANEL — The form side
+   This is where all the form steps appear.
+   It takes up the remaining space next to the left panel.
+   ============================================================ */
+.onboarding-right {
+  flex: 1; /* Take all remaining width */
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* Allow scrolling if content is tall */
+  max-width: 640px; /* Don't make it too wide on large screens */
+  margin: 0 auto; /* Center it horizontally */
+}
+
+/* ============================================================
+   STEP INDICATOR — The dots at the top (● ● ○ ○ ○)
+   These show the student which step they're on.
+   ============================================================ */
+.step-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+/* One step dot — the base style */
+.step-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%; /* Makes it a circle */
+  font-size: 12px;
+  font-weight: 700;
+  border: none; /* No border by default */
+  cursor: pointer;
+  transition: all 0.3s ease; /* Smooth change when style changes */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Active dot — the current step — shown in brand purple */
+.step-dot.active {
+  background-color: var(--primary);
+  color: white;
+  /* A glowing ring effect around the active dot */
+  box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+/* Done dot — completed steps — shown in success green */
+.step-dot.done {
+  background-color: var(--success);
+  color: white;
+  cursor: pointer; /* Pointer shows it's clickable */
+}
+
+/* Pending dot — future steps — shown in light gray */
+.step-dot.pending {
+  background-color: var(--border);
+  color: var(--text-light);
+  cursor: default; /* Not clickable, so no pointer */
+}
+
+/* ============================================================
+   PROGRESS BAR
+   A horizontal bar that fills up as steps are completed.
+   ============================================================ */
+
+/* The track (background) of the progress bar */
+.progress-bar-track {
+  height: 4px;
+  background-color: var(--border);
+  border-radius: 2px;
+  margin-bottom: 8px;
+  overflow: hidden; /* So the fill stays inside the track */
+}
+
+/* The filled portion — its width is set dynamically in JSX */
+.progress-bar-fill {
+  height: 100%;
+  background-color: var(--primary);
+  border-radius: 2px;
+  /* Smooth animation when the width changes */
+  transition: width 0.5s ease;
+}
+
+/* Small text showing "Step 2 of 5" */
+.step-label {
+  font-size: 13px;
+  color: var(--text-light);
+  margin-bottom: 32px;
+}
+
+/* ============================================================
+   FORM STEP — Container for each step's content
+   We give it a fade-in animation when it appears.
+   ============================================================ */
+.form-step {
+  animation: fadeSlideIn 0.35s ease both;
+}
+
+/* This animation makes the step appear by sliding in from the right */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px); /* Start 20px to the right */
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0); /* End at normal position */
+  }
+}
+
+/* The heading of each step */
+.step-title {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+/* The subtitle/description under the step heading */
+.step-description {
+  font-size: 15px;
+  color: var(--text-medium);
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   FORM GROUP — Container for one input field + label + error
+   We stack the label on top of the input using flex.
+   ============================================================ */
+.form-group {
+  display: flex;
+  flex-direction: column; /* Stack label → input → error vertically */
+  gap: 6px;
+  margin-bottom: 20px;
+  color: var(--text-dark);
+}
+
+/* The label text above each input */
+.form-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+/* The input box itself */
+.form-input {
+  padding: 14px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-input);
+  font-size: 15px;
+  font-family: var(--font-body);
+  color: var(--text-dark);
+  background-color: var(--white);
+  /* Smooth border color change on focus */
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+  outline: none; /* Remove the default browser outline */
+}
+
+/* Style when the student clicks inside the input (focus state) */
+.form-input:focus {
+  border-color: var(--border-active);
+  /* Soft purple glow around the input */
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+/* Style when there's a validation error */
+.form-input.input-error {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* The red error message text under an invalid input */
+.error-message {
+  font-size: 13px;
+  color: var(--danger);
+  /* Small shake animation to grab attention */
+  animation: shake 0.3s ease;
+}
+
+/* Apply same styling to select */
+select.form-input {
+  padding: 14px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-input);
+  font-size: 15px;
+  font-family: var(--font-body);
+  color: var(--text-dark);
+  background-color: var(--white);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+  outline: none;
+
+  /* Remove default browser style */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  /* Custom dropdown arrow */
+  background-image: url("data:image/svg+xml,%3Csvg fill='%236b7280' height='20' viewBox='0 0 20 20' width='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 7l5 5 5-5H5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 18px;
+
+  cursor: pointer;
+}
+
+/* Focus state (same as input) */
+select.form-input:focus {
+  border-color: var(--border-active);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+/* Error state */
+select.form-input.input-error {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+/* Shake animation for error messages */
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(6px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+/* ============================================================
+   SELECTION CARD GRID — Used for Interests and Skills
+   We display the cards in a flexible grid layout.
+   ============================================================ */
+.card-grid {
+  display: grid;
+  /* Auto-fill columns — each column is at least 130px, at most 1 fraction */
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+/* One selectable card (interest or skill) */
+.selection-card {
+  position: relative; /* So we can position the checkmark absolutely inside */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 12px;
+  background-color: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-card);
+  cursor: pointer;
+  /* Smooth transition for all style changes */
+  transition: all 0.2s ease;
+  font-family: var(--font-body);
+  box-shadow: var(--shadow-card);
+}
+
+/* When the student hovers over a card */
+.selection-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px); /* Lifts the card slightly */
+  box-shadow: var(--shadow-hover);
+}
+
+/* When the student has selected (clicked) a card */
+.selection-card.selected {
+  background-color: var(--primary-light);
+  border-color: var(--primary);
+  border-width: 2px;
+}
+
+/* Skill cards get a slightly different selected color (green) */
+.skill-card.selected {
+  background-color: var(--success-light);
+  border-color: var(--success);
+}
+
+/* The big emoji on each card */
+.card-emoji {
+  font-size: 28px;
+}
+
+/* The label text under the emoji */
+.card-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-dark);
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* The green checkmark badge that appears when a card is selected */
+.card-check {
+  position: absolute; /* Positioned relative to the card */
+  top: 8px;
+  right: 8px;
+  background-color: var(--success);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%; /* Circle */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Pop-in animation */
+  animation: popIn 0.2s ease;
+}
+
+/* Pop-in animation for the checkmark */
+@keyframes popIn {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* Small text showing how many items are selected */
+.selection-count {
+  font-size: 13px;
+  color: var(--primary);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+/* ============================================================
+   CAREER SEARCH — The search input with dropdown
+   ============================================================ */
+
+/* Wrapper that gives us relative positioning for the dropdown */
+.career-search-group {
+  position: relative; /* The dropdown is positioned relative to this */
+}
+
+/* The dropdown suggestion list */
+.suggestions-dropdown {
+  position: absolute; /* Float it below the input */
+  top: 100%; /* Start right below the input */
+  left: 0;
+  right: 0;
+  background-color: var(--white);
+  border: 1.5px solid var(--border-active);
+  border-radius: var(--radius-input);
+  box-shadow: var(--shadow-hover);
+  max-height: 220px;
+  overflow-y: auto; /* Scroll if too many suggestions */
+  z-index: 100; /* Float above other elements */
+  list-style: none; /* Remove default bullet points */
+  /* Slide down animation */
+  animation: slideDown 0.2s ease;
+  color: var(--text-dark);
+}
+
+/* Slide down animation for the dropdown */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* One item inside the dropdown */
+.suggestion-item {
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  /* Add a subtle separator between items */
+  border-bottom: 1px solid var(--border);
+}
+
+/* Last item doesn't need a border at the bottom */
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+/* When the student hovers over a suggestion */
+.suggestion-item:hover {
+  background-color: var(--primary-light);
+  color: var(--primary);
+}
+
+/* The green badge that confirms the selected career */
+.selected-career-badge {
+  margin-top: 12px;
+  padding: 12px 16px;
+  background-color: var(--success-light);
+  border-radius: var(--radius-input);
+  font-size: 14px;
+  color: var(--text-dark);
+  border: 1px solid var(--success);
+}
+
+/* ============================================================
+   QUICK PICK CHIPS — Clickable career name buttons
+   ============================================================ */
+.quick-pick-section {
+  margin-top: 24px;
+}
+
+.quick-pick-label {
+  font-size: 13px;
+  color: var(--text-medium);
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+/* The row of quick-pick chips */
+.quick-pick-chips {
+  display: flex;
+  flex-wrap: wrap; /* Wrap to next line if too many */
+  gap: 8px;
+}
+
+/* One quick-pick chip button */
+.quick-chip {
+  padding: 8px 16px;
+  background-color: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-chip); /* Fully rounded ends */
+  font-size: 13px;
+  font-family: var(--font-body);
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+
+/* Hover state for quick-pick chips */
+.quick-chip:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background-color: var(--primary-light);
+}
+
+/* Selected state for the active quick-pick chip */
+.quick-chip.chip-selected {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+/* ============================================================
+   SUMMARY CARD — Shown on Step 5 (Confirmation)
+   Displays everything the student filled in a clean card.
+   ============================================================ */
+.summary-card {
+  background-color: var(--white);
+  border-radius: var(--radius-card);
+  border: 1.5px solid var(--border);
+  box-shadow: var(--shadow-card);
+  overflow: hidden; /* Ensures rounded corners clip the inner content */
+  margin-bottom: 20px;
+}
+
+/* One section inside the summary card (e.g. Basic Info, Interests) */
+.summary-section {
+  padding: 20px 24px;
+}
+
+/* Section heading inside summary card */
+.summary-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 12px;
+}
+
+/* One row inside the basic info section (key: value) */
+.summary-row {
+  display: flex;
+  justify-content: space-between; /* Push key to left, value to right */
+  align-items: center;
+  padding: 6px 0;
+  font-size: 14px;
+  /* Subtle border between rows */
+  border-bottom: 1px solid var(--border);
+}
+
+/* The last row doesn't need a border */
+.summary-row:last-child {
+  border-bottom: none;
+}
+
+/* The label/key in a summary row (e.g. "Name") */
+.summary-key {
+  color: var(--text-medium);
+  font-weight: 500;
+}
+
+/* The value in a summary row (e.g. "Arjun Sharma") */
+.summary-value {
+  color: var(--text-dark);
+  font-weight: 700;
+}
+
+/* A horizontal divider line between sections in the summary card */
+.summary-divider {
+  height: 1px;
+  background-color: var(--border);
+}
+
+/* The career goal displayed as a purple pill badge */
+.career-goal-badge {
+  display: inline-block;
+  background-color: var(--primary);
+  color: white;
+  padding: 8px 20px;
+  border-radius: var(--radius-chip);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Container for the interest/skill chips in the summary */
+.summary-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* One chip in the summary */
+.summary-chip {
+  padding: 6px 14px;
+  border-radius: var(--radius-chip);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Interest chips are purple */
+.interest-chip {
+  background-color: var(--primary-light);
+  color: var(--primary);
+}
+
+/* Skill chips are green */
+.skill-chip {
+  background-color: var(--success-light);
+  color: #15803d; /* Dark green text */
+}
+
+/* The "Want to change something?" text */
+.edit-prompt {
+  font-size: 13px;
+  color: var(--text-medium);
+  text-align: center;
+}
+
+/* The "Go back and edit" link */
+.edit-link {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 13px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+/* ============================================================
+   NAVIGATION BUTTONS (Back / Next / Submit)
+   ============================================================ */
+.button-row {
+  display: flex;
+  justify-content: flex-end; /* Push buttons to the right */
+  gap: 12px;
+  margin-top: 32px;
+}
+
+/* Base style shared by all buttons */
+.btn {
+  padding: 14px 28px;
+  border-radius: var(--radius-chip); /* Fully rounded ends */
+  font-size: 15px;
+  font-weight: 700;
+  font-family: var(--font-body);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.3px;
+}
+
+/* Back button — outlined, not filled */
+.btn-secondary {
+  background-color: var(--white);
+  color: var(--text-medium);
+  border: 1.5px solid var(--border);
+}
+
+.btn-secondary:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* Next button — filled purple */
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-1px); /* Slight lift on hover */
+  box-shadow: 0 6px 20px rgba(108, 99, 255, 0.4);
+}
+
+/* Submit button — slightly larger, with a gradient for emphasis */
+.btn-submit {
+  background: linear-gradient(135deg, var(--primary) 0%, #4f46e5 100%);
+  color: white;
+  padding: 16px 36px;
+  font-size: 16px;
+  box-shadow: 0 4px 16px rgba(108, 99, 255, 0.35);
+}
+
+.btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(108, 99, 255, 0.45);
+}
+
+/* When a button is clicked (active state), it shrinks slightly */
+.btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* ============================================================
+   SUCCESS SCREEN — Shown after the student clicks "Let's Go!"
+   Centered, animated, celebratory.
+   ============================================================ */
+.success-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center horizontally */
+  justify-content: center; /* Center vertically */
+  height: 100vh;
+  width: 100%;
+  text-align: center;
+  padding: 40px;
+  /* Fade in animation */
+  animation: fadeIn 0.5s ease;
+}
+
+/* The big rocket emoji on success screen */
+.success-icon {
+  font-size: 80px;
+  margin-bottom: 24px;
+  /* Floating up-and-down animation */
+  animation: float 2s ease-in-out infinite;
+}
+
+/* Floating animation for the rocket */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-16px);
+  }
+}
+
+/* "You're all set!" heading */
+.success-title {
+  font-family: var(--font-heading);
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 12px;
+}
+
+/* Subtitle text */
+.success-subtitle {
+  font-size: 16px;
+  color: var(--text-medium);
+  margin-bottom: 32px;
+}
+
+/* Loading dots shown while redirecting */
+.success-dots {
+  display: flex;
+  gap: 8px;
+}
+
+/* Each loading dot */
+.success-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  /* Bounce animation — each dot has a different delay */
+  animation: bounce 1s ease infinite;
+}
+
+.success-dots span:nth-child(1) {
+  animation-delay: 0s;
+}
+.success-dots span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.success-dots span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+/* Bounce animation for loading dots */
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-10px);
+    opacity: 0.5;
+  }
+}
+
+/* General fade-in animation used in a few places */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE DESIGN — Mobile Screens
+   When the screen is smaller than 768px wide (like a phone),
+   we hide the left panel and expand the right panel to full width.
+   ============================================================ */
+@media (max-width: 768px) {
+  /* Stack left and right panels vertically instead of side by side */
+  .onboarding-wrapper {
+    flex-direction: column;
+  }
+
+  /* Hide the left decorative panel on mobile to save space */
+  .onboarding-left {
+    display: none;
+  }
+
+  /* Make the right panel take full width */
+  .onboarding-right {
+    padding: 32px 20px;
+    max-width: 100%;
+  }
+
+  /* Make step dots a bit smaller on mobile */
+  .step-dot {
+    width: 28px;
+    height: 28px;
+    font-size: 11px;
+  }
+
+  /* Shrink the step heading on mobile */
+  .step-title {
+    font-size: 22px;
+  }
+
+  /* On small screens, 2 columns is better than auto-fill */
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Stack buttons on top of each other on mobile */
+  .button-row {
+    flex-direction: column;
+  }
+
+  /* Make buttons full width on mobile */
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+}

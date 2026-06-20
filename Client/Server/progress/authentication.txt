@@ -1,0 +1,111 @@
+AUTH PROGRESS LOG
+=================
+
+Date: 17-1-26
+------
+
+Backend Authentication & Security – What is implemented
+
+1. User Authentication
+- User signup implemented
+- User login implemented
+- Password hashing using bcryptjs
+- JWT token generation on login
+
+2. JWT Authentication
+- JWT verification middleware added
+- Token read from Authorization header (Bearer token)
+- Decoded user data attached to request object
+
+3. Authorization
+- Role-based authorization middleware implemented
+- Routes can be restricted by roles (admin, student, counselor, etc.)
+
+4. Password Reset Functionality
+- Forgot password flow implemented
+- Secure reset token generation
+- Reset token hashed and stored in database
+- Token expiry time handled
+- Reset password endpoint implemented
+- Password updated securely and reset token cleared
+
+5. Email Integration
+- Email sending implemented using Nodemailer
+- Gmail SMTP with App Password used
+- Backend-only email testing done (no frontend)
+- Password reset link sent via email
+
+6. Rate Limiting & Security
+- Rate limiting middleware implemented
+- Applied to login endpoint
+- Applied to forgot-password endpoint
+- Helps prevent brute-force and abuse
+
+7. Error Handling
+- Centralized global error handling middleware added
+- Controllers pass errors using next(error)
+
+8. Environment Configuration
+- Environment variables used:
+  - PORT
+  - MONGO_URL
+  - JWT_SECRET
+  - EMAIL_SERVICE
+  - EMAIL_USER
+  - EMAIL_PASS
+  - EMAIL_FROM
+  - CLIENT_URL
+- .env file used (not committed)
+
+9. Testing
+- All authentication APIs tested using Postman
+- Signup, login, JWT protection tested
+- Password reset tested end-to-end via real email
+- MongoDB local connection verified
+
+STATUS:
+-------
+Backend authentication system is COMPLETE.
+No frontend dependency required.
+Further work can start on frontend integration, features, or deployment.
+
+--------------------------------------------------------
+
+Date: 04/06/2026
+----------------
+Frontend-Backend Authentication Integration, Cookies Session & Recovery UI Redesign
+
+Detailed description of what was implemented:
+
+1. MongoDB User Schema & Signup/Login Enhancements
+   - Added student profile registration fields: age, gender, state, city, educationLevel, and stream to UserSchema.
+   - Refactored server-side signup and login controllers to process and log these profile parameters upon user submission.
+
+2. Dev SMTP Bypass on Recovery
+   - Replaced Gmail SMTP nodemailer dispatch inside forgotPassword with a direct JSON response containing the generated reset token.
+   - Prevents SMTP 535 Bad Credentials blocks or connection timeouts during local development.
+
+3. Client Cookie-Based Session System
+   - Implemented cookie getter, setter, and deletion utility functions in Client/src/utils/cookies.js.
+   - Refactored signup/login forms in Auth.jsx, Axios interceptor in api.js, ProtectedRoute.jsx, Dashboard.jsx, and OnboardingForm.jsx to store and verify user session data using browser cookies (lakshyaSession with SameSite=Lax) instead of localStorage.
+   - Updated client state bindings in Auth.jsx inputs to resolve component stale rendering bugs.
+
+4. Multi-Channel Server Authorization Middleware
+   - Extended auth.middleware.js to verify incoming API request credentials by reading the token from:
+     - The Authorization Bearer header.
+     - The browser's lakshyaSession cookie.
+   - This provides robust and flexible JWT verification across both browser and programmatic requests.
+
+5. Route Protection Enforcement
+   - Applied authMiddleware to guard the course retrieval endpoint (/api/courses) and the internal ML health endpoint (/api/ml/health), keeping post-login resources protected.
+
+6. Forgot/Reset Password UI & Navbar Redesign
+   - Designed a responsive, glassmorphic header navbar (.auth-navbar) featuring the LAKSHYA logo and a "Back to Home" button.
+   - Restructured the recovery forms in ForgotPassword.jsx and ResetPassword.jsx into modern centered cards using Outfit/Inter typography, custom SVG icons, and rich green/emerald gradients.
+
+7. Automated Integration Testing
+   - Created and executed HTTP integration tests (test_e2e.js and test_cookie_auth.js) validating the entire registration, login, token retrieval, reset password, and new credential authentication flows.
+
+STATUS:
+-------
+Integration and Cookie-based Route Protection is COMPLETE, fully tested, and verified.
