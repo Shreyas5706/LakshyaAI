@@ -228,7 +228,7 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#eef2ff] px-6">
+    <div className="min-h-screen flex items-center justify-center bg-[#rgba(163,163,255,0.15)] px-6">
       <div className="auth-wrapper">
         <div className={`auth-slider ${active ? "active" : ""}`}>
           {/* ================= FORMS ================= */}
@@ -300,17 +300,17 @@ export default function Auth() {
                           display: "flex",
                           flexDirection: "column",
                           gap: "16px",
-                          border: "1px solid #e2e8f0",
+                          border: "1px solid #CEB5B7",
                           borderRadius: "8px",
                           padding: "12px",
-                          background: "#f8fafc",
+                          background: "#F8F8FC",
                         }}
                       >
                         <h3
                           style={{
                             fontSize: "14px",
                             fontWeight: "600",
-                            color: "#0f172a",
+                            color: "#564877",
                             marginBottom: "4px",
                           }}
                         >

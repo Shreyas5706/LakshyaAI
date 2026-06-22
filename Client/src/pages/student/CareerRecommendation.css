@@ -2,10 +2,10 @@
    CAREER RECOMMENDATIONS PAGE STYLING
 ===================================================== */
 .career-recommendation-page {
-  background: #f5f7fb;
+  background: #f8f8fc;
   min-height: 100vh;
   font-family: "Inter", sans-serif;
-  color: #0f172a;
+  color: #564877;
 }
 
 /* Container */
@@ -21,7 +21,7 @@
   border-radius: 24px;
   padding: 40px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e2e8f0;
+  border: 1px solid #ceb5b7;
   margin-top: 20px;
   animation: slideUp 0.6s ease forwards;
 }
@@ -35,13 +35,13 @@
 .step-title-text {
   font-size: 26px;
   font-weight: 700;
-  color: #0f172a;
+  color: #564877;
   margin-bottom: 8px;
 }
 
 .step-subtitle-text {
   font-size: 15px;
-  color: #64748b;
+  color: #8f8cac;
 }
 
 /* Form Groups & Inputs */
@@ -60,7 +60,7 @@
 .form-label-custom {
   font-size: 14px;
   font-weight: 600;
-  color: #334155;
+  color: #564877;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -71,9 +71,9 @@
   padding: 12px 16px;
   font-size: 15px;
   border-radius: 12px;
-  border: 1px solid #cbd5e1;
-  background: #f8fafc;
-  color: #334155;
+  border: 1px solid #ceb5b7;
+  background: #f8f8fc;
+  color: #564877;
   outline: none;
   transition: all 0.3s;
 }
@@ -92,9 +92,9 @@
   max-height: 280px;
   overflow-y: auto;
   padding: 8px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #ceb5b7;
   border-radius: 16px;
-  background: #f8fafc;
+  background: #f8f8fc;
 }
 
 .skill-pill-btn {
@@ -105,9 +105,9 @@
   font-size: 13px;
   font-weight: 500;
   border-radius: 10px;
-  border: 1px solid #cbd5e1;
+  border: 1px solid #ceb5b7;
   background: white;
-  color: #475569;
+  color: #8f8cac;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -149,19 +149,19 @@
   border-radius: 50%;
   background: #10b981;
   margin: 24px 0;
-  animation: pulse-ring 1.5s cubic-bezier(0.215, 0.610, 0.355, 1) infinite;
+  animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
 }
 
 .loading-title-custom {
   font-size: 20px;
   font-weight: 700;
-  color: #0f172a;
+  color: #564877;
   margin-bottom: 8px;
 }
 
 .loading-desc-custom {
   font-size: 14px;
-  color: #64748b;
+  color: #8f8cac;
   max-width: 450px;
 }
 
@@ -234,8 +234,8 @@
 
 .btn-secondary-custom {
   background: white;
-  color: #64748b;
-  border: 1px solid #cbd5e1;
+  color: #8f8cac;
+  border: 1px solid #ceb5b7;
   padding: 12px 28px;
   font-size: 15px;
   font-weight: 600;
@@ -245,15 +245,15 @@
 }
 
 .btn-secondary-custom:hover {
-  background: #f8fafc;
-  color: #334155;
+  background: #f8f8fc;
+  color: #564877;
   border-color: #94a3b8;
 }
 
 /* Prediction Results Layout */
 .results-grid-header {
   margin-bottom: 25px;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #ceb5b7;
   padding-bottom: 16px;
 }
 
@@ -266,7 +266,7 @@
 
 .career-select-card {
   background: white;
-  border: 2px solid #e2e8f0;
+  border: 2px solid #ceb5b7;
   border-radius: 18px;
   padding: 24px;
   cursor: pointer;
@@ -279,7 +279,7 @@
 }
 
 .career-select-card:hover {
-  border-color: #cbd5e1;
+  border-color: #ceb5b7;
   transform: translateY(-4px);
 }
 
@@ -293,7 +293,7 @@
   width: 28px;
   height: 28px;
   background: #f1f5f9;
-  color: #64748b;
+  color: #8f8cac;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -311,13 +311,13 @@
 .card-title-name {
   font-size: 18px;
   font-weight: 700;
-  color: #0f172a;
+  color: #564877;
   margin-bottom: 6px;
 }
 
 .card-title-category {
   font-size: 12px;
-  color: #64748b;
+  color: #8f8cac;
   text-transform: uppercase;
   font-weight: 600;
   letter-spacing: 0.5px;
@@ -335,8 +335,8 @@
 
 /* Detailed Information Section */
 .detailed-info-wrapper {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: #f8f8fc;
+  border: 1px solid #ceb5b7;
   border-radius: 20px;
   padding: 35px;
   animation: fadeIn 0.4s ease forwards;
@@ -345,13 +345,13 @@
 .detail-section-title {
   font-size: 20px;
   font-weight: 700;
-  color: #0f172a;
+  color: #564877;
   margin-bottom: 12px;
 }
 
 .detail-about-text {
   font-size: 15px;
-  color: #475569;
+  color: #8f8cac;
   line-height: 1.6;
   margin-bottom: 25px;
 }
@@ -366,7 +366,7 @@
 
 .salary-box-item {
   background: white;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #ceb5b7;
   border-radius: 16px;
   padding: 20px;
   display: flex;
@@ -388,7 +388,7 @@
 
 .salary-box-icon.exp {
   background: #eff6ff;
-  color: #3b82f6;
+  color: #a3a3ff;
 }
 
 .salary-box-meta {
@@ -398,7 +398,7 @@
 
 .salary-box-label {
   font-size: 11px;
-  color: #64748b;
+  color: #8f8cac;
   text-transform: uppercase;
   font-weight: 600;
 }
@@ -444,7 +444,7 @@
   position: relative;
   margin-left: 20px;
   padding-left: 30px;
-  border-left: 2px dashed #cbd5e1;
+  border-left: 2px dashed #ceb5b7;
   display: flex;
   flex-direction: column;
   gap: 25px;
@@ -483,31 +483,55 @@
 
 .timeline-step-desc {
   font-size: 13.5px;
-  color: #64748b;
+  color: #8f8cac;
   line-height: 1.5;
 }
 
 /* Animations */
 @keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
 }
 
 @keyframes pulse-ring {
-  0% { transform: scale(0.35); opacity: 0.8; }
-  50% { opacity: 0.3; }
-  100% { transform: scale(1); opacity: 0; }
+  0% {
+    transform: scale(0.35);
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
 }
 
 @keyframes slideUp {
-  from { transform: translateY(24px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Responsive Grid */
@@ -515,7 +539,8 @@
   .results-overview-cards {
     grid-template-columns: 1fr;
   }
-  .salary-row-cards, .insights-row-two-col {
+  .salary-row-cards,
+  .insights-row-two-col {
     grid-template-columns: 1fr;
   }
 }

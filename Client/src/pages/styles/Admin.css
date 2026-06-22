@@ -19,7 +19,7 @@
 }
 
 .sidebar ul li:hover {
-  background: #334155;
+  background: #564877;
 }
 
 /* content */
@@ -30,7 +30,7 @@
 /* cards */
 .card {
   background: #f1f5f9;
-  color: #0f172a;
+  color: #564877;
   margin-bottom: 15px;
   padding: 20px;
   border-radius: 10px;

@@ -2,10 +2,10 @@
    GLOBAL PAGE STYLING
 ===================================================== */
 .dashboard-page {
-  background: #f5f7fb;
+  background: #f8f8fc;
   min-height: 100vh;
   font-family: "Inter", sans-serif;
-  color: #0f172a;
+  color: #564877;
 }
 
 /* =====================================================
@@ -17,7 +17,7 @@
   z-index: 1000;
   height: 70px;
   background: white;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #ceb5b7;
 
   display: flex;
   align-items: center;
@@ -28,7 +28,7 @@
 .navbar-logo {
   font-weight: 700;
   font-size: 20px;
-  color: #0f172a;
+  color: #564877;
 }
 
 .navbar-links {
@@ -40,24 +40,24 @@
   background: none;
   border: none;
   font-size: 14px;
-  color: #64748b;
+  color: #8f8cac;
   cursor: pointer;
   transition: 0.2s;
 }
 
 .nav-link:hover {
-  color: #0f172a;
+  color: #564877;
 }
 
 .active-link {
-  color: #2563eb;
+  color: #564877;
   font-weight: 600;
 }
 
 .navbar-avatar {
   width: 38px;
   height: 38px;
-  background: #2563eb;
+  background: #564877;
   color: white;
   border-radius: 50%;
   display: flex;
@@ -85,7 +85,7 @@
   padding: 40px;
   margin-bottom: 25px;
 
-  background: linear-gradient(270deg, #2563eb, #4f46e5, #0ea5e9);
+  background: linear-gradient(270deg, #564877, #8f8cac, #0ea5e9);
   background-size: 600% 600%;
 
   animation:
@@ -198,12 +198,12 @@
 
 .stat-total {
   font-size: 14px;
-  color: #64748b;
+  color: #8f8cac;
 }
 
 .stat-label {
   font-size: 13px;
-  color: #64748b;
+  color: #8f8cac;
 }
 
 /* =====================================================
@@ -228,7 +228,7 @@
 }
 
 .task-label {
-  color: #2563eb;
+  color: #564877;
   font-size: 13px;
   margin-bottom: 10px;
   font-weight: 600;
@@ -256,11 +256,11 @@
 
 .task-duration {
   font-size: 12px;
-  color: #64748b;
+  color: #8f8cac;
 }
 
 .task-btn {
-  background: #2563eb;
+  background: #564877;
   color: white;
   border: none;
   padding: 10px 18px;
@@ -270,7 +270,7 @@
 }
 
 .task-btn:hover {
-  background: #1d4ed8;
+  background: #564877;
 }
 
 /* SKILLS SNAPSHOT */
@@ -290,7 +290,7 @@
 
 .card-subtext {
   font-size: 13px;
-  color: #64748b;
+  color: #8f8cac;
   margin-bottom: 15px;
 }
 
@@ -305,7 +305,7 @@
 }
 
 .skill-bar-track {
-  background: #e2e8f0;
+  background: #ceb5b7;
   height: 8px;
   border-radius: 6px;
   overflow: hidden;
@@ -313,7 +313,7 @@
 
 .skill-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #2563eb, #0ea5e9);
+  background: linear-gradient(90deg, #564877, #0ea5e9);
   width: 0%;
   transition: width 1s ease;
 }
@@ -322,7 +322,7 @@
   margin-top: 10px;
   background: none;
   border: none;
-  color: #2563eb;
+  color: #564877;
   cursor: pointer;
 }
 
@@ -362,7 +362,7 @@
 
 .activity-time {
   font-size: 12px;
-  color: #64748b;
+  color: #8f8cac;
 }
 
 /* =====================================================
@@ -410,13 +410,13 @@
 
 .nav-card-desc {
   font-size: 13px;
-  color: #64748b;
+  color: #8f8cac;
 }
 
 .nav-card-arrow {
   margin-top: 10px;
   font-size: 14px;
-  color: #2563eb;
+  color: #564877;
 }
 
 /* =====================================================
@@ -512,7 +512,7 @@
   height: 32px;
   border-radius: 50%;
   font-size: 20px;
-  color: #64748b;
+  color: #8f8cac;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -521,8 +521,8 @@
 }
 
 .profile-modal-close:hover {
-  background: #cbd5e1;
-  color: #0f172a;
+  background: #ceb5b7;
+  color: #564877;
 }
 
 .profile-modal-header {
@@ -536,7 +536,7 @@
 .profile-modal-avatar {
   width: 80px;
   height: 80px;
-  background: linear-gradient(135deg, #4f46e5, #2563eb);
+  background: linear-gradient(135deg, #8f8cac, #564877);
   color: white;
   font-size: 36px;
   font-weight: 700;
@@ -552,7 +552,7 @@
   font-size: 22px;
   font-weight: 700;
   margin: 0;
-  color: #0f172a;
+  color: #564877;
 }
 
 .profile-modal-role-badge {
@@ -570,10 +570,10 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
-  background: #f8fafc;
+  background: #f8f8fc;
   padding: 16px;
   border-radius: 16px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #ceb5b7;
   margin-bottom: 20px;
 }
 
@@ -588,7 +588,7 @@
 
 .detail-label {
   font-size: 11px;
-  color: #64748b;
+  color: #8f8cac;
   text-transform: uppercase;
   font-weight: 600;
 }
@@ -596,7 +596,7 @@
 .detail-value {
   font-size: 14px;
   font-weight: 600;
-  color: #334155;
+  color: #564877;
   margin-top: 2px;
 }
 
@@ -607,7 +607,7 @@
 .profile-section-tags h3 {
   font-size: 14px;
   font-weight: 700;
-  color: #475569;
+  color: #8f8cac;
   margin-bottom: 10px;
 }
 
@@ -646,7 +646,7 @@
   display: flex;
   gap: 12px;
   margin-top: 30px;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid #ceb5b7;
   padding-top: 20px;
 }
 
@@ -671,7 +671,7 @@
 }
 
 .btn-reset-password:hover {
-  background: #f5f3ff;
+  background: #f8f8fc;
 }
 
 .btn-logout {
@@ -723,12 +723,17 @@
 }
 
 @keyframes bounceLock {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
 }
 
 .btn-locked-action {
-  background: #2563eb;
+  background: #564877;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -740,7 +745,7 @@
 }
 
 .btn-locked-action:hover {
-  background: #1d4ed8;
+  background: #564877;
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
 
@@ -770,8 +775,8 @@
   width: 28px;
   height: 28px;
   background: #f1f5f9;
-  border: 2px solid #cbd5e1;
-  color: #64748b;
+  border: 2px solid #ceb5b7;
+  color: #8f8cac;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -782,8 +787,8 @@
 }
 
 .dashboard-timeline-step.active .step-num {
-  background: #2563eb;
-  border-color: #2563eb;
+  background: #564877;
+  border-color: #564877;
   color: white;
   box-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
 }
@@ -791,16 +796,16 @@
 .step-connector {
   width: 2px;
   flex-grow: 1;
-  background: #cbd5e1;
+  background: #ceb5b7;
   margin-top: 4px;
   margin-bottom: -15px; /* connects to next step dot */
 }
 
 .timeline-step-info {
-  background: #f8fafc;
+  background: #f8f8fc;
   padding: 12px 18px;
   border-radius: 12px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #ceb5b7;
   flex-grow: 1;
 }
 
@@ -818,7 +823,7 @@
 
 .timeline-step-detail {
   font-size: 12px;
-  color: #64748b;
+  color: #8f8cac;
   margin: 0;
 }
 
@@ -847,8 +852,8 @@
 ===================================================== */
 .btn-edit-profile {
   background: #f1f5f9;
-  border: 1px solid #cbd5e1;
-  color: #334155;
+  border: 1px solid #ceb5b7;
+  color: #564877;
   padding: 6px 12px;
   font-size: 12px;
   font-weight: 600;
@@ -858,14 +863,14 @@
 }
 
 .btn-edit-profile:hover {
-  background: #cbd5e1;
+  background: #ceb5b7;
 }
 
 .profile-edit-form h3 {
   font-size: 16px;
   font-weight: 700;
   margin: 0 0 15px 0;
-  color: #0f172a;
+  color: #564877;
 }
 
 .form-grid-modal {
@@ -888,7 +893,7 @@
 .form-group-modal label {
   font-size: 11px;
   font-weight: 600;
-  color: #64748b;
+  color: #8f8cac;
   text-transform: uppercase;
 }
 
@@ -896,17 +901,17 @@
 .form-group-modal select {
   padding: 8px 12px;
   border-radius: 8px;
-  border: 1px solid #cbd5e1;
+  border: 1px solid #ceb5b7;
   font-size: 13px;
   outline: none;
   background: white;
-  color: #334155;
+  color: #564877;
   transition: border-color 0.2s;
 }
 
 .form-group-modal input:focus,
 .form-group-modal select:focus {
-  border-color: #2563eb;
+  border-color: #564877;
 }
 
 .btn-row-modal {
@@ -918,22 +923,22 @@
 
 .btn-cancel {
   background: #f1f5f9;
-  color: #475569;
-  border: 1px solid #e2e8f0;
+  color: #8f8cac;
+  border: 1px solid #ceb5b7;
 }
 
 .btn-cancel:hover {
-  background: #cbd5e1;
+  background: #ceb5b7;
 }
 
 .btn-save {
-  background: #2563eb;
+  background: #564877;
   color: white;
   border: none;
 }
 
 .btn-save:hover {
-  background: #1d4ed8;
+  background: #564877;
 }
 
 .success-toast {
@@ -957,15 +962,14 @@
 }
 
 .password-management-section {
-  border-top: 1px dashed #cbd5e1;
+  border-top: 1px dashed #ceb5b7;
   margin-top: 15px;
   padding-top: 15px;
 }
 
 .password-edit-form {
-  background: #f8fafc;
+  background: #f8f8fc;
   padding: 15px;
   border-radius: 12px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #ceb5b7;
 }
-

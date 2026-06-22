@@ -4,7 +4,7 @@
   top: 0;
   width: 100%;
   background: #f8f8fc;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #ceb5b7;
   z-index: 1000;
 }
 
@@ -331,7 +331,7 @@
 /* ================= ROLES ================= */
 .role-card {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #ceb5b7;
   border-radius: 18px;
   min-height: 200px;
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
@@ -364,7 +364,7 @@
 }
 
 .role-para {
-  color: #475569;
+  color: #8f8cac;
   font-size: 14px;
   line-height: 1.6;
 }
@@ -440,7 +440,7 @@
 }
 
 .about-description-card p {
-  color: #475569;
+  color: #8f8cac;
   line-height: 1.9;
   margin-bottom: 12px;
 }
@@ -463,7 +463,7 @@
 }
 
 .about-stat span {
-  color: #64748b;
+  color: #8f8cac;
   font-size: 15px;
 }
 

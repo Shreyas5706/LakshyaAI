@@ -2,10 +2,10 @@
    CHATBOT PAGE LAYOUT
    ===================================================== */
 .chatbot-page {
-  background: #f5f7fb;
+  background: #f8f8fc;
   min-height: 100vh;
   font-family: "Inter", sans-serif;
-  color: #0f172a;
+  color: #564877;
 }
 
 .chatbot-content {
@@ -29,7 +29,7 @@
   width: 320px;
   background: white;
   border-radius: 20px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #ceb5b7;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
   padding: 24px;
   display: flex;
@@ -45,7 +45,7 @@
 }
 
 .chatbot-sidebar::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #ceb5b7;
   border-radius: 10px;
 }
 
@@ -53,7 +53,7 @@
   font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
-  color: #64748b;
+  color: #8f8cac;
   letter-spacing: 0.5px;
   margin-bottom: 12px;
   border-bottom: 1px solid #f1f5f9;
@@ -70,13 +70,13 @@
 .student-name-header {
   font-size: 16px;
   font-weight: 800;
-  color: #0f172a;
+  color: #564877;
   margin: 0;
 }
 
 .student-stream-badge {
-  background: #eef2ff;
-  color: #4f46e5;
+  background: #rgba(163, 163, 255, 0.15);
+  color: #8f8cac;
   padding: 4px 10px;
   border-radius: 8px;
   font-size: 12px;
@@ -87,13 +87,13 @@
 
 .student-meta-item {
   font-size: 13px;
-  color: #475569;
+  color: #8f8cac;
   display: flex;
   justify-content: space-between;
 }
 
 .student-meta-item strong {
-  color: #64748b;
+  color: #8f8cac;
 }
 
 /* Skills/Interests Tag Cloud */
@@ -105,7 +105,7 @@
 
 .context-pill-tag {
   background: #f1f5f9;
-  color: #334155;
+  color: #564877;
   padding: 4px 8px;
   border-radius: 6px;
   font-size: 11px;
@@ -125,28 +125,28 @@
 }
 
 .sidebar-career-card {
-  border: 1px solid #e2e8f0;
+  border: 1px solid #ceb5b7;
   border-radius: 12px;
   padding: 12px;
-  background: #f8fafc;
+  background: #f8f8fc;
   transition: all 0.2s ease;
 }
 
 .sidebar-career-card:hover {
-  border-color: #cbd5e1;
+  border-color: #ceb5b7;
   background: #f1f5f9;
 }
 
 .sidebar-career-role {
   font-size: 14px;
   font-weight: 700;
-  color: #0f172a;
+  color: #564877;
   margin: 0 0 4px 0;
 }
 
 .sidebar-career-confidence {
   font-size: 11px;
-  color: #2563eb;
+  color: #564877;
   font-weight: 600;
 }
 
@@ -203,7 +203,7 @@
   flex-grow: 1;
   background: white;
   border-radius: 20px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #ceb5b7;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
   display: flex;
   flex-direction: column;
@@ -213,7 +213,7 @@
 /* Chat Header */
 .chatbot-chat-header {
   padding: 20px 24px;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #ceb5b7;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -262,7 +262,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  background: #fafafb;
+  background: #f8f8fc;
   scrollbar-width: thin;
 }
 
@@ -271,7 +271,7 @@
 }
 
 .chatbot-messages-list::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #ceb5b7;
   border-radius: 10px;
 }
 
@@ -298,7 +298,7 @@
 }
 
 .chat-message-row.user .message-bubble {
-  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  background: linear-gradient(135deg, #564877, #8f8cac);
   color: white;
   border-radius: 16px 16px 0 16px;
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
@@ -307,7 +307,7 @@
 .chat-message-row.advisor .message-bubble {
   background: white;
   color: #1e293b;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #ceb5b7;
   border-radius: 16px 16px 16px 0;
 }
 
@@ -355,14 +355,14 @@
   gap: 5px;
   padding: 12px 18px;
   background: white;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #ceb5b7;
   border-radius: 16px 16px 16px 0;
 }
 
 .loading-dot {
   width: 7px;
   height: 7px;
-  background: #64748b;
+  background: #8f8cac;
   border-radius: 50%;
   animation: bounceDot 1.4s infinite ease-in-out both;
 }
@@ -380,7 +380,7 @@
   display: flex;
   gap: 8px;
   padding: 12px 24px 8px 24px;
-  background: #fafafb;
+  background: #f8f8fc;
   overflow-x: auto;
   border-top: 1px solid #f1f5f9;
   scrollbar-width: none; /* Hide scrollbar for clean chip row */
@@ -393,28 +393,28 @@
 .suggestion-chip {
   white-space: nowrap;
   background: white;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #ceb5b7;
   border-radius: 20px;
   padding: 8px 14px;
   font-size: 12px;
   font-weight: 600;
-  color: #4f46e5;
+  color: #8f8cac;
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
 }
 
 .suggestion-chip:hover {
-  background: #f5f3ff;
-  border-color: #c084fc;
-  color: #6b21a8;
+  background: #f8f8fc;
+  border-color: #a3a3ff;
+  color: #564877;
   transform: translateY(-1px);
 }
 
 /* Input Form Row */
 .chatbot-input-container {
   padding: 16px 24px;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid #ceb5b7;
   background: white;
 }
 
@@ -432,18 +432,18 @@
 .chatbot-input-field {
   width: 100%;
   height: 48px;
-  border: 1px solid #cbd5e1;
+  border: 1px solid #ceb5b7;
   border-radius: 12px;
   padding: 0 16px;
   font-size: 14px;
   outline: none;
-  background: #f8fafc;
-  color: #0f172a;
+  background: #f8f8fc;
+  color: #564877;
   transition: all 0.3s ease;
 }
 
 .chatbot-input-field:focus {
-  border-color: #2563eb;
+  border-color: #564877;
   background: white;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
@@ -451,7 +451,7 @@
 .chatbot-send-button {
   height: 48px;
   padding: 0 24px;
-  background: #2563eb;
+  background: #564877;
   color: white;
   border: none;
   border-radius: 12px;
@@ -466,13 +466,13 @@
 }
 
 .chatbot-send-button:hover:not(:disabled) {
-  background: #1d4ed8;
+  background: #564877;
   transform: translateY(-1px);
   box-shadow: 0 6px 14px rgba(37, 99, 235, 0.25);
 }
 
 .chatbot-send-button:disabled {
-  background: #cbd5e1;
+  background: #ceb5b7;
   color: #94a3b8;
   cursor: not-allowed;
   box-shadow: none;
@@ -508,11 +508,13 @@
 }
 
 @keyframes bounceDot {
-  0%, 80%, 100% {
+  0%,
+  80%,
+  100% {
     transform: scale(0);
   }
   40% {
-    transform: scale(1.0);
+    transform: scale(1);
   }
 }
 
@@ -570,7 +572,7 @@
    INTERACTIVE ELEMENTS INSIDE CHAT
    ===================================================== */
 .chat-action-btn {
-  background: linear-gradient(135deg, #4f46e5, #3b82f6);
+  background: linear-gradient(135deg, #8f8cac, #a3a3ff);
   color: white;
   border: none;
   border-radius: 8px;
@@ -587,20 +589,20 @@
 .chat-action-btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
-  background: linear-gradient(135deg, #4338ca, #2563eb);
+  background: linear-gradient(135deg, #4338ca, #564877);
 }
 
 .chat-callout-box {
-  background: #eef2ff;
-  border-left: 4px solid #4f46e5;
+  background: rgba(163, 163, 255, 0.15);
+  border-left: 4px solid #8f8cac;
   padding: 12px 16px;
   border-radius: 0 12px 12px 0;
   margin: 12px 0;
   font-style: italic;
-  color: #3730a3;
+  color: #564877;
   box-shadow: inset 0 0 8px rgba(79, 70, 229, 0.03);
 }
 
 .chat-callout-box .msg-paragraph {
-  color: #3730a3;
+  color: #564877;
 }

@@ -530,16 +530,16 @@ function OnboardingForm({ onComplete }) {
         educationLevel: formData.educationLevel,
         stream: formData.stream,
         interests: formData.interests,
-        skills: formData.skills
+        skills: formData.skills,
       };
-      
+
       const res = await API.put("/auth/profile", profileData);
-      
+
       // Update session cookie with the returned user profile details
       if (res.data?.success && res.data?.user) {
         session.user = {
           ...session.user,
-          ...res.data.user
+          ...res.data.user,
         };
       }
     } catch (err) {
@@ -547,10 +547,14 @@ function OnboardingForm({ onComplete }) {
     }
 
     // Mark the form as submitted — this shows the success animation
-    setCookie("lakshyaSession", {
-      ...session,
-      onboardingCompleted: true,
-    }, 1);
+    setCookie(
+      "lakshyaSession",
+      {
+        ...session,
+        onboardingCompleted: true,
+      },
+      1
+    );
     setIsSubmitted(true);
   }
 
@@ -824,37 +828,116 @@ function OnboardingForm({ onComplete }) {
             <p className="step-description">
               Please review your details before building your career roadmap 🚀
             </p>
-            
-            <div className="onboarding-summary-box" style={{ background: "#f8fafc", borderRadius: "16px", padding: "20px", border: "1px solid #e2e8f0", marginTop: "20px", display: "flex", flexDirection: "column", gap: "16px", maxHeight: "350px", overflowY: "auto", textAlign: "left" }}>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", borderBottom: "1px solid #e2e8f0", paddingBottom: "12px" }}>
-                <div><strong>Age:</strong> {formData.age || "N/A"}</div>
-                <div><strong>Gender:</strong> {formData.gender || "N/A"}</div>
-                <div><strong>City:</strong> {formData.city || "N/A"}</div>
-                <div><strong>State:</strong> {formData.state || "N/A"}</div>
-                <div style={{ gridColumn: "span 2" }}><strong>Education:</strong> {formData.educationLevel || "N/A"} ({formData.stream || "N/A"})</div>
+
+            <div
+              className="onboarding-summary-box"
+              style={{
+                background: "#F8F8FC",
+                borderRadius: "16px",
+                padding: "20px",
+                border: "1px solid #CEB5B7",
+                marginTop: "20px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "16px",
+                maxHeight: "350px",
+                overflowY: "auto",
+                textAlign: "left",
+              }}
+            >
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: "12px",
+                  borderBottom: "1px solid #CEB5B7",
+                  paddingBottom: "12px",
+                }}
+              >
+                <div>
+                  <strong>Age:</strong> {formData.age || "N/A"}
+                </div>
+                <div>
+                  <strong>Gender:</strong> {formData.gender || "N/A"}
+                </div>
+                <div>
+                  <strong>City:</strong> {formData.city || "N/A"}
+                </div>
+                <div>
+                  <strong>State:</strong> {formData.state || "N/A"}
+                </div>
+                <div style={{ gridColumn: "span 2" }}>
+                  <strong>Education:</strong> {formData.educationLevel || "N/A"}{" "}
+                  ({formData.stream || "N/A"})
+                </div>
               </div>
-              
+
               <div>
                 <strong>Interests:</strong>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginTop: "6px" }}>
-                  {formData.interests.map(i => (
-                    <span key={i} style={{ background: "#fdf2f8", color: "#be185d", padding: "4px 10px", borderRadius: "20px", fontSize: "12px", border: "1px solid #fbcfe8" }}>{i}</span>
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "6px",
+                    marginTop: "6px",
+                  }}
+                >
+                  {formData.interests.map((i) => (
+                    <span
+                      key={i}
+                      style={{
+                        background: "#fdf2f8",
+                        color: "#be185d",
+                        padding: "4px 10px",
+                        borderRadius: "20px",
+                        fontSize: "12px",
+                        border: "1px solid #fbcfe8",
+                      }}
+                    >
+                      {i}
+                    </span>
                   ))}
                 </div>
               </div>
 
               <div>
                 <strong>Skills:</strong>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginTop: "6px" }}>
-                  {formData.skills.map(s => (
-                    <span key={s} style={{ background: "#f0fdf4", color: "#15803d", padding: "4px 10px", borderRadius: "20px", fontSize: "12px", border: "1px solid #bbf7d0" }}>{s}</span>
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "6px",
+                    marginTop: "6px",
+                  }}
+                >
+                  {formData.skills.map((s) => (
+                    <span
+                      key={s}
+                      style={{
+                        background: "#f0fdf4",
+                        color: "#15803d",
+                        padding: "4px 10px",
+                        borderRadius: "20px",
+                        fontSize: "12px",
+                        border: "1px solid #bbf7d0",
+                      }}
+                    >
+                      {s}
+                    </span>
                   ))}
                 </div>
               </div>
 
               <div>
                 <strong>Dream Career:</strong>
-                <div style={{ marginTop: "4px", fontSize: "15px", color: "#0f172a", fontWeight: "600" }}>
+                <div
+                  style={{
+                    marginTop: "4px",
+                    fontSize: "15px",
+                    color: "#564877",
+                    fontWeight: "600",
+                  }}
+                >
                   🎯 {formData.careerGoal}
                 </div>
               </div>

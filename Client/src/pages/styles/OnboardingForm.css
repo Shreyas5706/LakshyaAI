@@ -780,7 +780,7 @@ select.form-input.input-error {
 
 /* Submit button — slightly larger, with a gradient for emphasis */
 .btn-submit {
-  background: linear-gradient(135deg, var(--primary) 0%, #4f46e5 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, #8f8cac 100%);
   color: white;
   padding: 16px 36px;
   font-size: 16px;

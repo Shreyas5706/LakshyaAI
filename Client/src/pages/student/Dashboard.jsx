@@ -31,7 +31,7 @@ const EDUCATION_LEVELS = [
   "12th",
   "Diploma",
   "Undergraduate",
-  "Postgraduate"
+  "Postgraduate",
 ];
 const STREAMS = [
   "Science (PCM)",
@@ -46,15 +46,42 @@ const STREAMS = [
   "Medical",
   "Law",
   "MBA",
-  "Design"
+  "Design",
 ];
 const INDIAN_STATES = [
-  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
-  "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka",
-  "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram",
-  "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu",
-  "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal",
-  "Delhi", "Jammu and Kashmir", "Ladakh", "Puducherry", "Chandigarh"
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal",
+  "Delhi",
+  "Jammu and Kashmir",
+  "Ladakh",
+  "Puducherry",
+  "Chandigarh",
 ];
 
 function Dashboard({ onNavigate }) {
@@ -79,7 +106,7 @@ function Dashboard({ onNavigate }) {
     state: "",
     city: "",
     educationLevel: "",
-    stream: ""
+    stream: "",
   });
   const [profileSuccess, setProfileSuccess] = useState("");
   const [profileError, setProfileError] = useState("");
@@ -132,7 +159,7 @@ function Dashboard({ onNavigate }) {
           state: freshUser.state || "",
           city: freshUser.city || "",
           educationLevel: freshUser.educationLevel || "",
-          stream: freshUser.stream || ""
+          stream: freshUser.stream || "",
         });
 
         // Calculate profile completeness percentage (based on 7 fields)
@@ -143,22 +170,24 @@ function Dashboard({ onNavigate }) {
           freshUser.state,
           freshUser.city,
           freshUser.educationLevel,
-          freshUser.stream
+          freshUser.stream,
         ];
         const filledFields = profileFields.filter(
           (field) => field !== undefined && field !== null && field !== ""
         ).length;
-        const calculatedPct = Math.round((filledFields / profileFields.length) * 100);
+        const calculatedPct = Math.round(
+          (filledFields / profileFields.length) * 100
+        );
 
         // Calculate dynamic stats
         const skillsCount = freshUser.skills?.length || 0;
         const coursesCount = freshRec ? 1 : 0; // 1 course started/done if recommendation is done
-        
+
         setRealStats({
           skillsLearned: skillsCount > 0 ? skillsCount : 3,
           coursesDone: coursesCount > 0 ? coursesCount : 2,
           streak: 5,
-          profilePct: calculatedPct
+          profilePct: calculatedPct,
         });
       }
     } catch (err) {
@@ -260,19 +289,19 @@ function Dashboard({ onNavigate }) {
         state: editForm.state,
         city: editForm.city.trim(),
         educationLevel: editForm.educationLevel,
-        stream: editForm.stream
+        stream: editForm.stream,
       };
 
       const res = await API.put("/auth/profile", payload);
       if (res.data?.success) {
         setProfileSuccess("Profile updated successfully!");
         setUser(res.data.user);
-        
+
         // Update Session Cookie
         const session = getCookie("lakshyaSession") || {};
         session.user = {
           ...session.user,
-          ...res.data.user
+          ...res.data.user,
         };
         setCookie("lakshyaSession", session, 1);
 
@@ -284,17 +313,21 @@ function Dashboard({ onNavigate }) {
           res.data.user.state,
           res.data.user.city,
           res.data.user.educationLevel,
-          res.data.user.stream
+          res.data.user.stream,
         ];
-        const filled = profileFields.filter(f => f !== undefined && f !== null && f !== "").length;
+        const filled = profileFields.filter(
+          (f) => f !== undefined && f !== null && f !== ""
+        ).length;
         const newPct = Math.round((filled / profileFields.length) * 100);
-        
-        setRealStats(prev => ({ ...prev, profilePct: newPct }));
+
+        setRealStats((prev) => ({ ...prev, profilePct: newPct }));
         setIsEditingProfile(false);
       }
     } catch (err) {
       console.error(err);
-      setProfileError(err.response?.data?.message || "Failed to update profile details.");
+      setProfileError(
+        err.response?.data?.message || "Failed to update profile details."
+      );
     }
   };
 
@@ -324,7 +357,7 @@ function Dashboard({ onNavigate }) {
     try {
       const res = await API.put("/auth/profile", {
         currentPassword,
-        password: newPassword
+        password: newPassword,
       });
 
       if (res.data?.success) {
@@ -339,18 +372,31 @@ function Dashboard({ onNavigate }) {
       }
     } catch (err) {
       console.error(err);
-      setPasswordError(err.response?.data?.message || "Incorrect current password or validation failed.");
+      setPasswordError(
+        err.response?.data?.message ||
+          "Incorrect current password or validation failed."
+      );
     }
   };
 
   // Render loading state
   if (loading && !user) {
     return (
-      <div className="dashboard-page flex-center" style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+      <div
+        className="dashboard-page flex-center"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
         <div className="loading-box-custom">
           <div className="pulse-spinner"></div>
           <h3 className="loading-title-custom">Loading Dashboard</h3>
-          <p className="loading-desc-custom">Syncing your learning analytics...</p>
+          <p className="loading-desc-custom">
+            Syncing your learning analytics...
+          </p>
         </div>
       </div>
     );
@@ -362,31 +408,54 @@ function Dashboard({ onNavigate }) {
   // Dynamic values based on prediction state
   const recommendedTitle = topCareer ? topCareer.role : "UI/UX Designer";
   const matchScore = topCareer ? Math.round(topCareer.confidence * 100) : null;
-  const skillsToLearn = topCareer?.explanation?.skills_to_learn || ["Creativity", "Problem Solving", "Communication"];
+  const skillsToLearn = topCareer?.explanation?.skills_to_learn || [
+    "Creativity",
+    "Problem Solving",
+    "Communication",
+  ];
   const currentRoadmap = topCareer?.explanation?.roadmap || [];
 
   // Generate activities list
   const recentActivities = [
     { text: `Signed up to LakshyaAI`, time: "Welcome aboard!", emoji: "🎉" },
-    user?.educationLevel ? { text: `Set education to ${user.educationLevel} (${user.stream || "General"})`, time: "Profile setup", emoji: "🎓" } : null,
-    hasDoneCareerPrediction ? { text: `Completed AI Career Prediction: ${recommendedTitle}`, time: "Roadmap unlocked", emoji: "🎯" } : null,
-    user?.skills?.length > 0 ? { text: `Updated ${user.skills.length} skills in profile`, time: "Skills synched", emoji: "💪" } : null,
+    user?.educationLevel
+      ? {
+          text: `Set education to ${user.educationLevel} (${user.stream || "General"})`,
+          time: "Profile setup",
+          emoji: "🎓",
+        }
+      : null,
+    hasDoneCareerPrediction
+      ? {
+          text: `Completed AI Career Prediction: ${recommendedTitle}`,
+          time: "Roadmap unlocked",
+          emoji: "🎯",
+        }
+      : null,
+    user?.skills?.length > 0
+      ? {
+          text: `Updated ${user.skills.length} skills in profile`,
+          time: "Skills synched",
+          emoji: "💪",
+        }
+      : null,
   ].filter(Boolean);
 
   // Dynamic Today's Task
-  const todayTask = hasDoneCareerPrediction && topCareer
-    ? {
-        title: `Learn ${skillsToLearn[0]} Fundamentals`,
-        duration: "45 mins",
-        type: "Recommended Study",
-        desc: `Step 1 of your roadmap: ${currentRoadmap[0]?.title || "Begin learning fundamentals"}`
-      }
-    : {
-        title: "Complete AI Career Recommendation",
-        duration: "10 mins",
-        type: "Action Required",
-        desc: "Unlock your custom transition roadmaps, learning tasks, and skills analysis"
-      };
+  const todayTask =
+    hasDoneCareerPrediction && topCareer
+      ? {
+          title: `Learn ${skillsToLearn[0]} Fundamentals`,
+          duration: "45 mins",
+          type: "Recommended Study",
+          desc: `Step 1 of your roadmap: ${currentRoadmap[0]?.title || "Begin learning fundamentals"}`,
+        }
+      : {
+          title: "Complete AI Career Recommendation",
+          duration: "10 mins",
+          type: "Action Required",
+          desc: "Unlock your custom transition roadmaps, learning tasks, and skills analysis",
+        };
 
   return (
     <div className="dashboard-page">
@@ -406,13 +475,16 @@ function Dashboard({ onNavigate }) {
           <button className="nav-link" onClick={() => handleNavigate("learn")}>
             Learn
           </button>
-          <button className="nav-link" onClick={() => handleNavigate("chatbot")}>
+          <button
+            className="nav-link"
+            onClick={() => handleNavigate("chatbot")}
+          >
             AI Assistant
           </button>
         </div>
-        <div 
-          className="navbar-avatar" 
-          onClick={() => setShowProfileModal(true)} 
+        <div
+          className="navbar-avatar"
+          onClick={() => setShowProfileModal(true)}
           style={{ cursor: "pointer" }}
           title="View Profile"
         >
@@ -441,7 +513,8 @@ function Dashboard({ onNavigate }) {
                 className="career-match-pill"
                 onClick={() => handleNavigate("career")}
               >
-                ✨ Recommended Role: <strong>{recommendedTitle}</strong> ({matchScore}% Match) →
+                ✨ Recommended Role: <strong>{recommendedTitle}</strong> (
+                {matchScore}% Match) →
               </button>
             ) : (
               <button
@@ -483,7 +556,11 @@ function Dashboard({ onNavigate }) {
             <div className="stat-label">Day Streak</div>
           </div>
 
-          <div className="stat-card stat-card-4" onClick={() => setShowProfileModal(true)} style={{ cursor: "pointer" }}>
+          <div
+            className="stat-card stat-card-4"
+            onClick={() => setShowProfileModal(true)}
+            style={{ cursor: "pointer" }}
+          >
             <div className="stat-icon">👤</div>
             <div className="stat-number">
               {statsCounter.profilePct}
@@ -501,34 +578,58 @@ function Dashboard({ onNavigate }) {
           <div className="todays-task-card">
             <div className="task-label">⚡ Today's Recommendation</div>
             <h3 className="task-title">{todayTask.title}</h3>
-            {todayTask.desc && <p className="task-subdesc" style={{ fontSize: "13px", color: "#64748b", marginBottom: "12px" }}>{todayTask.desc}</p>}
+            {todayTask.desc && (
+              <p
+                className="task-subdesc"
+                style={{
+                  fontSize: "13px",
+                  color: "#8F8CAC",
+                  marginBottom: "12px",
+                }}
+              >
+                {todayTask.desc}
+              </p>
+            )}
             <div className="task-details">
               <span className="task-badge">{todayTask.type}</span>
               <span className="task-duration">🕐 {todayTask.duration}</span>
             </div>
-            
+
             {hasDoneCareerPrediction ? (
-              <button className="task-btn" onClick={() => handleNavigate("learn")}>
+              <button
+                className="task-btn"
+                onClick={() => handleNavigate("learn")}
+              >
                 Start Now →
               </button>
             ) : (
-              <button className="task-btn btn-glowing" onClick={() => handleNavigate("career")}>
+              <button
+                className="task-btn btn-glowing"
+                onClick={() => handleNavigate("career")}
+              >
                 Unlock Custom Tasks →
               </button>
             )}
           </div>
 
           {/* Skills Snapshot Card */}
-          <div className={`skills-snapshot-card ${!hasDoneCareerPrediction ? "locked-widget-wrapper" : ""}`}>
+          <div
+            className={`skills-snapshot-card ${!hasDoneCareerPrediction ? "locked-widget-wrapper" : ""}`}
+          >
             <h3 className="card-heading">Skills Snapshot 📊</h3>
             <p className="card-subtext">
-              {hasDoneCareerPrediction ? "Target skills for your transition" : "Predict career to map your target skills"}
+              {hasDoneCareerPrediction
+                ? "Target skills for your transition"
+                : "Predict career to map your target skills"}
             </p>
 
             {!hasDoneCareerPrediction ? (
               <div className="locked-overlay-content">
                 <div className="lock-icon-large">🔒</div>
-                <button className="btn-locked-action" onClick={() => handleNavigate("career")}>
+                <button
+                  className="btn-locked-action"
+                  onClick={() => handleNavigate("career")}
+                >
                   Run Career Prediction
                 </button>
               </div>
@@ -540,8 +641,15 @@ function Dashboard({ onNavigate }) {
                   return (
                     <div key={skill} className="skill-bar-row">
                       <div className="skill-bar-header">
-                        <span className="skill-bar-name" style={{ textTransform: "capitalize" }}>{skill}</span>
-                        <span className="skill-bar-percent">{level}% Mastered</span>
+                        <span
+                          className="skill-bar-name"
+                          style={{ textTransform: "capitalize" }}
+                        >
+                          {skill}
+                        </span>
+                        <span className="skill-bar-percent">
+                          {level}% Mastered
+                        </span>
                       </div>
                       <div className="skill-bar-track">
                         <div
@@ -558,7 +666,10 @@ function Dashboard({ onNavigate }) {
             )}
 
             {hasDoneCareerPrediction && (
-              <button className="see-full-link" onClick={() => handleNavigate("skills")}>
+              <button
+                className="see-full-link"
+                onClick={() => handleNavigate("skills")}
+              >
                 Analyse Skill Gaps →
               </button>
             )}
@@ -571,25 +682,39 @@ function Dashboard({ onNavigate }) {
         {hasDoneCareerPrediction && currentRoadmap.length > 0 && (
           <div className="dashboard-roadmap-tracker activity-card">
             <h3 className="card-heading">🎯 Your Learning Roadmap</h3>
-            <p className="card-subtext">Master the steps required to transition to a {recommendedTitle}</p>
-            
+            <p className="card-subtext">
+              Master the steps required to transition to a {recommendedTitle}
+            </p>
+
             <div className="dashboard-timeline-steps">
               {currentRoadmap.map((stepItem, index) => (
-                <div key={index} className={`dashboard-timeline-step ${index === 0 ? "active" : ""}`}>
+                <div
+                  key={index}
+                  className={`dashboard-timeline-step ${index === 0 ? "active" : ""}`}
+                >
                   <div className="timeline-step-indicator">
-                    <span className="step-num">{stepItem.step || index + 1}</span>
-                    {index < currentRoadmap.length - 1 && <span className="step-connector"></span>}
+                    <span className="step-num">
+                      {stepItem.step || index + 1}
+                    </span>
+                    {index < currentRoadmap.length - 1 && (
+                      <span className="step-connector"></span>
+                    )}
                   </div>
                   <div className="timeline-step-info">
                     <h4 className="timeline-step-name">{stepItem.title}</h4>
-                    <p className="timeline-step-detail">{stepItem.description}</p>
+                    <p className="timeline-step-detail">
+                      {stepItem.description}
+                    </p>
                   </div>
                 </div>
               ))}
             </div>
 
             <div style={{ marginTop: "20px", textAlign: "right" }}>
-              <button className="task-btn" onClick={() => handleNavigate("career")}>
+              <button
+                className="task-btn"
+                onClick={() => handleNavigate("career")}
+              >
                 View Full Detailed Roadmap →
               </button>
             </div>
@@ -621,7 +746,9 @@ function Dashboard({ onNavigate }) {
                 );
               })
             ) : (
-              <p className="tag-none" style={{ padding: "10px 0" }}>No recent activity logged.</p>
+              <p className="tag-none" style={{ padding: "10px 0" }}>
+                No recent activity logged.
+              </p>
             )}
           </div>
         </div>
@@ -634,28 +761,40 @@ function Dashboard({ onNavigate }) {
           <p className="card-subtext">Jump to any section of your journey</p>
 
           <div className="nav-cards-grid">
-            <button className="nav-card nav-card-career" onClick={() => handleNavigate("career")}>
+            <button
+              className="nav-card nav-card-career"
+              onClick={() => handleNavigate("career")}
+            >
               <div className="nav-card-icon">🎯</div>
               <div className="nav-card-title">Career</div>
               <div className="nav-card-desc">See your matched career paths</div>
               <div className="nav-card-arrow">→</div>
             </button>
 
-            <button className="nav-card nav-card-skills" onClick={() => handleNavigate("skills")}>
+            <button
+              className="nav-card nav-card-skills"
+              onClick={() => handleNavigate("skills")}
+            >
               <div className="nav-card-icon">📊</div>
               <div className="nav-card-title">Skills</div>
               <div className="nav-card-desc">Analyse gaps and strengths</div>
               <div className="nav-card-arrow">→</div>
             </button>
 
-            <button className="nav-card nav-card-learn" onClick={() => handleNavigate("learn")}>
+            <button
+              className="nav-card nav-card-learn"
+              onClick={() => handleNavigate("learn")}
+            >
               <div className="nav-card-icon">📚</div>
               <div className="nav-card-title">Learn</div>
               <div className="nav-card-desc">Courses and tasks for you</div>
               <div className="nav-card-arrow">→</div>
             </button>
 
-            <button className="nav-card nav-card-progress" onClick={() => handleNavigate("chatbot")}>
+            <button
+              className="nav-card nav-card-progress"
+              onClick={() => handleNavigate("chatbot")}
+            >
               <div className="nav-card-icon">🤖</div>
               <div className="nav-card-title">AI Assistant</div>
               <div className="nav-card-desc">Talk to your career counselor</div>
@@ -669,18 +808,24 @@ function Dashboard({ onNavigate }) {
       {/* PERSONALIZED USER PROFILE MODAL                 */}
       {/* ============================================== */}
       {showProfileModal && (
-        <div className="profile-modal-overlay" onClick={() => {
-          setShowProfileModal(false);
-          setIsEditingProfile(false);
-          setShowChangePassword(false);
-          setProfileError("");
-          setProfileSuccess("");
-          setPasswordError("");
-          setPasswordSuccess("");
-        }}>
-          <div className="profile-modal-card" onClick={(e) => e.stopPropagation()}>
-            <button 
-              className="profile-modal-close" 
+        <div
+          className="profile-modal-overlay"
+          onClick={() => {
+            setShowProfileModal(false);
+            setIsEditingProfile(false);
+            setShowChangePassword(false);
+            setProfileError("");
+            setProfileSuccess("");
+            setPasswordError("");
+            setPasswordSuccess("");
+          }}
+        >
+          <div
+            className="profile-modal-card"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="profile-modal-close"
               onClick={() => {
                 setShowProfileModal(false);
                 setIsEditingProfile(false);
@@ -700,47 +845,63 @@ function Dashboard({ onNavigate }) {
               <h2>{user?.name || "Student Profile"}</h2>
               <span className="profile-modal-role-badge">Student</span>
             </div>
-            
+
             <div className="profile-modal-body">
               {/* Profile Details Edit / Read forms */}
               {!isEditingProfile ? (
                 // READ ONLY MODE
                 <div>
-                  {profileSuccess && <p className="success-toast">✅ {profileSuccess}</p>}
+                  {profileSuccess && (
+                    <p className="success-toast">✅ {profileSuccess}</p>
+                  )}
                   <div className="profile-detail-grid">
                     <div className="detail-item">
                       <span className="detail-label">Email</span>
-                      <span className="detail-value">{user?.email || "N/A"}</span>
+                      <span className="detail-value">
+                        {user?.email || "N/A"}
+                      </span>
                     </div>
                     <div className="detail-item">
                       <span className="detail-label">Age</span>
-                      <span className="detail-value">{user?.age || "N/A"} yrs</span>
+                      <span className="detail-value">
+                        {user?.age || "N/A"} yrs
+                      </span>
                     </div>
                     <div className="detail-item">
                       <span className="detail-label">Gender</span>
-                      <span className="detail-value">{user?.gender || "N/A"}</span>
+                      <span className="detail-value">
+                        {user?.gender || "N/A"}
+                      </span>
                     </div>
                     <div className="detail-item">
                       <span className="detail-label">City</span>
-                      <span className="detail-value">{user?.city || "N/A"}</span>
+                      <span className="detail-value">
+                        {user?.city || "N/A"}
+                      </span>
                     </div>
                     <div className="detail-item">
                       <span className="detail-label">State</span>
-                      <span className="detail-value">{user?.state || "N/A"}</span>
+                      <span className="detail-value">
+                        {user?.state || "N/A"}
+                      </span>
                     </div>
                     <div className="detail-item">
                       <span className="detail-label">Education</span>
-                      <span className="detail-value">{user?.educationLevel || "N/A"}</span>
+                      <span className="detail-value">
+                        {user?.educationLevel || "N/A"}
+                      </span>
                     </div>
                     <div className="detail-item">
                       <span className="detail-label">Stream</span>
-                      <span className="detail-value">{user?.stream || "N/A"}</span>
+                      <span className="detail-value">
+                        {user?.stream || "N/A"}
+                      </span>
                     </div>
                   </div>
 
                   <div style={{ textAlign: "right", marginBottom: "20px" }}>
-                    <button 
-                      className="btn-modal btn-edit-profile" 
+                    <button
+                      className="btn-modal btn-edit-profile"
                       onClick={() => setIsEditingProfile(true)}
                     >
                       ✏️ Edit Profile Info
@@ -749,82 +910,120 @@ function Dashboard({ onNavigate }) {
                 </div>
               ) : (
                 // EDIT MODE
-                <form onSubmit={handleSaveProfile} className="profile-edit-form">
+                <form
+                  onSubmit={handleSaveProfile}
+                  className="profile-edit-form"
+                >
                   <h3>Edit Profile Details</h3>
-                  {profileError && <p className="error-toast">❌ {profileError}</p>}
-                  
+                  {profileError && (
+                    <p className="error-toast">❌ {profileError}</p>
+                  )}
+
                   <div className="form-grid-modal">
                     <div className="form-group-modal span-2">
                       <label>Full Name</label>
-                      <input 
-                        type="text" 
-                        value={editForm.name} 
-                        onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                      <input
+                        type="text"
+                        value={editForm.name}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, name: e.target.value })
+                        }
                         required
                       />
                     </div>
                     <div className="form-group-modal">
                       <label>Age</label>
-                      <input 
-                        type="number" 
-                        value={editForm.age} 
-                        onChange={(e) => setEditForm({ ...editForm, age: e.target.value })}
+                      <input
+                        type="number"
+                        value={editForm.age}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, age: e.target.value })
+                        }
                       />
                     </div>
                     <div className="form-group-modal">
                       <label>Gender</label>
-                      <select 
-                        value={editForm.gender} 
-                        onChange={(e) => setEditForm({ ...editForm, gender: e.target.value })}
+                      <select
+                        value={editForm.gender}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, gender: e.target.value })
+                        }
                       >
                         <option value="">Select Gender</option>
-                        {GENDER_OPTIONS.map(g => <option key={g} value={g}>{g}</option>)}
+                        {GENDER_OPTIONS.map((g) => (
+                          <option key={g} value={g}>
+                            {g}
+                          </option>
+                        ))}
                       </select>
                     </div>
                     <div className="form-group-modal">
                       <label>City</label>
-                      <input 
-                        type="text" 
-                        value={editForm.city} 
-                        onChange={(e) => setEditForm({ ...editForm, city: e.target.value })}
+                      <input
+                        type="text"
+                        value={editForm.city}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, city: e.target.value })
+                        }
                       />
                     </div>
                     <div className="form-group-modal">
                       <label>State</label>
-                      <select 
-                        value={editForm.state} 
-                        onChange={(e) => setEditForm({ ...editForm, state: e.target.value })}
+                      <select
+                        value={editForm.state}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, state: e.target.value })
+                        }
                       >
                         <option value="">Select State</option>
-                        {INDIAN_STATES.map(s => <option key={s} value={s}>{s}</option>)}
+                        {INDIAN_STATES.map((s) => (
+                          <option key={s} value={s}>
+                            {s}
+                          </option>
+                        ))}
                       </select>
                     </div>
                     <div className="form-group-modal">
                       <label>Education Level</label>
-                      <select 
-                        value={editForm.educationLevel} 
-                        onChange={(e) => setEditForm({ ...editForm, educationLevel: e.target.value })}
+                      <select
+                        value={editForm.educationLevel}
+                        onChange={(e) =>
+                          setEditForm({
+                            ...editForm,
+                            educationLevel: e.target.value,
+                          })
+                        }
                       >
                         <option value="">Select Education</option>
-                        {EDUCATION_LEVELS.map(el => <option key={el} value={el}>{el}</option>)}
+                        {EDUCATION_LEVELS.map((el) => (
+                          <option key={el} value={el}>
+                            {el}
+                          </option>
+                        ))}
                       </select>
                     </div>
                     <div className="form-group-modal">
                       <label>Stream</label>
-                      <select 
-                        value={editForm.stream} 
-                        onChange={(e) => setEditForm({ ...editForm, stream: e.target.value })}
+                      <select
+                        value={editForm.stream}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, stream: e.target.value })
+                        }
                       >
                         <option value="">Select Stream</option>
-                        {STREAMS.map(st => <option key={st} value={st}>{st}</option>)}
+                        {STREAMS.map((st) => (
+                          <option key={st} value={st}>
+                            {st}
+                          </option>
+                        ))}
                       </select>
                     </div>
                   </div>
 
                   <div className="btn-row-modal">
-                    <button 
-                      type="button" 
-                      className="btn-modal btn-cancel" 
+                    <button
+                      type="button"
+                      className="btn-modal btn-cancel"
                       onClick={() => {
                         setIsEditingProfile(false);
                         setProfileError("");
@@ -845,7 +1044,9 @@ function Dashboard({ onNavigate }) {
                 <div className="tag-list">
                   {user?.interests && user.interests.length > 0 ? (
                     user.interests.map((interest) => (
-                      <span key={interest} className="tag-pill interest-pill">{interest}</span>
+                      <span key={interest} className="tag-pill interest-pill">
+                        {interest}
+                      </span>
                     ))
                   ) : (
                     <span className="tag-none">No interests selected yet</span>
@@ -858,7 +1059,9 @@ function Dashboard({ onNavigate }) {
                 <div className="tag-list">
                   {user?.skills && user.skills.length > 0 ? (
                     user.skills.map((skill) => (
-                      <span key={skill} className="tag-pill skill-pill">{skill}</span>
+                      <span key={skill} className="tag-pill skill-pill">
+                        {skill}
+                      </span>
                     ))
                   ) : (
                     <span className="tag-none">No skills selected yet</span>
@@ -869,7 +1072,7 @@ function Dashboard({ onNavigate }) {
               {/* Password Management */}
               <div className="password-management-section">
                 {!showChangePassword ? (
-                  <button 
+                  <button
                     className="btn-modal btn-reset-password"
                     onClick={() => setShowChangePassword(true)}
                     style={{ width: "100%", margin: "10px 0" }}
@@ -877,15 +1080,22 @@ function Dashboard({ onNavigate }) {
                     🔐 Change Account Password
                   </button>
                 ) : (
-                  <form onSubmit={handleSavePassword} className="profile-edit-form password-edit-form">
+                  <form
+                    onSubmit={handleSavePassword}
+                    className="profile-edit-form password-edit-form"
+                  >
                     <h3>Change Password</h3>
-                    {passwordError && <p className="error-toast">❌ {passwordError}</p>}
-                    {passwordSuccess && <p className="success-toast">✅ {passwordSuccess}</p>}
-                    
+                    {passwordError && (
+                      <p className="error-toast">❌ {passwordError}</p>
+                    )}
+                    {passwordSuccess && (
+                      <p className="success-toast">✅ {passwordSuccess}</p>
+                    )}
+
                     <div className="form-group-modal">
                       <label>Current Password</label>
-                      <input 
-                        type="password" 
+                      <input
+                        type="password"
                         value={currentPassword}
                         onChange={(e) => setCurrentPassword(e.target.value)}
                         required
@@ -893,8 +1103,8 @@ function Dashboard({ onNavigate }) {
                     </div>
                     <div className="form-group-modal">
                       <label>New Password (min 8 chars, A-z, 0-9, @)</label>
-                      <input 
-                        type="password" 
+                      <input
+                        type="password"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                         required
@@ -902,8 +1112,8 @@ function Dashboard({ onNavigate }) {
                     </div>
                     <div className="form-group-modal">
                       <label>Confirm New Password</label>
-                      <input 
-                        type="password" 
+                      <input
+                        type="password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         required
@@ -911,9 +1121,9 @@ function Dashboard({ onNavigate }) {
                     </div>
 
                     <div className="btn-row-modal">
-                      <button 
-                        type="button" 
-                        className="btn-modal btn-cancel" 
+                      <button
+                        type="button"
+                        className="btn-modal btn-cancel"
                         onClick={() => {
                           setShowChangePassword(false);
                           setPasswordError("");
@@ -935,7 +1145,7 @@ function Dashboard({ onNavigate }) {
             </div>
 
             <div className="profile-modal-footer">
-              <button 
+              <button
                 className="btn-modal btn-logout"
                 onClick={handleLogout}
                 style={{ width: "100%" }}
