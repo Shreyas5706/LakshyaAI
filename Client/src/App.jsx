@@ -16,6 +16,7 @@ import CareerRecommendation from "./pages/student/CareerRecommendation";
 import Courses from "./pages/student/Courses";
 import SkillgapAnalysis from "./pages/student/SkillgapAnalysis";
 import Chatbot from "./pages/student/Chatbot";
+import AIAssistantLanding from "./pages/student/AIAssistantLanding";
 import CollegeRecommendation from "./pages/student/CollegeRecommendation";
 import Profile from "./pages/student/Profile";
 import CounselorDashboard from "./pages/counselor/Dashboard";
@@ -73,6 +74,15 @@ function App() {
           element={
             <ProtectedRoute role="student">
               <SkillgapAnalysis />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/student/ai-assistant"
+          element={
+            <ProtectedRoute role="student">
+              <AIAssistantLanding />
             </ProtectedRoute>
           }
         />

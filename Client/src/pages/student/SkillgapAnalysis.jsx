@@ -1,217 +1,314 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../../services/api";
-import "./Courses.css"; // Reuse general navbar and theme layout
+import logo from "../../assets/Logo.png";
+import "./SkillgapAnalysis.css";
+
+// ── Static skill data ──────────────────────────────────────────
+const TARGET_SKILLS = [
+  { name: "Deep Learning",       priority: "high",   reason: "Core for AI/ML roles" },
+  { name: "TensorFlow / PyTorch", priority: "high",  reason: "Most-used ML frameworks" },
+  { name: "MLOps",               priority: "medium", reason: "Deployment & pipelines" },
+  { name: "Docker & Kubernetes", priority: "medium", reason: "Containerization skills" },
+  { name: "Cloud Infrastructure", priority: "medium", reason: "AWS / GCP experience" },
+  { name: "System Design",       priority: "low",    reason: "Senior role requirement" },
+];
+
+const SKILL_PERCENTAGES = [90, 75, 80, 70, 60, 65];
+
+const ROADMAP_STEPS = [
+  { name: "Python Basics",           sub: "Completed",        pct: 100, status: "completed" },
+  { name: "Data Analysis",           sub: "Completed",        pct: 100, status: "completed" },
+  { name: "Machine Learning Basics", sub: "Completed",        pct: 100, status: "completed" },
+  { name: "Deep Learning",           sub: "In progress · 60%", pct: 60,  status: "in-progress" },
+  { name: "MLOps",                   sub: "Upcoming",         pct: 0,   status: "upcoming" },
+  { name: "Generative AI",           sub: "Upcoming",         pct: 0,   status: "upcoming" },
+];
 
 function SkillgapAnalysis() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const [user, setUser]   = useState(null);
 
   useEffect(() => {
     API.get("/dashboard")
-      .then((res) => {
-        if (res.data?.success) {
-          setUser(res.data.user);
-        }
-      })
+      .then((res) => { if (res.data?.success) setUser(res.data.user); })
       .catch((err) => console.log(err));
   }, []);
 
-  const loggedSkills = user?.skills || [
-    "Communication",
-    "Problem Solving",
-    "Creativity",
-  ];
-  const targetSkills = [
-    "Advanced Logic",
-    "System Design",
-    "Cloud Infrastructure",
-    "Database Tuning",
-  ];
+  const studentName  = user?.name || "Student";
+  const loggedSkills = user?.skills?.length
+    ? user.skills.slice(0, 6)
+    : ["Python", "JavaScript", "SQL", "Data Analysis", "Machine Learning", "Statistics"];
+
+  const handleNavigate = (path) => navigate(`/student/${path}`);
 
   return (
-    <div className="courses-page">
-      <nav className="dashboard-navbar">
-        <div className="navbar-logo">LAKSHYA AI</div>
-        <div className="navbar-links">
-          <button
-            className="nav-link"
-            onClick={() => navigate("/student/dashboard")}
-          >
-            Dashboard
-          </button>
-          <button
-            className="nav-link"
-            onClick={() => navigate("/student/career")}
-          >
-            Career
-          </button>
-          <button
-            className="nav-link active-link"
-            onClick={() => navigate("/student/skills")}
-          >
-            Skills
-          </button>
-          <button
-            className="nav-link"
-            onClick={() => navigate("/student/learn")}
-          >
-            Learn
-          </button>
-          <button
-            className="nav-link"
-            onClick={() => navigate("/student/chatbot")}
-          >
-            AI Assistant
-          </button>
-        </div>
-        <div
-          className="navbar-avatar"
-          onClick={() => navigate("/student/dashboard")}
-          style={{ cursor: "pointer" }}
-        >
-          {user?.name ? user.name.charAt(0).toUpperCase() : "S"}
-        </div>
-      </nav>
+    <div className="skills-page-root">
 
-      <div
-        className="courses-content"
-        style={{ display: "flex", flexDirection: "column", gap: "25px" }}
-      >
-        <div
-          className="courses-header-section welcome-banner"
-          style={{ minHeight: "auto", padding: "30px 40px" }}
-        >
-          <div className="welcome-text-block">
-            <h1
-              className="welcome-heading"
-              style={{ margin: "0 0 10px 0", fontSize: "26px" }}
-            >
-              Skills Gap Analysis 📊
-            </h1>
-            <p className="greeting-line" style={{ opacity: 0.9 }}>
-              Compare your current skill level against the skills required for
-              your target career paths.
-            </p>
+      {/* ══════════════════════════════
+          SIDEBAR
+         ══════════════════════════════ */}
+      <aside className="skills-sidebar">
+        <div className="skills-sidebar-brand">
+          <img src={logo} className="skills-sidebar-logo" alt="Logo" />
+          <span className="skills-sidebar-brand-txt">LAKSHYA AI</span>
+        </div>
+
+        <div className="skills-sidebar-menu">
+          <span className="skills-menu-group-lbl">Menu</span>
+          <button className="skills-nav-btn" onClick={() => handleNavigate("dashboard")}>
+            <span>🏠</span> Dashboard
+          </button>
+          <button className="skills-nav-btn" onClick={() => handleNavigate("career")}>
+            <span>🎯</span> Career
+          </button>
+          <button className="skills-nav-btn active" onClick={() => handleNavigate("skills")}>
+            <span>📊</span> Skills
+          </button>
+          <button className="skills-nav-btn" onClick={() => handleNavigate("learn")}>
+            <span>📚</span> Learn
+          </button>
+          <button className="skills-nav-btn" onClick={() => handleNavigate("assessments")}>
+            <span>📝</span> Assessments
+          </button>
+          <button className="skills-nav-btn" onClick={() => handleNavigate("resume")}>
+            <span>📄</span> Resume Builder
+          </button>
+          <button className="skills-nav-btn" onClick={() => handleNavigate("applications")}>
+            <span>💼</span> Applications
+          </button>
+          <button className="skills-nav-btn" onClick={() => handleNavigate("mentorship")}>
+            <span>👥</span> Mentorship
+          </button>
+          <button className="skills-nav-btn" onClick={() => handleNavigate("ai-assistant")}>
+            <span>🤖</span> AI Assistant
+          </button>
+
+          <span className="skills-menu-group-lbl" style={{ marginTop: "20px" }}>Shortcuts</span>
+          <button className="skills-nav-btn" onClick={() => handleNavigate("career")}>
+            <span>➔</span> Roadmap
+          </button>
+          <button className="skills-nav-btn" onClick={() => handleNavigate("learn")}>
+            <span>➔</span> My Courses
+          </button>
+          <button className="skills-nav-btn" onClick={() => handleNavigate("skills")}>
+            <span>➔</span> Skill Gap
+          </button>
+        </div>
+
+        <div className="skills-promo-card">
+          <span style={{ fontSize: "20px", display: "block", marginBottom: "6px" }}>👑</span>
+          <h4>Upgrade to Pro</h4>
+          <p>Unlock advanced AI insights, premium roadmaps &amp; more.</p>
+          <button className="skills-promo-btn" onClick={() => handleNavigate("pricing")}>
+            Upgrade Now &nbsp;➔
+          </button>
+        </div>
+      </aside>
+
+      {/* ══════════════════════════════
+          MAIN PANEL
+         ══════════════════════════════ */}
+      <main className="skills-main">
+
+        {/* ── Header bar ── */}
+        <header className="skills-header">
+          <div className="skills-search-bar">
+            <span className="skills-search-glass">🔍</span>
+            <input type="text" placeholder="Search skills, courses, careers..." />
           </div>
-        </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "25px",
-          }}
-          className="filters-container-wrapper"
-        >
-          <div
-            style={{
-              padding: "20px",
-              background: "#F8F8FC",
-              borderRadius: "16px",
-            }}
-          >
-            <h3
-              style={{
-                fontSize: "16px",
-                fontWeight: "700",
-                marginBottom: "15px",
-              }}
-            >
-              💪 Your Current Skills
-            </h3>
+          <div className="skills-header-right">
             <div
-              style={{ display: "flex", flexDirection: "column", gap: "10px" }}
+              className="skills-avatar-widget"
+              onClick={() => handleNavigate("dashboard")}
+              title="Back to Dashboard"
             >
-              {loggedSkills.map((s, idx) => (
-                <div
-                  key={s}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "4px",
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      fontSize: "13px",
-                    }}
-                  >
-                    <span>{s}</span>
-                    <span>{80 - idx * 10}%</span>
+              <div className="skills-avatar-circle">
+                {studentName.charAt(0).toUpperCase()}
+              </div>
+              <div className="skills-user-info">
+                <span className="skills-user-name">{studentName}</span>
+                <span className="skills-user-role">Student</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* ── Scrollable content ── */}
+        <div className="skills-content-scroller">
+
+          {/* ── Hero Banner ── */}
+          <section className="skills-hero-banner">
+            <div className="skills-hero-text">
+              <h1>Skill Gap Analysis 📊</h1>
+              <p>
+                Compare your current skills against what's needed for your target career.
+                Identify gaps, track progress, and get AI-powered course recommendations.
+              </p>
+            </div>
+
+            <div className="skills-hero-badge">
+              <div className="skills-score-ring">
+                <svg width="90" height="90" viewBox="0 0 36 36">
+                  <path
+                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                    fill="none" stroke="rgba(86,72,119,0.1)" strokeWidth="3.5"
+                  />
+                  <path
+                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                    fill="none" stroke="#564877" strokeWidth="3.5"
+                    strokeDasharray="73, 100" strokeLinecap="round"
+                  />
+                </svg>
+                <span className="skills-score-num">73%</span>
+              </div>
+              <span className="skills-score-lbl">Career Readiness</span>
+            </div>
+          </section>
+
+          {/* ── Stats strip ── */}
+          <section className="skills-stats-strip">
+            <div className="skills-stat-card">
+              <div className="skills-stat-icon ic-purple">🧠</div>
+              <div className="skills-stat-body">
+                <span className="skills-stat-label">Current Skills</span>
+                <span className="skills-stat-val">{loggedSkills.length}</span>
+                <span className="skills-stat-sub">Skills mastered</span>
+              </div>
+            </div>
+
+            <div className="skills-stat-card">
+              <div className="skills-stat-icon ic-red">🔍</div>
+              <div className="skills-stat-body">
+                <span className="skills-stat-label">Skill Gaps</span>
+                <span className="skills-stat-val">{TARGET_SKILLS.length}</span>
+                <span className="skills-stat-sub">Skills to acquire</span>
+              </div>
+            </div>
+
+            <div className="skills-stat-card">
+              <div className="skills-stat-icon ic-green">✅</div>
+              <div className="skills-stat-body">
+                <span className="skills-stat-label">Steps Done</span>
+                <span className="skills-stat-val">3 / 6</span>
+                <span className="skills-stat-sub">Roadmap progress</span>
+              </div>
+            </div>
+
+            <div className="skills-stat-card">
+              <div className="skills-stat-icon ic-amber">🔥</div>
+              <div className="skills-stat-body">
+                <span className="skills-stat-label">Top Priority</span>
+                <span className="skills-stat-val" style={{ fontSize: "13px" }}>Deep Learning</span>
+                <span className="skills-stat-sub">AI-recommended</span>
+              </div>
+            </div>
+          </section>
+
+          {/* ── Main grid: Current Skills + Target Gaps ── */}
+          <section className="skills-main-grid">
+
+            {/* Card 1: Current Skills */}
+            <div className="skills-module-card">
+              <div className="skills-module-hdr">
+                <h3 className="skills-module-title">💪 Your Current Skills</h3>
+                <button className="skills-module-link" onClick={() => handleNavigate("profile")}>
+                  Edit Skills →
+                </button>
+              </div>
+
+              <div className="skills-bar-list">
+                {loggedSkills.map((skill, idx) => (
+                  <div className="skills-bar-row" key={skill}>
+                    <div className="skills-bar-meta">
+                      <span className="skills-bar-name">{skill}</span>
+                      <span className="skills-bar-pct">{SKILL_PERCENTAGES[idx] ?? 70}%</span>
+                    </div>
+                    <div className="skills-bar-track">
+                      <div
+                        className="skills-bar-fill"
+                        style={{ width: `${SKILL_PERCENTAGES[idx] ?? 70}%` }}
+                      />
+                    </div>
                   </div>
-                  <div
-                    style={{
-                      height: "8px",
-                      background: "#CEB5B7",
-                      borderRadius: "4px",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <div
-                      style={{
-                        height: "100%",
-                        width: `${80 - idx * 10}%`,
-                        background: "linear-gradient(90deg, #564877, #A3A3FF)",
-                      }}
-                    ></div>
+                ))}
+              </div>
+            </div>
+
+            {/* Card 2: Skill Gaps */}
+            <div className="skills-module-card">
+              <div className="skills-module-hdr">
+                <h3 className="skills-module-title">🎯 Skills to Acquire</h3>
+                <button className="skills-module-link" onClick={() => handleNavigate("learn")}>
+                  Find Courses →
+                </button>
+              </div>
+
+              <div className="skills-gap-grid">
+                {TARGET_SKILLS.map((s) => (
+                  <div className="skills-gap-item" key={s.name}>
+                    <div className="skills-gap-left">
+                      <span className="skills-gap-dot" />
+                      <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
+                        <span className="skills-gap-name">{s.name}</span>
+                        <span style={{ fontSize: "11px", color: "#8f8cac" }}>{s.reason}</span>
+                      </div>
+                    </div>
+                    <span className={`skills-gap-badge ${s.priority}`}>
+                      {s.priority === "high" ? "🔴 High" : s.priority === "medium" ? "🟡 Medium" : "🟢 Low"}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              <button className="skills-cta-btn" onClick={() => handleNavigate("learn")}>
+                Find Courses to Bridge Gaps &nbsp;→
+              </button>
+            </div>
+          </section>
+
+          {/* ── Priority alert ── */}
+          <div className="skills-priority-box">
+            <div className="skills-priority-left">
+              <span className="skills-priority-lbl">⭐ Top Priority Skill</span>
+              <strong className="skills-priority-name">Deep Learning</strong>
+              <p className="skills-priority-desc">
+                High-demand skill for AI/ML Engineer roles. Start now to stay ahead.
+              </p>
+            </div>
+            <button className="skills-priority-btn" onClick={() => handleNavigate("learn")}>
+              Start Learning
+            </button>
+          </div>
+
+          {/* ── Roadmap progress ── */}
+          <section className="skills-bottom-card">
+            <div className="skills-module-hdr">
+              <h3 className="skills-module-title">🗺️ Learning Roadmap</h3>
+              <button className="skills-module-link" onClick={() => handleNavigate("career")}>
+                Full Roadmap →
+              </button>
+            </div>
+
+            <div className="skills-roadmap-grid">
+              {ROADMAP_STEPS.map((step) => (
+                <div className={`skills-roadmap-step ${step.status}`} key={step.name}>
+                  <span className={`step-status-badge ${step.status === "completed" ? "done" : step.status === "in-progress" ? "active" : "upcoming"}`}>
+                    {step.status === "completed" ? "✓ Done" : step.status === "in-progress" ? "● In Progress" : "○ Upcoming"}
+                  </span>
+                  <span className="step-skill-name">{step.name}</span>
+                  <span className="step-skill-sub">{step.sub}</span>
+                  <div className="step-mini-bar-track">
+                    <div className="step-mini-bar-fill" style={{ width: `${step.pct}%` }} />
                   </div>
                 </div>
               ))}
             </div>
-          </div>
+          </section>
 
-          <div
-            style={{
-              padding: "20px",
-              background: "#fdf2f8",
-              borderRadius: "16px",
-            }}
-          >
-            <h3
-              style={{
-                fontSize: "16px",
-                fontWeight: "700",
-                marginBottom: "15px",
-                color: "#be185d",
-              }}
-            >
-              🎯 Target Skills to Learn
-            </h3>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-              {targetSkills.map((s) => (
-                <span
-                  key={s}
-                  style={{
-                    background: "white",
-                    border: "1px solid #fbcfe8",
-                    padding: "8px 16px",
-                    borderRadius: "20px",
-                    fontSize: "13px",
-                    fontWeight: "500",
-                    color: "#be185d",
-                  }}
-                >
-                  ➕ {s}
-                </span>
-              ))}
-            </div>
-            <button
-              className="task-btn"
-              onClick={() => navigate("/student/learn")}
-              style={{
-                marginTop: "30px",
-                width: "100%",
-                background: "#be185d",
-              }}
-            >
-              Find Courses to Bridge Gaps →
-            </button>
-          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

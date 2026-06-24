@@ -94,15 +94,11 @@ export default function LandingPage() {
           </nav>
 
           <div className="nav-right">
-            {session ? (
-              <button className="signup-btn" onClick={handleDashboardRedirect}>
-                Go to Dashboard
-              </button>
-            ) : (
-              <button className="signup-btn" onClick={() => navigate("/auth")}>
-                Sign Up
-              </button>
-            )}
+
+            <button className="signup-btn" onClick={() => navigate("/auth")}>
+              Sign Up
+            </button>
+
           </div>
         </div>
       </header>

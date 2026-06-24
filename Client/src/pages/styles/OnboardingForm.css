@@ -18,7 +18,7 @@
    FONTS — We import a nice font from Google Fonts
    "Nunito" is a friendly, rounded font — perfect for students
    ============================================================ */
-@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap");
 
 /* ============================================================
    CSS VARIABLES (Custom Properties)
@@ -67,10 +67,10 @@
   --border-active: #6c63ff;
 
   /* The font we use for body text and labels */
-  --font-body: "Nunito", sans-serif;
+  --font-body: "Poppins", sans-serif;
 
   /* The font we use for big headings */
-  --font-heading: "Syne", sans-serif;
+  --font-heading: "Poppins", sans-serif;
 
   /* Rounded corners for cards */
   --radius-card: 16px;

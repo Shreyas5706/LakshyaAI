@@ -1,87 +1,24 @@
-// ============================================================
-//  Dashboard.jsx
-//  This is the HOME PAGE of LAKSHYA AI.
-//  The student sees this page every time they log in.
-//
-//  What this page shows:
-//  1. A welcome banner with the student's name
-//  2. Their top career match (fetched from cached recommendation)
-//  3. Quick stats (skills learned, courses done, streak, profile %)
-//  4. Today's task card (personalized if predicted, locked if not)
-//  5. Skills snapshot (personalized skills-to-learn if predicted, locked if not)
-//  6. Timeline roadmap progress tracker (personalized if predicted, CTA if not)
-//  7. Recent activity feed
-//  8. Navigation cards to go to other sections
-//
-//  All data is synchronized live with the backend APIs!
-// ============================================================
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCookie, setCookie, eraseCookie } from "../../utils/cookies";
 import API from "../../services/api";
-
-// Import the CSS file that styles this page
+import logo from "../../assets/Logo.png";
+import chatbotImg from "../../assets/Chatbot.png";
+import explorerImg from "../../assets/Explorer.png";
 import "./Dashboard.css";
 
 // Options list for profile editing
 const GENDER_OPTIONS = ["Male", "Female", "Other"];
-const EDUCATION_LEVELS = [
-  "10th",
-  "12th",
-  "Diploma",
-  "Undergraduate",
-  "Postgraduate",
-];
+const EDUCATION_LEVELS = ["10th", "12th", "Diploma", "Undergraduate", "Postgraduate"];
 const STREAMS = [
-  "Science (PCM)",
-  "Science (PCB)",
-  "Commerce",
-  "Arts",
-  "Computer Science",
-  "IT",
-  "Mechanical",
-  "Civil",
-  "Electrical",
-  "Medical",
-  "Law",
-  "MBA",
-  "Design",
+  "Science (PCM)", "Science (PCB)", "Commerce", "Arts", "Computer Science",
+  "IT", "Mechanical", "Civil", "Electrical", "Medical", "Law", "MBA", "Design"
 ];
 const INDIAN_STATES = [
-  "Andhra Pradesh",
-  "Arunachal Pradesh",
-  "Assam",
-  "Bihar",
-  "Chhattisgarh",
-  "Goa",
-  "Gujarat",
-  "Haryana",
-  "Himachal Pradesh",
-  "Jharkhand",
-  "Karnataka",
-  "Kerala",
-  "Madhya Pradesh",
-  "Maharashtra",
-  "Manipur",
-  "Meghalaya",
-  "Mizoram",
-  "Nagaland",
-  "Odisha",
-  "Punjab",
-  "Rajasthan",
-  "Sikkim",
-  "Tamil Nadu",
-  "Telangana",
-  "Tripura",
-  "Uttar Pradesh",
-  "Uttarakhand",
-  "West Bengal",
-  "Delhi",
-  "Jammu and Kashmir",
-  "Ladakh",
-  "Puducherry",
-  "Chandigarh",
+  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat",
+  "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra",
+  "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim",
+  "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Delhi"
 ];
 
 function Dashboard({ onNavigate }) {
@@ -100,13 +37,7 @@ function Dashboard({ onNavigate }) {
 
   // Profile Edit Form States
   const [editForm, setEditForm] = useState({
-    name: "",
-    age: "",
-    gender: "",
-    state: "",
-    city: "",
-    educationLevel: "",
-    stream: "",
+    name: "", age: "", gender: "", state: "", city: "", educationLevel: "", stream: ""
   });
   const [profileSuccess, setProfileSuccess] = useState("");
   const [profileError, setProfileError] = useState("");
@@ -118,22 +49,8 @@ function Dashboard({ onNavigate }) {
   const [passwordSuccess, setPasswordSuccess] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
-  // Animated counter stats
-  const [statsCounter, setStatsCounter] = useState({
-    skillsLearned: 0,
-    coursesDone: 0,
-    streak: 0,
-    profilePct: 0,
-  });
-
-  const [realStats, setRealStats] = useState({
-    skillsLearned: 3,
-    coursesDone: 2,
-    streak: 5,
-    profilePct: 80,
-  });
-
-  const [showBars, setShowBars] = useState(false);
+  // Tasks checkboxes state
+  const [tasksChecked, setTasksChecked] = useState([false, false, false, false]);
 
   // ----------------------------------------------------------
   //  Fetch Dashboard Data from Backend
@@ -144,12 +61,9 @@ function Dashboard({ onNavigate }) {
       const res = await API.get("/dashboard");
       if (res.data?.success) {
         const freshUser = res.data.user;
-        const freshJourney = res.data.journey;
-        const freshRec = res.data.careerRecommendation;
-
         setUser(freshUser);
-        setJourney(freshJourney);
-        setCareerRecommendation(freshRec);
+        setJourney(res.data.journey);
+        setCareerRecommendation(res.data.careerRecommendation);
 
         // Prepopulate edit form
         setEditForm({
@@ -160,34 +74,6 @@ function Dashboard({ onNavigate }) {
           city: freshUser.city || "",
           educationLevel: freshUser.educationLevel || "",
           stream: freshUser.stream || "",
-        });
-
-        // Calculate profile completeness percentage (based on 7 fields)
-        const profileFields = [
-          freshUser.name,
-          freshUser.age,
-          freshUser.gender,
-          freshUser.state,
-          freshUser.city,
-          freshUser.educationLevel,
-          freshUser.stream,
-        ];
-        const filledFields = profileFields.filter(
-          (field) => field !== undefined && field !== null && field !== ""
-        ).length;
-        const calculatedPct = Math.round(
-          (filledFields / profileFields.length) * 100
-        );
-
-        // Calculate dynamic stats
-        const skillsCount = freshUser.skills?.length || 0;
-        const coursesCount = freshRec ? 1 : 0; // 1 course started/done if recommendation is done
-
-        setRealStats({
-          skillsLearned: skillsCount > 0 ? skillsCount : 3,
-          coursesDone: coursesCount > 0 ? coursesCount : 2,
-          streak: 5,
-          profilePct: calculatedPct,
         });
       }
     } catch (err) {
@@ -201,76 +87,28 @@ function Dashboard({ onNavigate }) {
     fetchDashboardData();
   }, []);
 
-  // Trigger animations when stats are loaded
-  useEffect(() => {
-    if (!loading) {
-      setTimeout(() => {
-        setShowBars(true);
-      }, 400);
-      animateCounters();
-    }
-  }, [loading, realStats]);
-
-  // ----------------------------------------------------------
-  //  Stat Counters Animation logic
-  // ----------------------------------------------------------
-  function animateCounters() {
-    const duration = 1500;
-    const interval = 30;
-    const steps = duration / interval;
-    let currentStep = 0;
-
-    const timer = setInterval(function () {
-      currentStep = currentStep + 1;
-      const progress = currentStep / steps;
-
-      setStatsCounter({
-        skillsLearned: Math.round(realStats.skillsLearned * progress),
-        coursesDone: Math.round(realStats.coursesDone * progress),
-        streak: Math.round(realStats.streak * progress),
-        profilePct: Math.round(realStats.profilePct * progress),
-      });
-
-      if (currentStep >= steps) {
-        clearInterval(timer);
-        setStatsCounter(realStats);
-      }
-    }, interval);
-  }
-
-  // Helper Greeting
-  function getGreeting() {
+  const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return "Good Morning";
     if (hour < 17) return "Good Afternoon";
     return "Good Evening";
-  }
+  };
 
-  // Navigation Handler
-  function handleNavigate(pageName) {
+  const handleNavigate = (pageName) => {
     if (onNavigate) {
       onNavigate(pageName);
     } else {
-      if (pageName === "career") {
-        navigate("/student/career");
-      } else if (pageName === "dashboard") {
-        navigate("/student/dashboard");
-      } else {
-        navigate(`/student/${pageName}`);
-      }
+      if (pageName === "dashboard") navigate("/student/dashboard");
+      else navigate(`/student/${pageName}`);
     }
-  }
+  };
 
-  // Logout Handler
   const handleLogout = () => {
     eraseCookie("lakshyaSession");
     localStorage.removeItem("lakshya_student");
     navigate("/auth");
   };
 
-  // ----------------------------------------------------------
-  //  Update Profile API Call
-  // ----------------------------------------------------------
   const handleSaveProfile = async (e) => {
     e.preventDefault();
     setProfileSuccess("");
@@ -299,41 +137,16 @@ function Dashboard({ onNavigate }) {
 
         // Update Session Cookie
         const session = getCookie("lakshyaSession") || {};
-        session.user = {
-          ...session.user,
-          ...res.data.user,
-        };
+        session.user = { ...session.user, ...res.data.user };
         setCookie("lakshyaSession", session, 1);
-
-        // Recalculate completeness
-        const profileFields = [
-          res.data.user.name,
-          res.data.user.age,
-          res.data.user.gender,
-          res.data.user.state,
-          res.data.user.city,
-          res.data.user.educationLevel,
-          res.data.user.stream,
-        ];
-        const filled = profileFields.filter(
-          (f) => f !== undefined && f !== null && f !== ""
-        ).length;
-        const newPct = Math.round((filled / profileFields.length) * 100);
-
-        setRealStats((prev) => ({ ...prev, profilePct: newPct }));
         setIsEditingProfile(false);
       }
     } catch (err) {
       console.error(err);
-      setProfileError(
-        err.response?.data?.message || "Failed to update profile details."
-      );
+      setProfileError(err.response?.data?.message || "Failed to update profile details.");
     }
   };
 
-  // ----------------------------------------------------------
-  //  Update Password API Call
-  // ----------------------------------------------------------
   const handleSavePassword = async (e) => {
     e.preventDefault();
     setPasswordSuccess("");
@@ -343,23 +156,17 @@ function Dashboard({ onNavigate }) {
       setPasswordError("Current password is required.");
       return;
     }
-
     if (newPassword.length < 8) {
       setPasswordError("New password must be at least 8 characters long.");
       return;
     }
-
     if (newPassword !== confirmPassword) {
       setPasswordError("Passwords do not match.");
       return;
     }
 
     try {
-      const res = await API.put("/auth/profile", {
-        currentPassword,
-        password: newPassword,
-      });
-
+      const res = await API.put("/auth/profile", { currentPassword, password: newPassword });
       if (res.data?.success) {
         setPasswordSuccess("Password changed successfully!");
         setCurrentPassword("");
@@ -372,663 +179,911 @@ function Dashboard({ onNavigate }) {
       }
     } catch (err) {
       console.error(err);
-      setPasswordError(
-        err.response?.data?.message ||
-          "Incorrect current password or validation failed."
-      );
+      setPasswordError(err.response?.data?.message || "Incorrect current password.");
     }
   };
 
-  // Render loading state
+  const toggleTask = (index) => {
+    const updated = [...tasksChecked];
+    updated[index] = !updated[index];
+    setTasksChecked(updated);
+  };
+
   if (loading && !user) {
     return (
-      <div
-        className="dashboard-page flex-center"
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <div className="loading-box-custom">
-          <div className="pulse-spinner"></div>
-          <h3 className="loading-title-custom">Loading Dashboard</h3>
-          <p className="loading-desc-custom">
-            Syncing your learning analytics...
-          </p>
-        </div>
+      <div className="dashboard-loading-box">
+        <div className="pulse-spinner"></div>
+        <h3 className="loading-title-custom">Syncing Dashboard...</h3>
       </div>
     );
   }
 
-  const hasDoneCareerPrediction = journey?.currentStep === "CAREER_PREDICTED";
-  const topCareer = careerRecommendation?.careers?.[0];
-
-  // Dynamic values based on prediction state
-  const recommendedTitle = topCareer ? topCareer.role : "UI/UX Designer";
-  const matchScore = topCareer ? Math.round(topCareer.confidence * 100) : null;
-  const skillsToLearn = topCareer?.explanation?.skills_to_learn || [
-    "Creativity",
-    "Problem Solving",
-    "Communication",
-  ];
-  const currentRoadmap = topCareer?.explanation?.roadmap || [];
-
-  // Generate activities list
-  const recentActivities = [
-    { text: `Signed up to LakshyaAI`, time: "Welcome aboard!", emoji: "🎉" },
-    user?.educationLevel
-      ? {
-          text: `Set education to ${user.educationLevel} (${user.stream || "General"})`,
-          time: "Profile setup",
-          emoji: "🎓",
-        }
-      : null,
-    hasDoneCareerPrediction
-      ? {
-          text: `Completed AI Career Prediction: ${recommendedTitle}`,
-          time: "Roadmap unlocked",
-          emoji: "🎯",
-        }
-      : null,
-    user?.skills?.length > 0
-      ? {
-          text: `Updated ${user.skills.length} skills in profile`,
-          time: "Skills synched",
-          emoji: "💪",
-        }
-      : null,
-  ].filter(Boolean);
-
-  // Dynamic Today's Task
-  const todayTask =
-    hasDoneCareerPrediction && topCareer
-      ? {
-          title: `Learn ${skillsToLearn[0]} Fundamentals`,
-          duration: "45 mins",
-          type: "Recommended Study",
-          desc: `Step 1 of your roadmap: ${currentRoadmap[0]?.title || "Begin learning fundamentals"}`,
-        }
-      : {
-          title: "Complete AI Career Recommendation",
-          duration: "10 mins",
-          type: "Action Required",
-          desc: "Unlock your custom transition roadmaps, learning tasks, and skills analysis",
-        };
+  // Dynamic names
+  const studentName = user?.name || "Diya";
+  const targetCareer = careerRecommendation?.careers?.[0]?.role || "AI/ML Engineer";
 
   return (
-    <div className="dashboard-page">
-      {/* -------------------------------------------------- */}
-      {/* TOP NAVIGATION BAR                                  */}
-      {/* -------------------------------------------------- */}
-      <nav className="dashboard-navbar">
-        <div className="navbar-logo">LAKSHYA AI</div>
-        <div className="navbar-links">
-          <button className="nav-link active-link">Dashboard</button>
-          <button className="nav-link" onClick={() => handleNavigate("career")}>
-            Career
+    <div className="student-dashboard-root">
+
+      {/* ========================================================
+          SIDEBAR NAVIGATION (left side matching reference)
+         ======================================================== */}
+      <aside className="db-sidebar">
+        <div className="sidebar-brand-block">
+          <img src={logo} className="sidebar-logo-img" alt="Logo" />
+          <span className="sidebar-brand-txt">LAKSHYA AI</span>
+        </div>
+
+        <div className="sidebar-menu">
+          <span className="menu-group-label">Menu</span>
+          <button className="sidebar-menu-btn active" onClick={() => handleNavigate("dashboard")}>
+            <span className="btn-icon">🏠</span> Dashboard
           </button>
-          <button className="nav-link" onClick={() => handleNavigate("skills")}>
-            Skills
+          <button className="sidebar-menu-btn" onClick={() => handleNavigate("career")}>
+            <span className="btn-icon">🎯</span> Career
           </button>
-          <button className="nav-link" onClick={() => handleNavigate("learn")}>
-            Learn
+          <button className="sidebar-menu-btn" onClick={() => handleNavigate("skills")}>
+            <span className="btn-icon">📊</span> Skills
           </button>
-          <button
-            className="nav-link"
-            onClick={() => handleNavigate("chatbot")}
-          >
-            AI Assistant
+          <button className="sidebar-menu-btn" onClick={() => handleNavigate("learn")}>
+            <span className="btn-icon">📚</span> Learn
+          </button>
+          <button className="sidebar-menu-btn" onClick={() => handleNavigate("assessments")}>
+            <span className="btn-icon">📝</span> Assessments
+          </button>
+          <button className="sidebar-menu-btn" onClick={() => handleNavigate("resume")}>
+            <span className="btn-icon">📄</span> Resume Builder
+          </button>
+          <button className="sidebar-menu-btn" onClick={() => handleNavigate("applications")}>
+            <span className="btn-icon">💼</span> Applications
+          </button>
+          <button className="sidebar-menu-btn" onClick={() => handleNavigate("mentorship")}>
+            <span className="btn-icon">👥</span> Mentorship
+          </button>
+          <button className="sidebar-menu-btn" onClick={() => handleNavigate("ai-assistant")}>
+            <span className="btn-icon">🤖</span> AI Assistant
+          </button>
+
+          <span className="menu-group-label" style={{ marginTop: "20px" }}>Shortcuts</span>
+          <button className="sidebar-menu-btn" onClick={() => handleNavigate("career")}>
+            <span className="btn-icon">➔</span> Roadmap
+          </button>
+          <button className="sidebar-menu-btn" onClick={() => handleNavigate("learn")}>
+            <span className="btn-icon">➔</span> My Courses
+          </button>
+          <button className="sidebar-menu-btn" onClick={() => handleNavigate("learn")}>
+            <span className="btn-icon">➔</span> Saved Resources
+          </button>
+          <button className="sidebar-menu-btn" onClick={() => handleNavigate("skills")}>
+            <span className="btn-icon">➔</span> Skill Gap
+          </button>
+          <button className="sidebar-menu-btn" onClick={() => handleNavigate("career")}>
+            <span className="btn-icon">➔</span> Career Insights
           </button>
         </div>
-        <div
-          className="navbar-avatar"
-          onClick={() => setShowProfileModal(true)}
-          style={{ cursor: "pointer" }}
-          title="View Profile"
-        >
-          {user?.name ? user.name.charAt(0).toUpperCase() : "S"}
+
+        {/* Upgrade to Pro Card */}
+        <div className="sidebar-promo-card">
+          <span className="promo-crown">👑</span>
+          <h4>Upgrade to Pro</h4>
+          <p>Unlock advanced AI insights, premium roadmaps & more.</p>
+          <button className="promo-btn" onClick={() => handleNavigate("pricing")}>
+            Upgrade Now &nbsp;➔
+          </button>
         </div>
-      </nav>
+      </aside>
 
-      {/* -------------------------------------------------- */}
-      {/* MAIN CONTENT AREA                                   */}
-      {/* -------------------------------------------------- */}
-      <div className="dashboard-content">
-        {/* ============================================== */}
-        {/* WELCOME BANNER                                  */}
-        {/* ============================================== */}
-        <div className="welcome-banner">
-          <div className="welcome-text-block">
-            <p className="greeting-line">{getGreeting()} 👋</p>
-            <h1 className="welcome-heading">
-              Hey {user?.name || "there"}, ready to move closer
-              <br />
-              to your dream career?
-            </h1>
+      {/* ========================================================
+          MAIN CONTENT PANEL (right side)
+         ======================================================== */}
+      <main className="db-main">
 
-            {hasDoneCareerPrediction ? (
-              <button
-                className="career-match-pill"
-                onClick={() => handleNavigate("career")}
-              >
-                ✨ Recommended Role: <strong>{recommendedTitle}</strong> (
-                {matchScore}% Match) →
-              </button>
-            ) : (
-              <button
-                className="career-match-pill pulse-glowing-btn"
-                onClick={() => handleNavigate("career")}
-              >
-                🚀 Predict Your Perfect Matching Career with AI Now →
-              </button>
-            )}
+        {/* TOP NAVBAR HEADER */}
+        <header className="db-header">
+          <div className="header-search-bar">
+            <span className="search-glass">🔍</span>
+            <input type="text" placeholder="Search skills, courses, careers..." />
+            <kbd className="search-kbd">⌘ K</kbd>
           </div>
 
-          <div className="banner-circle banner-circle-1"></div>
-          <div className="banner-circle banner-circle-2"></div>
-          <div className="banner-circle banner-circle-3"></div>
-        </div>
-
-        {/* ============================================== */}
-        {/* QUICK STATS ROW                                 */}
-        {/* ============================================== */}
-        <div className="stats-row">
-          <div className="stat-card stat-card-1">
-            <div className="stat-icon">🧠</div>
-            <div className="stat-number">
-              {statsCounter.skillsLearned}
-              <span className="stat-total">/8</span>
+          <div className="header-right-tools">
+            <button className="tool-icon-btn notification-bell" title="Notifications">
+              🔔
+              <span className="bell-badge">3</span>
+            </button>
+            <button className="tool-icon-btn" title="Calendar" onClick={() => handleNavigate("learn")}>
+              📅
+            </button>
+            <div
+              className="user-profile-widget"
+              onClick={() => setShowProfileModal(true)}
+              title="Profile Options"
+            >
+              <div className="user-avatar-circle">
+                {studentName.charAt(0).toUpperCase()}
+              </div>
+              <div className="user-info-text">
+                <span className="user-name">{studentName} Sharma</span>
+                <span className="user-role">Student</span>
+              </div>
             </div>
-            <div className="stat-label">Skills Logged</div>
           </div>
+        </header>
 
-          <div className="stat-card stat-card-2">
-            <div className="stat-icon">📚</div>
-            <div className="stat-number">{statsCounter.coursesDone}</div>
-            <div className="stat-label">Paths Unlocked</div>
-          </div>
+        <div className="db-content-scroller">
 
-          <div className="stat-card stat-card-3">
-            <div className="stat-icon">🔥</div>
-            <div className="stat-number">{statsCounter.streak}</div>
-            <div className="stat-label">Day Streak</div>
-          </div>
-
-          <div
-            className="stat-card stat-card-4"
-            onClick={() => setShowProfileModal(true)}
-            style={{ cursor: "pointer" }}
-          >
-            <div className="stat-icon">👤</div>
-            <div className="stat-number">
-              {statsCounter.profilePct}
-              <span className="stat-total">%</span>
-            </div>
-            <div className="stat-label">Profile Complete</div>
-          </div>
-        </div>
-
-        {/* ============================================== */}
-        {/* MIDDLE SECTION — Conditional Tasks & Skills     */}
-        {/* ============================================== */}
-        <div className="middle-row">
-          {/* Today's Task Card */}
-          <div className="todays-task-card">
-            <div className="task-label">⚡ Today's Recommendation</div>
-            <h3 className="task-title">{todayTask.title}</h3>
-            {todayTask.desc && (
-              <p
-                className="task-subdesc"
-                style={{
-                  fontSize: "13px",
-                  color: "#8F8CAC",
-                  marginBottom: "12px",
-                }}
-              >
-                {todayTask.desc}
+          {/* ==============================================
+              WELCOME BANNER WITH MASCOT & METADATA
+             ============================================== */}
+          <section className="welcome-banner-scene">
+            <div className="welcome-banner-left">
+              <span className="banner-salutation">{getGreeting()}, {studentName}! 👋</span>
+              <h2 className="banner-title-text">Keep learning, keep growing.</h2>
+              <p className="banner-subtitle-text">
+                You are on the right path to becoming an <strong className="role-hl">{targetCareer}</strong>
               </p>
-            )}
-            <div className="task-details">
-              <span className="task-badge">{todayTask.type}</span>
-              <span className="task-duration">🕐 {todayTask.duration}</span>
+              <button className="banner-cta-btn" onClick={() => handleNavigate("career")}>
+                View Career Roadmap &nbsp;➔
+              </button>
             </div>
 
-            {hasDoneCareerPrediction ? (
-              <button
-                className="task-btn"
-                onClick={() => handleNavigate("learn")}
-              >
-                Start Now →
-              </button>
-            ) : (
-              <button
-                className="task-btn btn-glowing"
-                onClick={() => handleNavigate("career")}
-              >
-                Unlock Custom Tasks →
-              </button>
-            )}
-          </div>
-
-          {/* Skills Snapshot Card */}
-          <div
-            className={`skills-snapshot-card ${!hasDoneCareerPrediction ? "locked-widget-wrapper" : ""}`}
-          >
-            <h3 className="card-heading">Skills Snapshot 📊</h3>
-            <p className="card-subtext">
-              {hasDoneCareerPrediction
-                ? "Target skills for your transition"
-                : "Predict career to map your target skills"}
-            </p>
-
-            {!hasDoneCareerPrediction ? (
-              <div className="locked-overlay-content">
-                <div className="lock-icon-large">🔒</div>
-                <button
-                  className="btn-locked-action"
-                  onClick={() => handleNavigate("career")}
-                >
-                  Run Career Prediction
-                </button>
+            {/* Career readiness progress wheel */}
+            <div className="readiness-meter-box">
+              <span className="meter-label">Career Readiness</span>
+              <div className="radial-meter-outer">
+                <svg width="86" height="86" viewBox="0 0 36 36">
+                  <path className="meter-track" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="3.5" />
+                  <path className="meter-fill" strokeDasharray="78, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#ffffff" strokeWidth="3.5" />
+                </svg>
+                <div className="meter-pct-text">78%</div>
               </div>
-            ) : (
-              <div className="skills-bar-list">
-                {skillsToLearn.slice(0, 3).map((skill, idx) => {
-                  const mockLevels = [30, 15, 5]; // Match step-wise learning progress
-                  const level = mockLevels[idx] || 10;
-                  return (
-                    <div key={skill} className="skill-bar-row">
-                      <div className="skill-bar-header">
-                        <span
-                          className="skill-bar-name"
-                          style={{ textTransform: "capitalize" }}
-                        >
-                          {skill}
-                        </span>
-                        <span className="skill-bar-percent">
-                          {level}% Mastered
-                        </span>
-                      </div>
-                      <div className="skill-bar-track">
-                        <div
-                          className="skill-bar-fill"
-                          style={{
-                            width: showBars ? level + "%" : "0%",
-                          }}
-                        ></div>
-                      </div>
-                    </div>
-                  );
-                })}
+              <span className="meter-details">You are ahead of <strong>65%</strong> of students</span>
+            </div>
+
+            {/* Mascot visual overlay */}
+            <div className="banner-mascot-wrap">
+              <img src={explorerImg} className="banner-mascot-img" alt="Explorer mascot" />
+            </div>
+
+            {/* AI Mentor Speech bubble */}
+            <div className="mentor-speech-overlay">
+              <div className="mentor-speech-lbl">✦ AI Mentor Says</div>
+              <p className="mentor-speech-quote">
+                "You're making great progress! Focus on Deep Learning next."
+              </p>
+            </div>
+          </section>
+
+          {/* ==============================================
+              CAREER SNAPSHOT SNAP ROW (4 mini widget cards)
+             ============================================== */}
+          <section className="snapshot-cards-row">
+            {/* Snapshot Card 1 */}
+            <div className="snapshot-card">
+              <span className="snap-icon-circle c-purple">🎯</span>
+              <div>
+                <span className="snap-lbl">Target Career</span>
+                <h4 className="snap-val">{targetCareer}</h4>
+                <button className="snap-link" onClick={() => handleNavigate("career")}>Change Goal</button>
               </div>
-            )}
+            </div>
 
-            {hasDoneCareerPrediction && (
-              <button
-                className="see-full-link"
-                onClick={() => handleNavigate("skills")}
-              >
-                Analyse Skill Gaps →
-              </button>
-            )}
-          </div>
-        </div>
+            {/* Snapshot Card 2 */}
+            <div className="snapshot-card">
+              <span className="snap-icon-circle c-green">🧠</span>
+              <div>
+                <span className="snap-lbl">Current Skills</span>
+                <h4 className="snap-val">18 Skills</h4>
+                <button className="snap-link" onClick={() => handleNavigate("skills")}>View Skills</button>
+              </div>
+            </div>
 
-        {/* ============================================== */}
-        {/* PERSONALIZED TIMELINE PROGRESS (IF PREDICTED)    */}
-        {/* ============================================== */}
-        {hasDoneCareerPrediction && currentRoadmap.length > 0 && (
-          <div className="dashboard-roadmap-tracker activity-card">
-            <h3 className="card-heading">🎯 Your Learning Roadmap</h3>
-            <p className="card-subtext">
-              Master the steps required to transition to a {recommendedTitle}
-            </p>
+            {/* Snapshot Card 3 */}
+            <div className="snapshot-card">
+              <span className="snap-icon-circle c-red">🔍</span>
+              <div>
+                <span className="snap-lbl">Missing Skills</span>
+                <h4 className="snap-val">7 Skills</h4>
+                <button className="snap-link" onClick={() => handleNavigate("skills")}>View Gap</button>
+              </div>
+            </div>
 
-            <div className="dashboard-timeline-steps">
-              {currentRoadmap.map((stepItem, index) => (
-                <div
-                  key={index}
-                  className={`dashboard-timeline-step ${index === 0 ? "active" : ""}`}
-                >
-                  <div className="timeline-step-indicator">
-                    <span className="step-num">
-                      {stepItem.step || index + 1}
-                    </span>
-                    {index < currentRoadmap.length - 1 && (
-                      <span className="step-connector"></span>
-                    )}
+            {/* Snapshot Card 4 */}
+            <div className="snapshot-card">
+              <span className="snap-icon-circle c-orange">🔥</span>
+              <div>
+                <span className="snap-lbl">Learning Streak</span>
+                <h4 className="snap-val">24 Days</h4>
+                <button className="snap-link" onClick={() => handleNavigate("learn")}>Keep Going! 🔥</button>
+              </div>
+            </div>
+          </section>
+
+          {/* ==============================================
+              MIDDLE ROW METRICS (3 detailed column modules)
+             ============================================== */}
+          <section className="dashboard-grid-middle">
+
+            {/* Module 1: Your Career Roadmap */}
+            <div className="grid-module-card">
+              <h3 className="module-title">Your Career Roadmap</h3>
+
+              <div className="roadmap-step-timeline">
+                {/* Step 1 */}
+                <div className="timeline-step-item completed">
+                  <div className="timeline-dot-wrap">
+                    <span className="dot-icon">✓</span>
+                    <span className="dot-line" />
                   </div>
-                  <div className="timeline-step-info">
-                    <h4 className="timeline-step-name">{stepItem.title}</h4>
-                    <p className="timeline-step-detail">
-                      {stepItem.description}
-                    </p>
+                  <div className="step-info-block">
+                    <span className="step-title">Python Basics</span>
+                    <span className="step-pct">100%</span>
                   </div>
                 </div>
-              ))}
-            </div>
 
-            <div style={{ marginTop: "20px", textAlign: "right" }}>
-              <button
-                className="task-btn"
-                onClick={() => handleNavigate("career")}
-              >
-                View Full Detailed Roadmap →
+                {/* Step 2 */}
+                <div className="timeline-step-item completed">
+                  <div className="timeline-dot-wrap">
+                    <span className="dot-icon">✓</span>
+                    <span className="dot-line" />
+                  </div>
+                  <div className="step-info-block">
+                    <span className="step-title">Data Analysis with Python</span>
+                    <span className="step-pct">100%</span>
+                  </div>
+                </div>
+
+                {/* Step 3 */}
+                <div className="timeline-step-item completed">
+                  <div className="timeline-dot-wrap">
+                    <span className="dot-icon">✓</span>
+                    <span className="dot-line" />
+                  </div>
+                  <div className="step-info-block">
+                    <span className="step-title">Machine Learning Basics</span>
+                    <span className="step-pct">100%</span>
+                  </div>
+                </div>
+
+                {/* Step 4 */}
+                <div className="timeline-step-item active">
+                  <div className="timeline-dot-wrap">
+                    <span className="dot-icon-active" />
+                    <span className="dot-line" />
+                  </div>
+                  <div className="step-info-block">
+                    <span className="step-title font-bold">Deep Learning</span>
+                    <span className="step-pct font-bold color-purple">60%</span>
+                  </div>
+                </div>
+
+                {/* Step 5 */}
+                <div className="timeline-step-item upcoming">
+                  <div className="timeline-dot-wrap">
+                    <span className="dot-icon-upcoming" />
+                    <span className="dot-line" />
+                  </div>
+                  <div className="step-info-block">
+                    <span className="step-title">MLOps</span>
+                    <span className="step-pct">Upcoming</span>
+                  </div>
+                </div>
+
+                {/* Step 6 */}
+                <div className="timeline-step-item upcoming">
+                  <div className="timeline-dot-wrap">
+                    <span className="dot-icon-upcoming" />
+                  </div>
+                  <div className="step-info-block">
+                    <span className="step-title">Generative AI</span>
+                    <span className="step-pct">Upcoming</span>
+                  </div>
+                </div>
+              </div>
+
+              <button className="module-footer-btn" onClick={() => handleNavigate("career")}>
+                View Full Roadmap
               </button>
             </div>
-          </div>
-        )}
 
-        {/* ============================================== */}
-        {/* RECENT ACTIVITY FEED                           */}
-        {/* ============================================== */}
-        <div className="activity-card">
-          <h3 className="card-heading">Recent Activity 📋</h3>
-          <p className="card-subtext">Your learning milestone journey</p>
+            {/* Module 2: Skill Gap Analysis */}
+            <div className="grid-module-card">
+              <div className="module-header-row">
+                <h3 className="module-title">Skill Gap Analysis</h3>
+                <button className="module-header-link" onClick={() => handleNavigate("skills")}>View Full Report →</button>
+              </div>
 
-          <div className="activity-list">
-            {recentActivities.length > 0 ? (
-              recentActivities.map(function (activity, index) {
-                return (
-                  <div
-                    key={index}
-                    className="activity-item"
-                    style={{ animationDelay: index * 0.1 + "s" }}
-                  >
-                    <div className="activity-icon">{activity.emoji}</div>
-                    <div className="activity-text-block">
-                      <p className="activity-text">{activity.text}</p>
-                      <p className="activity-time">{activity.time}</p>
+              <div className="skill-gap-data-layout">
+                {/* Left: Your Current Skills progress bar lists */}
+                <div className="skills-progress-list">
+                  <span className="sg-section-lbl">Your Current Skills</span>
+
+                  <div className="sg-bar-row">
+                    <div className="sg-bar-hdr">
+                      <span>Python</span>
+                      <strong>90%</strong>
+                    </div>
+                    <div className="sg-bar-track"><div className="sg-bar-fill" style={{ width: "90%" }} /></div>
+                  </div>
+
+                  <div className="sg-bar-row">
+                    <div className="sg-bar-hdr">
+                      <span>JavaScript</span>
+                      <strong>75%</strong>
+                    </div>
+                    <div className="sg-bar-track"><div className="sg-bar-fill" style={{ width: "75%" }} /></div>
+                  </div>
+
+                  <div className="sg-bar-row">
+                    <div className="sg-bar-hdr">
+                      <span>SQL</span>
+                      <strong>80%</strong>
+                    </div>
+                    <div className="sg-bar-track"><div className="sg-bar-fill" style={{ width: "80%" }} /></div>
+                  </div>
+
+                  <div className="sg-bar-row">
+                    <div className="sg-bar-hdr">
+                      <span>Data Analysis</span>
+                      <strong>70%</strong>
+                    </div>
+                    <div className="sg-bar-track"><div className="sg-bar-fill" style={{ width: "70%" }} /></div>
+                  </div>
+
+                  <div className="sg-bar-row">
+                    <div className="sg-bar-hdr">
+                      <span>Machine Learning</span>
+                      <strong>60%</strong>
+                    </div>
+                    <div className="sg-bar-track"><div className="sg-bar-fill" style={{ width: "60%" }} /></div>
+                  </div>
+
+                  <div className="sg-bar-row">
+                    <div className="sg-bar-hdr">
+                      <span>Statistics</span>
+                      <strong>65%</strong>
+                    </div>
+                    <div className="sg-bar-track"><div className="sg-bar-fill" style={{ width: "65%" }} /></div>
+                  </div>
+                </div>
+
+                {/* Right: Recommended skills capsule tags */}
+                <div className="skills-recommendations-list">
+                  <span className="sg-section-lbl">Recommended Skills</span>
+                  <div className="sg-tags-cloud">
+                    <span className="sg-rec-tag active">Deep Learning</span>
+                    <span className="sg-rec-tag">TensorFlow</span>
+                    <span className="sg-rec-tag">PyTorch</span>
+                    <span className="sg-rec-tag">MLOps</span>
+                    <span className="sg-rec-tag">Docker</span>
+                    <span className="sg-rec-tag">AWS</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Top Priority Highlight Box */}
+              <div className="sg-priority-alert">
+                <div className="sg-alert-left">
+                  <div className="alert-badge-lbl">⭐ Top Priority</div>
+                  <strong className="alert-skill-name">Deep Learning</strong>
+                  <p className="alert-desc-txt">High demand skill for AI/ML Engineer roles.</p>
+                </div>
+                <button className="sg-alert-btn" onClick={() => handleNavigate("learn")}>
+                  Start Learning
+                </button>
+              </div>
+            </div>
+
+            {/* Module 3: AI Insights & Resume Score */}
+            <div className="insights-double-module">
+
+              {/* Card A: AI Career Insights */}
+              <div className="grid-module-card min-height-half">
+                <h3 className="module-title">AI Career Insights</h3>
+
+                <div className="insights-stats-grid">
+                  <div className="insight-stat-item">
+                    <span className="insight-lbl">Average Salary</span>
+                    <div className="insight-val">₹14 - 26 LPA</div>
+                    <span className="insight-subdesc">For AI/ML Engineers in India</span>
+                    <div className="insight-chart-spark">
+                      <svg viewBox="0 0 100 30" width="100%" height="24">
+                        <path d="M0,25 Q15,10 30,22 T60,5 T90,18" fill="none" stroke="#a3a3ff" strokeWidth="2.5" />
+                      </svg>
                     </div>
                   </div>
-                );
-              })
-            ) : (
-              <p className="tag-none" style={{ padding: "10px 0" }}>
-                No recent activity logged.
+
+                  <div className="insight-stat-item">
+                    <span className="insight-lbl">Job Demand</span>
+                    <div className="insight-val color-green">+38%</div>
+                    <span className="insight-subdesc">Growth in AI/ML Jobs</span>
+                    <div className="insight-chart-spark bars-layout">
+                      <span className="bar-spark-item h-20" />
+                      <span className="bar-spark-item h-40" />
+                      <span className="bar-spark-item h-60" />
+                      <span className="bar-spark-item h-50" />
+                      <span className="bar-spark-item h-90 active" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="hiring-companies-block">
+                  <span className="hiring-lbl">Top Hiring Companies</span>
+                  <div className="companies-row">
+                    <span className="company-logo g-col">G</span>
+                    <span className="company-logo ms-col">ms</span>
+                    <span className="company-logo oa-col">oA</span>
+                    <span className="company-logo nv-col">nv</span>
+                    <button className="hiring-view-all-btn" onClick={() => handleNavigate("career")}>View All →</button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card B: Resume Score card */}
+              <div className="grid-module-card min-height-half">
+                <h3 className="module-title">Resume Score</h3>
+
+                <div className="resume-score-layout">
+                  <div className="resume-score-wheel">
+                    <svg width="68" height="68" viewBox="0 0 36 36">
+                      <path className="wheel-track" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#f1f5f9" strokeWidth="3" />
+                      <path className="wheel-fill" strokeDasharray="82, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#564877" strokeWidth="3" />
+                    </svg>
+                    <div className="wheel-text">82<span className="wheel-total">/100</span></div>
+                  </div>
+
+                  <div className="resume-score-feedback">
+                    <strong className="score-desc-txt">Great Progress! 🚀</strong>
+                    <span className="score-sub-txt">Improve your resume strength to attract top employers.</span>
+                  </div>
+                </div>
+
+                <div className="resume-suggestions-list">
+                  <div className="suggestion-item">
+                    <span className="sug-bullet">•</span>
+                    <span className="sug-txt">Add more projects</span>
+                    <strong className="sug-score-up color-green">+10</strong>
+                  </div>
+                  <div className="suggestion-item">
+                    <span className="sug-bullet">•</span>
+                    <span className="sug-txt">Add certifications</span>
+                    <strong className="sug-score-up color-green">+5</strong>
+                  </div>
+                  <div className="suggestion-item">
+                    <span className="sug-bullet">•</span>
+                    <span className="sug-txt">Improve skills section</span>
+                    <strong className="sug-score-up color-green">+3</strong>
+                  </div>
+                </div>
+
+                <button className="resume-improve-btn" onClick={() => handleNavigate("resume")}>
+                  Improve Resume
+                </button>
+              </div>
+
+            </div>
+
+          </section>
+
+          {/* ==============================================
+              RECOMMENDED FOR YOU (course cards slider)
+             ============================================== */}
+          <section className="courses-slider-section">
+            <div className="section-header-row">
+              <h3 className="section-heading">Recommended for You</h3>
+              <button className="section-action-btn" onClick={() => handleNavigate("learn")}>View All Courses →</button>
+            </div>
+
+            <div className="courses-slider-container">
+              {/* Course Card 1 */}
+              <div className="slider-course-card" onClick={() => handleNavigate("learn")}>
+                <div className="card-top-bg c-bg-1" />
+                <div className="slider-card-body">
+                  <span className="c-platform-lbl c-coursera">coursera</span>
+                  <h4 className="c-title">Machine Learning Fundamentals</h4>
+                  <span className="c-author">Andrew Ng</span>
+                  <div className="c-ratings-meta">
+                    <span className="star">★</span> 4.8 <span className="reviews">(12.4K)</span>
+                  </div>
+                  <div className="slider-card-footer">
+                    <span className="c-difficulty">Beginner</span>
+                    <button className="c-enroll-btn">Enroll Now</button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Course Card 2 */}
+              <div className="slider-course-card" onClick={() => handleNavigate("learn")}>
+                <div className="card-top-bg c-bg-2" />
+                <div className="slider-card-body">
+                  <span className="c-platform-lbl c-udemy">udemy</span>
+                  <h4 className="c-title">AWS Cloud Practitioner</h4>
+                  <span className="c-author">Stephane Maarek</span>
+                  <div className="c-ratings-meta">
+                    <span className="star">★</span> 4.7 <span className="reviews">(9.1K)</span>
+                  </div>
+                  <div className="slider-card-footer">
+                    <span className="c-difficulty">Beginner</span>
+                    <button className="c-enroll-btn">Enroll Now</button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Course Card 3 */}
+              <div className="slider-course-card" onClick={() => handleNavigate("learn")}>
+                <div className="card-top-bg c-bg-3" />
+                <div className="slider-card-body">
+                  <span className="c-platform-lbl c-coursera">coursera</span>
+                  <h4 className="c-title">Deep Learning Specialization</h4>
+                  <span className="c-author">Deeplearning.AI</span>
+                  <div className="c-ratings-meta">
+                    <span className="star">★</span> 4.9 <span className="reviews">(18.7K)</span>
+                  </div>
+                  <div className="slider-card-footer">
+                    <span className="c-difficulty">Intermediate</span>
+                    <button className="c-enroll-btn">Enroll Now</button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Course Card 4 */}
+              <div className="slider-course-card" onClick={() => handleNavigate("learn")}>
+                <div className="card-top-bg c-bg-4" />
+                <div className="slider-card-body">
+                  <span className="c-platform-lbl c-edx">edX</span>
+                  <h4 className="c-title">Data Science Program</h4>
+                  <span className="c-author">IBM</span>
+                  <div className="c-ratings-meta">
+                    <span className="star">★</span> 4.6 <span className="reviews">(7.8K)</span>
+                  </div>
+                  <div className="slider-card-footer">
+                    <span className="c-difficulty">Intermediate</span>
+                    <button className="c-enroll-btn">Enroll Now</button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Course Card 5 */}
+              <div className="slider-course-card" onClick={() => handleNavigate("learn")}>
+                <div className="card-top-bg c-bg-5" />
+                <div className="slider-card-body">
+                  <span className="c-platform-lbl c-udemy">udemy</span>
+                  <h4 className="c-title">Docker & Kubernetes Mastery</h4>
+                  <span className="c-author">TechWorld with Nana</span>
+                  <div className="c-ratings-meta">
+                    <span className="star">★</span> 4.7 <span className="reviews">(6.3K)</span>
+                  </div>
+                  <div className="slider-card-footer">
+                    <span className="c-difficulty">Intermediate</span>
+                    <button className="c-enroll-btn">Enroll Now</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ==============================================
+              BOTTOM LAYOUT (application tracker & checklists)
+             ============================================== */}
+          <section className="dashboard-grid-bottom">
+
+            {/* Column A: Application Tracker */}
+            <div className="grid-module-card flex-2">
+              <h3 className="module-title" style={{ marginBottom: "15px" }}>Application Tracker</h3>
+
+              <div className="tracker-kanban-board">
+                {/* Column 1: Wishlist */}
+                <div className="kanban-col">
+                  <div className="kanban-hdr">
+                    <span className="kanban-dot c-purple" />
+                    <span>Wishlist (12)</span>
+                  </div>
+                  <div className="kanban-cards-list">
+                    <div className="kanban-card-item">
+                      <span className="kb-comp">Google</span>
+                      <span className="kb-role">AI Engineer</span>
+                    </div>
+                    <div className="kanban-card-item">
+                      <span className="kb-comp">Microsoft</span>
+                      <span className="kb-role">ML Engineer</span>
+                    </div>
+                  </div>
+                  <button className="kanban-view-all" onClick={() => handleNavigate("applications")}>View All</button>
+                </div>
+
+                {/* Column 2: Applied */}
+                <div className="kanban-col">
+                  <div className="kanban-hdr">
+                    <span className="kanban-dot c-blue" />
+                    <span>Applied (8)</span>
+                  </div>
+                  <div className="kanban-cards-list">
+                    <div className="kanban-card-item">
+                      <span className="kb-comp">Amazon</span>
+                      <span className="kb-role">Data Scientist</span>
+                    </div>
+                    <div className="kanban-card-item">
+                      <span className="kb-comp">Adobe</span>
+                      <span className="kb-role">ML Engineer</span>
+                    </div>
+                  </div>
+                  <button className="kanban-view-all" onClick={() => handleNavigate("applications")}>View All</button>
+                </div>
+
+                {/* Column 3: Interview */}
+                <div className="kanban-col">
+                  <div className="kanban-hdr">
+                    <span className="kanban-dot c-orange" />
+                    <span>Interview (3)</span>
+                  </div>
+                  <div className="kanban-cards-list">
+                    <div className="kanban-card-item">
+                      <span className="kb-comp">TCS</span>
+                      <span className="kb-role">Data Analyst</span>
+                    </div>
+                    <div className="kanban-card-item">
+                      <span className="kb-comp">Infosys</span>
+                      <span className="kb-role">AI Engineer</span>
+                    </div>
+                  </div>
+                  <button className="kanban-view-all" onClick={() => handleNavigate("applications")}>View All</button>
+                </div>
+
+                {/* Column 4: Offer */}
+                <div className="kanban-col">
+                  <div className="kanban-hdr">
+                    <span className="kanban-dot c-green" />
+                    <span>Offer (1)</span>
+                  </div>
+                  <div className="kanban-cards-list">
+                    <div className="kanban-card-item offer-card">
+                      <span className="kb-comp">NVIDIA</span>
+                      <span className="kb-role">AI Research Engineer</span>
+                    </div>
+                  </div>
+                  <button className="kanban-view-all" onClick={() => handleNavigate("applications")}>View All</button>
+                </div>
+              </div>
+            </div>
+
+            {/* Column B: Today's Tasks & Achievements */}
+            <div className="insights-double-module flex-1">
+
+              {/* Card 1: Today's Tasks */}
+              <div className="grid-module-card flex-grow-1" style={{ paddingBottom: "18px" }}>
+                <div className="module-header-row" style={{ marginBottom: "12px" }}>
+                  <h3 className="module-title">Today's Tasks</h3>
+                  <button className="module-header-link" onClick={() => handleNavigate("learn")}>View All Tasks →</button>
+                </div>
+
+                <div className="checklist-container">
+                  <div className="check-item-row" onClick={() => toggleTask(0)}>
+                    <input type="checkbox" checked={tasksChecked[0]} readOnly />
+                    <div className="check-item-content">
+                      <span className={tasksChecked[0] ? "check-title line-through" : "check-title"}>Complete Deep Learning Module</span>
+                      <span className="check-tag in-progress">In Progress</span>
+                    </div>
+                  </div>
+
+                  <div className="check-item-row" onClick={() => toggleTask(1)}>
+                    <input type="checkbox" checked={tasksChecked[1]} readOnly />
+                    <div className="check-item-content">
+                      <span className={tasksChecked[1] ? "check-title line-through" : "check-title"}>Take SQL Assessment</span>
+                      <span className="check-duration">🕐 20 min</span>
+                    </div>
+                  </div>
+
+                  <div className="check-item-row" onClick={() => toggleTask(2)}>
+                    <input type="checkbox" checked={tasksChecked[2]} readOnly />
+                    <div className="check-item-content">
+                      <span className={tasksChecked[2] ? "check-title line-through" : "check-title"}>Update Resume</span>
+                      <span className="check-duration">🕐 15 min</span>
+                    </div>
+                  </div>
+
+                  <div className="check-item-row" onClick={() => toggleTask(3)}>
+                    <input type="checkbox" checked={tasksChecked[3]} readOnly />
+                    <div className="check-item-content">
+                      <span className={tasksChecked[3] ? "check-title line-through" : "check-title"}>Solve 3 DSA Problems</span>
+                      <span className="check-duration">🕐 30 min</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 2: Achievements */}
+              <div className="grid-module-card min-height-unset">
+                <div className="module-header-row" style={{ marginBottom: "12px" }}>
+                  <h3 className="module-title">Achievements</h3>
+                  <button className="module-header-link" onClick={() => handleNavigate("skills")}>View All →</button>
+                </div>
+
+                <div className="achievements-badges-row">
+                  <span className="badge-item badge-g" title="Fast Learner">🏆</span>
+                  <span className="badge-item badge-b" title="Streak Master">🔥</span>
+                  <span className="badge-item badge-o" title="Quiz Solver">🥇</span>
+                  <span className="badge-item badge-p" title="Projects Done">🚀</span>
+                  <span className="badge-more-count">+12</span>
+                </div>
+              </div>
+
+            </div>
+
+          </section>
+
+          {/* ==============================================
+              AI MENTOR RECOMMENDATION FOOTER BANNER
+             ============================================== */}
+          <footer className="mentor-recommendation-banner">
+            <div className="mentor-banner-left">
+              <h3 className="mentor-banner-title">✦ AI Mentor Recommendation</h3>
+              <p className="mentor-banner-txt">
+                {studentName}, focus on completing <strong>Deep Learning</strong> this week. It will boost your career readiness by <strong>12%</strong>! 🚀
               </p>
-            )}
+              <button className="mentor-banner-btn" onClick={() => handleNavigate("learn")}>
+                Start Deep Learning
+              </button>
+            </div>
+
+            <div className="mentor-banner-visual">
+              <img src={chatbotImg} className="mentor-banner-robot" alt="Robot mascot" />
+            </div>
+          </footer>
+
+        </div>
+      </main>
+
+      {/* ========================================================
+          CHAT ASSISTANT OVERLAY WIDGET (bottom right)
+         ======================================================== */}
+      <div className="floating-chat-overlay" onClick={() => handleNavigate("ai-assistant")}>
+        <div className="chat-overlay-header">
+          <div className="chat-avatar-mini">
+            <img src={explorerImg} alt="Explorer mini" />
+          </div>
+          <div className="chat-hdr-info">
+            <strong>Lakshya AI Assistant</strong>
+            <span className="status-lbl-active">● Online</span>
           </div>
         </div>
 
-        {/* ============================================== */}
-        {/* NAVIGATION CARDS                                */}
-        {/* ============================================== */}
-        <div className="nav-cards-section">
-          <h3 className="card-heading">Explore Sections</h3>
-          <p className="card-subtext">Jump to any section of your journey</p>
+        <div className="chat-overlay-body">
+          <p className="chat-overlay-msg">
+            Hi {studentName}! 👋 How can I help you achieve your career goals today?
+          </p>
+        </div>
 
-          <div className="nav-cards-grid">
-            <button
-              className="nav-card nav-card-career"
-              onClick={() => handleNavigate("career")}
-            >
-              <div className="nav-card-icon">🎯</div>
-              <div className="nav-card-title">Career</div>
-              <div className="nav-card-desc">See your matched career paths</div>
-              <div className="nav-card-arrow">→</div>
-            </button>
-
-            <button
-              className="nav-card nav-card-skills"
-              onClick={() => handleNavigate("skills")}
-            >
-              <div className="nav-card-icon">📊</div>
-              <div className="nav-card-title">Skills</div>
-              <div className="nav-card-desc">Analyse gaps and strengths</div>
-              <div className="nav-card-arrow">→</div>
-            </button>
-
-            <button
-              className="nav-card nav-card-learn"
-              onClick={() => handleNavigate("learn")}
-            >
-              <div className="nav-card-icon">📚</div>
-              <div className="nav-card-title">Learn</div>
-              <div className="nav-card-desc">Courses and tasks for you</div>
-              <div className="nav-card-arrow">→</div>
-            </button>
-
-            <button
-              className="nav-card nav-card-progress"
-              onClick={() => handleNavigate("chatbot")}
-            >
-              <div className="nav-card-icon">🤖</div>
-              <div className="nav-card-title">AI Assistant</div>
-              <div className="nav-card-desc">Talk to your career counselor</div>
-              <div className="nav-card-arrow">→</div>
-            </button>
-          </div>
+        <div className="chat-overlay-input-row" onClick={(e) => e.stopPropagation()}>
+          <input type="text" placeholder="Ask anything..." onKeyDown={(e) => {
+            if (e.key === "Enter") handleNavigate("ai-assistant");
+          }} />
+          <button className="chat-send-btn" onClick={() => handleNavigate("ai-assistant")}>➔</button>
         </div>
       </div>
 
-      {/* ============================================== */}
-      {/* PERSONALIZED USER PROFILE MODAL                 */}
-      {/* ============================================== */}
+      {/* ========================================================
+          PROFILE MODAL (Read / Edit details form overlay)
+         ======================================================== */}
       {showProfileModal && (
-        <div
-          className="profile-modal-overlay"
-          onClick={() => {
-            setShowProfileModal(false);
-            setIsEditingProfile(false);
-            setShowChangePassword(false);
-            setProfileError("");
-            setProfileSuccess("");
-            setPasswordError("");
-            setPasswordSuccess("");
-          }}
-        >
-          <div
-            className="profile-modal-card"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className="profile-modal-close"
-              onClick={() => {
-                setShowProfileModal(false);
-                setIsEditingProfile(false);
-                setShowChangePassword(false);
-                setProfileError("");
-                setProfileSuccess("");
-                setPasswordError("");
-                setPasswordSuccess("");
-              }}
-            >
-              ×
-            </button>
+        <div className="profile-modal-overlay" onClick={() => {
+          setShowProfileModal(false);
+          setIsEditingProfile(false);
+          setShowChangePassword(false);
+          setProfileError("");
+          setProfileSuccess("");
+          setPasswordError("");
+          setPasswordSuccess("");
+        }}>
+          <div className="profile-modal-card" onClick={(e) => e.stopPropagation()}>
+            <button className="profile-modal-close" onClick={() => {
+              setShowProfileModal(false);
+              setIsEditingProfile(false);
+              setShowChangePassword(false);
+              setProfileError("");
+              setProfileSuccess("");
+              setPasswordError("");
+              setPasswordSuccess("");
+            }}>×</button>
+
             <div className="profile-modal-header">
               <div className="profile-modal-avatar">
-                {user?.name ? user.name.charAt(0).toUpperCase() : "S"}
+                {studentName.charAt(0).toUpperCase()}
               </div>
-              <h2>{user?.name || "Student Profile"}</h2>
+              <h2>{studentName} Sharma</h2>
               <span className="profile-modal-role-badge">Student</span>
             </div>
 
             <div className="profile-modal-body">
-              {/* Profile Details Edit / Read forms */}
               {!isEditingProfile ? (
-                // READ ONLY MODE
                 <div>
-                  {profileSuccess && (
-                    <p className="success-toast">✅ {profileSuccess}</p>
-                  )}
+                  {profileSuccess && <p className="success-toast">✅ {profileSuccess}</p>}
                   <div className="profile-detail-grid">
                     <div className="detail-item">
                       <span className="detail-label">Email</span>
-                      <span className="detail-value">
-                        {user?.email || "N/A"}
-                      </span>
+                      <span className="detail-value">{user?.email || "N/A"}</span>
                     </div>
                     <div className="detail-item">
                       <span className="detail-label">Age</span>
-                      <span className="detail-value">
-                        {user?.age || "N/A"} yrs
-                      </span>
+                      <span className="detail-value">{user?.age || "N/A"} yrs</span>
                     </div>
                     <div className="detail-item">
                       <span className="detail-label">Gender</span>
-                      <span className="detail-value">
-                        {user?.gender || "N/A"}
-                      </span>
+                      <span className="detail-value">{user?.gender || "N/A"}</span>
                     </div>
                     <div className="detail-item">
                       <span className="detail-label">City</span>
-                      <span className="detail-value">
-                        {user?.city || "N/A"}
-                      </span>
+                      <span className="detail-value">{user?.city || "N/A"}</span>
                     </div>
                     <div className="detail-item">
                       <span className="detail-label">State</span>
-                      <span className="detail-value">
-                        {user?.state || "N/A"}
-                      </span>
+                      <span className="detail-value">{user?.state || "N/A"}</span>
                     </div>
                     <div className="detail-item">
                       <span className="detail-label">Education</span>
-                      <span className="detail-value">
-                        {user?.educationLevel || "N/A"}
-                      </span>
+                      <span className="detail-value">{user?.educationLevel || "N/A"}</span>
                     </div>
                     <div className="detail-item">
                       <span className="detail-label">Stream</span>
-                      <span className="detail-value">
-                        {user?.stream || "N/A"}
-                      </span>
+                      <span className="detail-value">{user?.stream || "N/A"}</span>
                     </div>
                   </div>
 
                   <div style={{ textAlign: "right", marginBottom: "20px" }}>
-                    <button
-                      className="btn-modal btn-edit-profile"
-                      onClick={() => setIsEditingProfile(true)}
-                    >
+                    <button className="btn-modal btn-edit-profile" onClick={() => setIsEditingProfile(true)}>
                       ✏️ Edit Profile Info
                     </button>
                   </div>
                 </div>
               ) : (
-                // EDIT MODE
-                <form
-                  onSubmit={handleSaveProfile}
-                  className="profile-edit-form"
-                >
+                <form onSubmit={handleSaveProfile} className="profile-edit-form">
                   <h3>Edit Profile Details</h3>
-                  {profileError && (
-                    <p className="error-toast">❌ {profileError}</p>
-                  )}
+                  {profileError && <p className="error-toast">❌ {profileError}</p>}
 
                   <div className="form-grid-modal">
                     <div className="form-group-modal span-2">
                       <label>Full Name</label>
-                      <input
-                        type="text"
-                        value={editForm.name}
-                        onChange={(e) =>
-                          setEditForm({ ...editForm, name: e.target.value })
-                        }
-                        required
-                      />
+                      <input type="text" value={editForm.name} onChange={(e) => setEditForm({ ...editForm, name: e.target.value })} required />
                     </div>
                     <div className="form-group-modal">
                       <label>Age</label>
-                      <input
-                        type="number"
-                        value={editForm.age}
-                        onChange={(e) =>
-                          setEditForm({ ...editForm, age: e.target.value })
-                        }
-                      />
+                      <input type="number" value={editForm.age} onChange={(e) => setEditForm({ ...editForm, age: e.target.value })} />
                     </div>
                     <div className="form-group-modal">
                       <label>Gender</label>
-                      <select
-                        value={editForm.gender}
-                        onChange={(e) =>
-                          setEditForm({ ...editForm, gender: e.target.value })
-                        }
-                      >
+                      <select value={editForm.gender} onChange={(e) => setEditForm({ ...editForm, gender: e.target.value })}>
                         <option value="">Select Gender</option>
-                        {GENDER_OPTIONS.map((g) => (
-                          <option key={g} value={g}>
-                            {g}
-                          </option>
-                        ))}
+                        {GENDER_OPTIONS.map(g => <option key={g} value={g}>{g}</option>)}
                       </select>
                     </div>
                     <div className="form-group-modal">
                       <label>City</label>
-                      <input
-                        type="text"
-                        value={editForm.city}
-                        onChange={(e) =>
-                          setEditForm({ ...editForm, city: e.target.value })
-                        }
-                      />
+                      <input type="text" value={editForm.city} onChange={(e) => setEditForm({ ...editForm, city: e.target.value })} />
                     </div>
                     <div className="form-group-modal">
                       <label>State</label>
-                      <select
-                        value={editForm.state}
-                        onChange={(e) =>
-                          setEditForm({ ...editForm, state: e.target.value })
-                        }
-                      >
+                      <select value={editForm.state} onChange={(e) => setEditForm({ ...editForm, state: e.target.value })}>
                         <option value="">Select State</option>
-                        {INDIAN_STATES.map((s) => (
-                          <option key={s} value={s}>
-                            {s}
-                          </option>
-                        ))}
+                        {INDIAN_STATES.map(s => <option key={s} value={s}>{s}</option>)}
                       </select>
                     </div>
                     <div className="form-group-modal">
                       <label>Education Level</label>
-                      <select
-                        value={editForm.educationLevel}
-                        onChange={(e) =>
-                          setEditForm({
-                            ...editForm,
-                            educationLevel: e.target.value,
-                          })
-                        }
-                      >
+                      <select value={editForm.educationLevel} onChange={(e) => setEditForm({ ...editForm, educationLevel: e.target.value })}>
                         <option value="">Select Education</option>
-                        {EDUCATION_LEVELS.map((el) => (
-                          <option key={el} value={el}>
-                            {el}
-                          </option>
-                        ))}
+                        {EDUCATION_LEVELS.map(el => <option key={el} value={el}>{el}</option>)}
                       </select>
                     </div>
                     <div className="form-group-modal">
                       <label>Stream</label>
-                      <select
-                        value={editForm.stream}
-                        onChange={(e) =>
-                          setEditForm({ ...editForm, stream: e.target.value })
-                        }
-                      >
+                      <select value={editForm.stream} onChange={(e) => setEditForm({ ...editForm, stream: e.target.value })}>
                         <option value="">Select Stream</option>
-                        {STREAMS.map((st) => (
-                          <option key={st} value={st}>
-                            {st}
-                          </option>
-                        ))}
+                        {STREAMS.map(st => <option key={st} value={st}>{st}</option>)}
                       </select>
                     </div>
                   </div>
 
                   <div className="btn-row-modal">
-                    <button
-                      type="button"
-                      className="btn-modal btn-cancel"
-                      onClick={() => {
-                        setIsEditingProfile(false);
-                        setProfileError("");
-                      }}
-                    >
+                    <button type="button" className="btn-modal btn-cancel" onClick={() => { setIsEditingProfile(false); setProfileError(""); }}>
                       Cancel
                     </button>
                     <button type="submit" className="btn-modal btn-save">
@@ -1038,101 +1093,40 @@ function Dashboard({ onNavigate }) {
                 </form>
               )}
 
-              {/* Interests & Skills tags (Read only) */}
-              <div className="profile-section-tags">
-                <h3>Interests 🎨</h3>
-                <div className="tag-list">
-                  {user?.interests && user.interests.length > 0 ? (
-                    user.interests.map((interest) => (
-                      <span key={interest} className="tag-pill interest-pill">
-                        {interest}
-                      </span>
-                    ))
-                  ) : (
-                    <span className="tag-none">No interests selected yet</span>
-                  )}
-                </div>
-              </div>
-
-              <div className="profile-section-tags">
-                <h3>Skills 💪</h3>
-                <div className="tag-list">
-                  {user?.skills && user.skills.length > 0 ? (
-                    user.skills.map((skill) => (
-                      <span key={skill} className="tag-pill skill-pill">
-                        {skill}
-                      </span>
-                    ))
-                  ) : (
-                    <span className="tag-none">No skills selected yet</span>
-                  )}
-                </div>
-              </div>
-
               {/* Password Management */}
               <div className="password-management-section">
                 {!showChangePassword ? (
-                  <button
-                    className="btn-modal btn-reset-password"
-                    onClick={() => setShowChangePassword(true)}
-                    style={{ width: "100%", margin: "10px 0" }}
-                  >
+                  <button className="btn-modal btn-reset-password" onClick={() => setShowChangePassword(true)} style={{ width: "100%", margin: "10px 0" }}>
                     🔐 Change Account Password
                   </button>
                 ) : (
-                  <form
-                    onSubmit={handleSavePassword}
-                    className="profile-edit-form password-edit-form"
-                  >
+                  <form onSubmit={handleSavePassword} className="profile-edit-form password-edit-form">
                     <h3>Change Password</h3>
-                    {passwordError && (
-                      <p className="error-toast">❌ {passwordError}</p>
-                    )}
-                    {passwordSuccess && (
-                      <p className="success-toast">✅ {passwordSuccess}</p>
-                    )}
+                    {passwordError && <p className="error-toast">❌ {passwordError}</p>}
+                    {passwordSuccess && <p className="success-toast">✅ {passwordSuccess}</p>}
 
                     <div className="form-group-modal">
                       <label>Current Password</label>
-                      <input
-                        type="password"
-                        value={currentPassword}
-                        onChange={(e) => setCurrentPassword(e.target.value)}
-                        required
-                      />
+                      <input type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} required />
                     </div>
                     <div className="form-group-modal">
-                      <label>New Password (min 8 chars, A-z, 0-9, @)</label>
-                      <input
-                        type="password"
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                        required
-                      />
+                      <label>New Password (min 8 chars)</label>
+                      <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required />
                     </div>
                     <div className="form-group-modal">
                       <label>Confirm New Password</label>
-                      <input
-                        type="password"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        required
-                      />
+                      <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
                     </div>
 
                     <div className="btn-row-modal">
-                      <button
-                        type="button"
-                        className="btn-modal btn-cancel"
-                        onClick={() => {
-                          setShowChangePassword(false);
-                          setPasswordError("");
-                          setPasswordSuccess("");
-                          setCurrentPassword("");
-                          setNewPassword("");
-                          setConfirmPassword("");
-                        }}
-                      >
+                      <button type="button" className="btn-modal btn-cancel" onClick={() => {
+                        setShowChangePassword(false);
+                        setPasswordError("");
+                        setPasswordSuccess("");
+                        setCurrentPassword("");
+                        setNewPassword("");
+                        setConfirmPassword("");
+                      }}>
                         Cancel
                       </button>
                       <button type="submit" className="btn-modal btn-save">
@@ -1145,11 +1139,7 @@ function Dashboard({ onNavigate }) {
             </div>
 
             <div className="profile-modal-footer">
-              <button
-                className="btn-modal btn-logout"
-                onClick={handleLogout}
-                style={{ width: "100%" }}
-              >
+              <button className="btn-modal btn-logout" onClick={handleLogout} style={{ width: "100%" }}>
                 🚪 Logout from Session
               </button>
             </div>

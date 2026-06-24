@@ -296,7 +296,7 @@ function CareerRecommendation() {
           <button className="nav-link active-link">Career</button>
           <button className="nav-link" onClick={() => navigate("/student/skills")}>Skills</button>
           <button className="nav-link" onClick={() => navigate("/student/learn")}>Learn</button>
-          <button className="nav-link" onClick={() => navigate("/student/chatbot")}>AI Assistant</button>
+          <button className="nav-link" onClick={() => navigate("/student/ai-assistant")}>AI Assistant</button>
         </div>
         <div className="navbar-avatar" onClick={() => navigate("/student/dashboard")} style={{ cursor: "pointer" }}>
           {user?.name ? user.name.charAt(0).toUpperCase() : "S"}

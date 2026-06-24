@@ -1,0 +1,530 @@
+/* ═══════════════════════════════════════════════════════════════
+   AI ASSISTANT LANDING  —  Pixel-perfect match of reference image
+   Color Palette:
+     #564877  Deep Purple   — headings, buttons
+     #8F8CAC  Muted Lavender— secondary text
+     #A3A3FF  Soft Periwinkle— accents
+     #CEB5B7  Dusty Rose    — gradient / glow
+     #F8F8FC  Off White     — background base
+═══════════════════════════════════════════════════════════════ */
+
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap");
+
+/* ════ ROOT WRAPPER ════ */
+.ail-root {
+  font-family: "Outfit", sans-serif;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+  /* Soft lavender gradient — exactly like reference */
+  background: linear-gradient(
+    115deg,
+    #eceaf8 0%,
+    #ede6f6 30%,
+    #f0e8f5 55%,
+    #f5e8f2 80%,
+    #f8ecf2 100%
+  );
+  position: relative;
+}
+
+/* ════ PAGE LAYOUT (below navbar) ════ */
+.ail-page {
+  display: flex;
+  align-items: center;
+  min-height: calc(100vh - 70px); /* 70px = navbar height */
+  padding-top: 70px;              /* push content below fixed navbar */
+  max-width: 1380px;
+  margin: 0 auto;
+  padding-left: 64px;
+  padding-right: 0;
+  position: relative;
+}
+
+/* ════════════════════════════════════
+   LEFT — Text Content
+════════════════════════════════════ */
+.ail-left {
+  flex: 0 0 42%;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  padding-bottom: 40px;
+  animation: ailFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes ailFadeUp {
+  from { opacity: 0; transform: translateY(36px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Badge ── */
+.ail-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 16px;
+  border-radius: 50px;
+  background: rgba(86, 72, 119, 0.09);
+  border: 1px solid rgba(86, 72, 119, 0.16);
+  font-size: 13px;
+  font-weight: 500;
+  color: #564877;
+  width: fit-content;
+  letter-spacing: 0.01em;
+}
+
+.ail-badge-star {
+  color: #a3a3ff;
+  font-size: 14px;
+}
+
+/* ── Heading ── */
+.ail-heading {
+  font-size: clamp(2.6rem, 4.2vw, 3.8rem);
+  font-weight: 800;
+  color: #130f25;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+  margin: 0;
+}
+
+/* "AI Conversations" gradient line */
+.ail-gradient-text {
+  background: linear-gradient(
+    135deg,
+    #7b5ea7 0%,
+    #9f7fd4 30%,
+    #b89be8 55%,
+    #d4a0b5 80%,
+    #e0a0b8 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: ailGradMove 5s linear infinite;
+  display: block;
+}
+
+@keyframes ailGradMove {
+  0%   { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+/* ── Subtitle ── */
+.ail-subtitle {
+  font-size: 15.5px;
+  color: #7a7898;
+  line-height: 1.8;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* ── Buttons ── */
+.ail-buttons {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* Primary — filled gradient */
+.ail-btn-primary {
+  position: relative;
+  padding: 14px 30px;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  font-family: "Outfit", sans-serif;
+  font-size: 15.5px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #7052b2 0%, #9278d4 55%, #a99ee8 100%);
+  background-size: 200% auto;
+  box-shadow: 0 6px 28px rgba(112, 82, 178, 0.38);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, background-position 0.5s ease;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.ail-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(112, 82, 178, 0.5);
+  background-position: right center;
+}
+
+/* Shimmer sweep */
+.ail-btn-primary::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.28) 50%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+}
+
+.ail-btn-primary:hover::after {
+  animation: ailShimmer 0.55s ease forwards;
+}
+
+@keyframes ailShimmer {
+  from { left: -100%; }
+  to   { left: 200%; }
+}
+
+/* Outline button — See Demo */
+.ail-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 26px;
+  border-radius: 50px;
+  border: 1.5px solid rgba(86, 72, 119, 0.28);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  font-family: "Outfit", sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #3a2f5e;
+  transition: all 0.22s ease;
+  white-space: nowrap;
+}
+
+.ail-btn-outline:hover {
+  border-color: #a3a3ff;
+  background: rgba(163, 163, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.ail-play {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7052b2, #b89be8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 9px;
+  flex-shrink: 0;
+}
+
+/* ── Trust section ── */
+.ail-trust {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ail-trust-text {
+  font-size: 13px;
+  color: #8f8cac;
+  font-weight: 500;
+}
+
+.ail-logos {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.ail-logo-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #564877;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.ail-logo-item:hover {
+  opacity: 1;
+}
+
+/* ════════════════════════════════════
+   RIGHT — Visual / Characters
+════════════════════════════════════ */
+.ail-right {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-height: calc(100vh - 70px);
+  overflow: hidden;
+  animation: ailFadeRight 1s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+}
+
+@keyframes ailFadeRight {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Soft radial pink-lavender glow behind characters (key feature from reference) */
+.ail-bg-glow {
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(216, 185, 210, 0.45) 0%,
+    rgba(206, 181, 183, 0.25) 40%,
+    transparent 70%
+  );
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -45%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Sparkle stars ── */
+.ail-star {
+  position: absolute;
+  color: #a3a3ff;
+  pointer-events: none;
+  z-index: 2;
+  animation: ailSparkle 3s ease-in-out infinite;
+}
+
+.s1 { top: 12%; left: 18%;  font-size: 20px; animation-delay: 0s;   animation-duration: 3.2s; color: #b89be8; }
+.s2 { top: 20%; right: 12%; font-size: 14px; animation-delay: 0.7s; animation-duration: 2.8s; }
+.s3 { top: 55%; right: 8%;  font-size: 12px; animation-delay: 1.4s; animation-duration: 3.5s; }
+.s4 { top: 72%; left: 10%;  font-size: 10px; animation-delay: 0.4s; animation-duration: 2.5s; color: #ceb5b7; }
+
+@keyframes ailSparkle {
+  0%   { transform: rotate(0deg)   scale(1);    opacity: 0.5; }
+  50%  { transform: rotate(180deg) scale(1.4);  opacity: 1; }
+  100% { transform: rotate(360deg) scale(1);    opacity: 0.5; }
+}
+
+/* Small circle dots */
+.ail-dot {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(163, 163, 255, 0.55);
+  pointer-events: none;
+  z-index: 2;
+  animation: ailDotPulse 3s ease-in-out infinite;
+}
+
+.d1 { width: 8px;  height: 8px;  top: 35%; right: 20%; animation-delay: 0s; }
+.d2 { width: 6px;  height: 6px;  top: 60%; left: 22%;  animation-delay: 1s;  background: rgba(206,181,183,0.7); }
+.d3 { width: 10px; height: 10px; top: 25%; left: 40%;  animation-delay: 1.8s; }
+
+@keyframes ailDotPulse {
+  0%, 100% { transform: scale(1);   opacity: 0.5; }
+  50%       { transform: scale(1.5); opacity: 1; }
+}
+
+/* Connector ring between characters */
+.ail-connector-ring {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(163, 163, 255, 0.4);
+  box-shadow: 0 0 12px rgba(163, 163, 255, 0.25);
+  bottom: 38%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  pointer-events: none;
+  animation: ailRingPulse 3s ease-in-out infinite;
+}
+
+@keyframes ailRingPulse {
+  0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+  50%       { opacity: 1;   transform: translateX(-50%) scale(1.08); }
+}
+
+/* ── Chat bubbles ── */
+.ail-bubble {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(235, 230, 245, 0.8);
+  box-shadow: 0 4px 20px rgba(86, 72, 119, 0.1);
+  border-radius: 16px;
+  padding: 11px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1035;
+  line-height: 1.4;
+  z-index: 10;
+  white-space: nowrap;
+}
+
+/* "Hello AI" — top-left of the right section, above Explorer */
+.ail-bubble-left {
+  top: 14%;
+  left: 8%;
+  animation: ailBubbleFloat 3.5s ease-in-out infinite,
+             ailBubbleIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.6s both;
+}
+
+/* "How can I help you today?" — top-right, above Robot */
+.ail-bubble-right {
+  top: 10%;
+  right: 5%;
+  white-space: normal;
+  max-width: 160px;
+  animation: ailBubbleFloat 3.5s ease-in-out infinite 0.9s,
+             ailBubbleIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.9s both;
+}
+
+@keyframes ailBubbleIn {
+  from { opacity: 0; transform: translateY(-10px) scale(0.94); }
+  to   { opacity: 1; transform: translateY(0)     scale(1); }
+}
+
+@keyframes ailBubbleFloat {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-8px); }
+  100% { transform: translateY(0); }
+}
+
+/* ── Characters container ── */
+.ail-characters {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0px;
+  z-index: 5;
+  padding-bottom: 60px;  /* space for platform ring */
+}
+
+.ail-char-wrap {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+}
+
+/* Explorer (the kid with goggles) */
+.ail-char.ail-explorer {
+  width: 310px;
+  height: auto;
+  object-fit: contain;
+  filter:
+    drop-shadow(0 30px 50px rgba(86, 72, 119, 0.2))
+    drop-shadow(0 8px 16px rgba(163, 163, 255, 0.15));
+  animation: ailFloatA 3.2s ease-in-out infinite;
+  position: relative;
+  z-index: 2;
+}
+
+/* Robot (chatbot) */
+.ail-char.ail-robot {
+  width: 270px;
+  height: auto;
+  object-fit: contain;
+  filter:
+    drop-shadow(0 28px 48px rgba(86, 72, 119, 0.18))
+    drop-shadow(0 6px 14px rgba(163, 163, 255, 0.12));
+  animation: ailFloatB 3.2s ease-in-out infinite 0.7s;
+  position: relative;
+  z-index: 1;
+  margin-left: -30px; /* slight overlap like in reference */
+}
+
+@keyframes ailFloatA {
+  0%   { transform: translateY(0px); }
+  50%  { transform: translateY(-18px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes ailFloatB {
+  0%   { transform: translateY(0px); }
+  50%  { transform: translateY(-13px); }
+  100% { transform: translateY(0px); }
+}
+
+/* ── Platform ellipse ring under characters ── */
+.ail-platform {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 420px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(163, 163, 255, 0.35);
+  box-shadow:
+    0 0 20px rgba(163, 163, 255, 0.2),
+    0 0 50px rgba(163, 163, 255, 0.08);
+  pointer-events: none;
+  z-index: 3;
+  animation: ailPlatformPulse 3.5s ease-in-out infinite;
+}
+
+@keyframes ailPlatformPulse {
+  0%, 100% { opacity: 0.55; }
+  50%       { opacity: 1; }
+}
+
+/* ════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════ */
+@media (max-width: 1100px) {
+  .ail-page {
+    padding-left: 40px;
+  }
+  .ail-char.ail-explorer { width: 260px; }
+  .ail-char.ail-robot    { width: 225px; }
+}
+
+@media (max-width: 860px) {
+  .ail-page {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 100px 28px 40px;
+    min-height: unset;
+  }
+
+  .ail-left {
+    align-items: center;
+    max-width: 100%;
+    gap: 22px;
+  }
+
+  .ail-heading { font-size: 2.4rem; }
+
+  .ail-buttons { justify-content: center; }
+
+  .ail-right {
+    width: 100%;
+    min-height: 420px;
+  }
+
+  .ail-char.ail-explorer { width: 210px; }
+  .ail-char.ail-robot    { width: 185px; }
+
+  .ail-bubble-left  { left: 2%;  top: 8%; }
+  .ail-bubble-right { right: 2%; top: 4%; }
+
+  .ail-platform { width: 300px; }
+}
+
+@media (max-width: 480px) {
+  .ail-heading { font-size: 2rem; }
+  .ail-char.ail-explorer { width: 160px; }
+  .ail-char.ail-robot    { width: 140px; }
+  .ail-platform { width: 220px; }
+  .ail-bubble { font-size: 12px; padding: 8px 13px; }
+}
