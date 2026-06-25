@@ -137,6 +137,17 @@ Work Done:
 - Increased the Axios timeout threshold for Gemini API calls to 60 seconds (60000ms) in aiHelper.js to prevent transient 503 gateway timeouts during non-IT career predictions.
 
 --------------------------------------------------------
+Date: 25/06/2026
+Module: Custom 404 Error Config Page
+Work Done:
+- Designed and built a custom React 404 error page (NotFound.jsx) displaying a clean, responsive glassmorphic card.
+- Implemented user session checking (via lakshyaSession cookie) to dynamically provide role-based redirects to dashboards (student, counselor, admin) or the landing page.
+- Added a "Go Back" browser navigation fallback action using React Router.
+- Created NotFound.css containing ambient cosmic blur overlays, starry dashed orbits, floating robot animations, radar-sweeps, and hover-triggered transition scales.
+- Configured a catch-all wildcard Route path="*" in App.jsx to intercept all non-existent paths.
+- Ran a test build verifying flawless syntax and compilation across the updated workspace.
+
+--------------------------------------------------------
 
 Notes / Ideas (Optional):
 -------------------------
