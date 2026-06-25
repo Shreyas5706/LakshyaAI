@@ -21,6 +21,7 @@ import CollegeRecommendation from "./pages/student/CollegeRecommendation";
 import Profile from "./pages/student/Profile";
 import CounselorDashboard from "./pages/counselor/Dashboard";
 import AdminDashboard from "./pages/admin/Dashboard";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -133,6 +134,9 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* Catch-all 404 Route */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );
