@@ -480,8 +480,8 @@ export default function Auth() {
               </h2>
               <p className="text-indigo-100 mb-6">
                 {active
-                  ? "Login with your credentials"
-                  : "Sign up to start your journey"}
+                  ? "Sign up to start your journey"
+                  : "Login with your credentials"}
               </p>
 
               <button
