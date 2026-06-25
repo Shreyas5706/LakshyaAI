@@ -11,12 +11,75 @@
 
 /* ════ ROOT LAYOUT ════ */
 .skills-page-root {
-  display: flex;
+  display: block;
   min-height: 100vh;
   background: #f8f8fc;
   font-family: "Poppins", sans-serif;
   color: #1a1035;
 }
+
+/* ════ TOP NAVBAR ════ */
+.dashboard-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 40px;
+  background: #fff;
+  border-bottom: 1px solid #ceb5b7;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar-logo {
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: #564877;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 4px;
+}
+
+.nav-link {
+  background: none;
+  border: none;
+  color: #8f8cac;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+}
+
+.nav-link:hover {
+  color: #564877;
+  background: #f8f8fc;
+}
+
+.active-link {
+  color: #564877 !important;
+  background: rgba(163,163,255,0.1) !important;
+  font-weight: 700 !important;
+}
+
+.navbar-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #564877, #a3a3ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+}
+
 
 /* ════ SIDEBAR — identical to dashboard ════ */
 .skills-sidebar {
@@ -145,13 +208,9 @@
 
 .skills-promo-btn:hover { background: #a3a3ff; }
 
-/* ════ MAIN PANEL ════ */
+/* ════ MAIN PANEL (legacy, no longer used as sidebar partner) ════ */
 .skills-main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
+  display: block;
 }
 
 /* ════ HEADER BAR ════ */
@@ -246,9 +305,9 @@
 
 /* ════ SCROLLABLE CONTENT ════ */
 .skills-content-scroller {
-  flex: 1;
-  overflow-y: auto;
-  padding: 30px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 40px 60px;
   display: flex;
   flex-direction: column;
   gap: 28px;

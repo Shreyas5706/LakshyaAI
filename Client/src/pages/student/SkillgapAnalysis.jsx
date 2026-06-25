@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../../services/api";
-import logo from "../../assets/Logo.png";
 import "./SkillgapAnalysis.css";
 
 // ── Static skill data ──────────────────────────────────────────
@@ -46,97 +45,24 @@ function SkillgapAnalysis() {
     <div className="skills-page-root">
 
       {/* ══════════════════════════════
-          SIDEBAR
+          TOP NAVBAR
          ══════════════════════════════ */}
-      <aside className="skills-sidebar">
-        <div className="skills-sidebar-brand">
-          <img src={logo} className="skills-sidebar-logo" alt="Logo" />
-          <span className="skills-sidebar-brand-txt">LAKSHYA AI</span>
+      <nav className="dashboard-navbar">
+        <div className="navbar-logo">LAKSHYA AI</div>
+        <div className="navbar-links">
+          <button className="nav-link" onClick={() => handleNavigate("dashboard")}>Dashboard</button>
+          <button className="nav-link" onClick={() => handleNavigate("career")}>Career</button>
+          <button className="nav-link active-link">Skills</button>
+          <button className="nav-link" onClick={() => handleNavigate("learn")}>Learn</button>
+          <button className="nav-link" onClick={() => handleNavigate("ai-assistant")}>AI Assistant</button>
         </div>
-
-        <div className="skills-sidebar-menu">
-          <span className="skills-menu-group-lbl">Menu</span>
-          <button className="skills-nav-btn" onClick={() => handleNavigate("dashboard")}>
-            <span>🏠</span> Dashboard
-          </button>
-          <button className="skills-nav-btn" onClick={() => handleNavigate("career")}>
-            <span>🎯</span> Career
-          </button>
-          <button className="skills-nav-btn active" onClick={() => handleNavigate("skills")}>
-            <span>📊</span> Skills
-          </button>
-          <button className="skills-nav-btn" onClick={() => handleNavigate("learn")}>
-            <span>📚</span> Learn
-          </button>
-          <button className="skills-nav-btn" onClick={() => handleNavigate("assessments")}>
-            <span>📝</span> Assessments
-          </button>
-          <button className="skills-nav-btn" onClick={() => handleNavigate("resume")}>
-            <span>📄</span> Resume Builder
-          </button>
-          <button className="skills-nav-btn" onClick={() => handleNavigate("applications")}>
-            <span>💼</span> Applications
-          </button>
-          <button className="skills-nav-btn" onClick={() => handleNavigate("mentorship")}>
-            <span>👥</span> Mentorship
-          </button>
-          <button className="skills-nav-btn" onClick={() => handleNavigate("ai-assistant")}>
-            <span>🤖</span> AI Assistant
-          </button>
-
-          <span className="skills-menu-group-lbl" style={{ marginTop: "20px" }}>Shortcuts</span>
-          <button className="skills-nav-btn" onClick={() => handleNavigate("career")}>
-            <span>➔</span> Roadmap
-          </button>
-          <button className="skills-nav-btn" onClick={() => handleNavigate("learn")}>
-            <span>➔</span> My Courses
-          </button>
-          <button className="skills-nav-btn" onClick={() => handleNavigate("skills")}>
-            <span>➔</span> Skill Gap
-          </button>
+        <div className="navbar-avatar" onClick={() => handleNavigate("dashboard")} style={{ cursor: "pointer" }}>
+          {studentName.charAt(0).toUpperCase()}
         </div>
+      </nav>
 
-        <div className="skills-promo-card">
-          <span style={{ fontSize: "20px", display: "block", marginBottom: "6px" }}>👑</span>
-          <h4>Upgrade to Pro</h4>
-          <p>Unlock advanced AI insights, premium roadmaps &amp; more.</p>
-          <button className="skills-promo-btn" onClick={() => handleNavigate("pricing")}>
-            Upgrade Now &nbsp;➔
-          </button>
-        </div>
-      </aside>
-
-      {/* ══════════════════════════════
-          MAIN PANEL
-         ══════════════════════════════ */}
-      <main className="skills-main">
-
-        {/* ── Header bar ── */}
-        <header className="skills-header">
-          <div className="skills-search-bar">
-            <span className="skills-search-glass">🔍</span>
-            <input type="text" placeholder="Search skills, courses, careers..." />
-          </div>
-
-          <div className="skills-header-right">
-            <div
-              className="skills-avatar-widget"
-              onClick={() => handleNavigate("dashboard")}
-              title="Back to Dashboard"
-            >
-              <div className="skills-avatar-circle">
-                {studentName.charAt(0).toUpperCase()}
-              </div>
-              <div className="skills-user-info">
-                <span className="skills-user-name">{studentName}</span>
-                <span className="skills-user-role">Student</span>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        {/* ── Scrollable content ── */}
-        <div className="skills-content-scroller">
+      {/* ── Scrollable content ── */}
+      <div className="skills-content-scroller">
 
           {/* ── Hero Banner ── */}
           <section className="skills-hero-banner">
@@ -307,8 +233,7 @@ function SkillgapAnalysis() {
             </div>
           </section>
 
-        </div>
-      </main>
+      </div>
     </div>
   );
 }

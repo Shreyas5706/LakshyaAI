@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCookie, setCookie, eraseCookie } from "../../utils/cookies";
 import API from "../../services/api";
-import logo from "../../assets/Logo.png";
 import chatbotImg from "../../assets/Chatbot.png";
 import explorerImg from "../../assets/Explorer.png";
 import "./Dashboard.css";
@@ -206,111 +205,28 @@ function Dashboard({ onNavigate }) {
     <div className="student-dashboard-root">
 
       {/* ========================================================
-          SIDEBAR NAVIGATION (left side matching reference)
+          TOP NAVBAR
          ======================================================== */}
-      <aside className="db-sidebar">
-        <div className="sidebar-brand-block">
-          <img src={logo} className="sidebar-logo-img" alt="Logo" />
-          <span className="sidebar-brand-txt">LAKSHYA AI</span>
+      <nav className="dashboard-navbar">
+        <div className="navbar-logo">LAKSHYA AI</div>
+        <div className="navbar-links">
+          <button className="nav-link active-link">Dashboard</button>
+          <button className="nav-link" onClick={() => handleNavigate("career")}>Career</button>
+          <button className="nav-link" onClick={() => handleNavigate("skills")}>Skills</button>
+          <button className="nav-link" onClick={() => handleNavigate("learn")}>Learn</button>
+          <button className="nav-link" onClick={() => handleNavigate("ai-assistant")}>AI Assistant</button>
         </div>
-
-        <div className="sidebar-menu">
-          <span className="menu-group-label">Menu</span>
-          <button className="sidebar-menu-btn active" onClick={() => handleNavigate("dashboard")}>
-            <span className="btn-icon">🏠</span> Dashboard
-          </button>
-          <button className="sidebar-menu-btn" onClick={() => handleNavigate("career")}>
-            <span className="btn-icon">🎯</span> Career
-          </button>
-          <button className="sidebar-menu-btn" onClick={() => handleNavigate("skills")}>
-            <span className="btn-icon">📊</span> Skills
-          </button>
-          <button className="sidebar-menu-btn" onClick={() => handleNavigate("learn")}>
-            <span className="btn-icon">📚</span> Learn
-          </button>
-          <button className="sidebar-menu-btn" onClick={() => handleNavigate("assessments")}>
-            <span className="btn-icon">📝</span> Assessments
-          </button>
-          <button className="sidebar-menu-btn" onClick={() => handleNavigate("resume")}>
-            <span className="btn-icon">📄</span> Resume Builder
-          </button>
-          <button className="sidebar-menu-btn" onClick={() => handleNavigate("applications")}>
-            <span className="btn-icon">💼</span> Applications
-          </button>
-          <button className="sidebar-menu-btn" onClick={() => handleNavigate("mentorship")}>
-            <span className="btn-icon">👥</span> Mentorship
-          </button>
-          <button className="sidebar-menu-btn" onClick={() => handleNavigate("ai-assistant")}>
-            <span className="btn-icon">🤖</span> AI Assistant
-          </button>
-
-          <span className="menu-group-label" style={{ marginTop: "20px" }}>Shortcuts</span>
-          <button className="sidebar-menu-btn" onClick={() => handleNavigate("career")}>
-            <span className="btn-icon">➔</span> Roadmap
-          </button>
-          <button className="sidebar-menu-btn" onClick={() => handleNavigate("learn")}>
-            <span className="btn-icon">➔</span> My Courses
-          </button>
-          <button className="sidebar-menu-btn" onClick={() => handleNavigate("learn")}>
-            <span className="btn-icon">➔</span> Saved Resources
-          </button>
-          <button className="sidebar-menu-btn" onClick={() => handleNavigate("skills")}>
-            <span className="btn-icon">➔</span> Skill Gap
-          </button>
-          <button className="sidebar-menu-btn" onClick={() => handleNavigate("career")}>
-            <span className="btn-icon">➔</span> Career Insights
-          </button>
+        <div
+          className="navbar-avatar"
+          onClick={() => setShowProfileModal(true)}
+          title="Profile Options"
+          style={{ cursor: "pointer" }}
+        >
+          {studentName.charAt(0).toUpperCase()}
         </div>
+      </nav>
 
-        {/* Upgrade to Pro Card */}
-        <div className="sidebar-promo-card">
-          <span className="promo-crown">👑</span>
-          <h4>Upgrade to Pro</h4>
-          <p>Unlock advanced AI insights, premium roadmaps & more.</p>
-          <button className="promo-btn" onClick={() => handleNavigate("pricing")}>
-            Upgrade Now &nbsp;➔
-          </button>
-        </div>
-      </aside>
-
-      {/* ========================================================
-          MAIN CONTENT PANEL (right side)
-         ======================================================== */}
-      <main className="db-main">
-
-        {/* TOP NAVBAR HEADER */}
-        <header className="db-header">
-          <div className="header-search-bar">
-            <span className="search-glass">🔍</span>
-            <input type="text" placeholder="Search skills, courses, careers..." />
-            <kbd className="search-kbd">⌘ K</kbd>
-          </div>
-
-          <div className="header-right-tools">
-            <button className="tool-icon-btn notification-bell" title="Notifications">
-              🔔
-              <span className="bell-badge">3</span>
-            </button>
-            <button className="tool-icon-btn" title="Calendar" onClick={() => handleNavigate("learn")}>
-              📅
-            </button>
-            <div
-              className="user-profile-widget"
-              onClick={() => setShowProfileModal(true)}
-              title="Profile Options"
-            >
-              <div className="user-avatar-circle">
-                {studentName.charAt(0).toUpperCase()}
-              </div>
-              <div className="user-info-text">
-                <span className="user-name">{studentName} Sharma</span>
-                <span className="user-role">Student</span>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        <div className="db-content-scroller">
+      <div className="db-content-scroller">
 
           {/* ==============================================
               WELCOME BANNER WITH MASCOT & METADATA
@@ -931,8 +847,6 @@ function Dashboard({ onNavigate }) {
           </footer>
 
         </div>
-      </main>
-
       {/* ========================================================
           CHAT ASSISTANT OVERLAY WIDGET (bottom right)
          ======================================================== */}
