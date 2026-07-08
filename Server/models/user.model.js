@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const UserSchema = new mongoose.Schema({
   name: { type: String },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  password: { type: String, default: null }, // Optional for Google OAuth users
   role: {
     type: String,
     enum: ["student", "counselor", "admin"],
@@ -59,6 +59,15 @@ const UserSchema = new mongoose.Schema({
   },
   lastPasswordResetRequest: {
     type: Date,
+    default: null
+  },
+  authProvider: {
+    type: String,
+    enum: ["local", "google"],
+    default: "local"
+  },
+  googleId: {
+    type: String,
     default: null
   }
 

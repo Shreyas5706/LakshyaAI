@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../../services/api";
 import { setCookie } from "../../utils/cookies";
+import { GoogleLogin } from "@react-oauth/google";
 import "../styles/auth.css";
 import workspaceImg from "../../assets/Auth-avatar.png";
 
@@ -227,6 +228,67 @@ export default function Auth() {
     }
   };
 
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      setSignupError("");
+      setLoginError("");
+      const response = await API.post("/auth/google", {
+        token: credentialResponse.credential,
+      });
+
+      const { token, user } = response.data;
+
+      // Determine onboarding completed status:
+      // A student has completed onboarding if they already have skills in the backend
+      const onboardingCompleted =
+        user.role === "student" && user.skills && user.skills.length > 0;
+
+      setCookie(
+        "lakshyaSession",
+        {
+          token,
+          role: user.role,
+          user: {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            age: user.age,
+            gender: user.gender,
+            state: user.state,
+            city: user.city,
+            educationLevel: user.educationLevel,
+            stream: user.stream,
+          },
+          onboardingCompleted,
+        },
+        1
+      );
+
+      if (user.role === "student") {
+        if (onboardingCompleted) {
+          navigate("/student/dashboard");
+        } else {
+          navigate("/student/onboarding");
+        }
+      } else if (user.role === "counselor") {
+        navigate("/counselor/dashboard");
+      } else if (user.role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/");
+      }
+    } catch (err) {
+      const msg =
+        err.response?.data?.message ||
+        "Google Authentication failed. Please try again.";
+      if (active) {
+        setSignupError(msg);
+      } else {
+        setLoginError(msg);
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#rgba(163,163,255,0.15)] px-6">
       <div className="auth-wrapper">
@@ -407,6 +469,24 @@ export default function Auth() {
                     >
                       Sign Up
                     </button>
+
+                    <div style={{ display: "flex", alignItems: "center", margin: "14px 0 10px 0" }}>
+                      <div style={{ flex: 1, height: "1px", background: "#CEB5B7" }}></div>
+                      <span style={{ padding: "0 10px", fontSize: "12px", color: "#94a3b8", fontWeight: "600" }}>OR</span>
+                      <div style={{ flex: 1, height: "1px", background: "#CEB5B7" }}></div>
+                    </div>
+
+                    <div style={{ display: "flex", justifyContent: "center" }}>
+                      <GoogleLogin
+                        onSuccess={handleGoogleSuccess}
+                        onError={() => setSignupError("Google Signup failed. Please try again.")}
+                        theme="filled_blue"
+                        shape="pill"
+                        text="signup_with"
+                        size="large"
+                        width="320px"
+                      />
+                    </div>
                   </div>
                 </div>
               )}
@@ -462,6 +542,24 @@ export default function Auth() {
                     <button onClick={handleLogin} className="create-btn w-full">
                       Login
                     </button>
+
+                    <div style={{ display: "flex", alignItems: "center", margin: "14px 0 10px 0" }}>
+                      <div style={{ flex: 1, height: "1px", background: "#CEB5B7" }}></div>
+                      <span style={{ padding: "0 10px", fontSize: "12px", color: "#94a3b8", fontWeight: "600" }}>OR</span>
+                      <div style={{ flex: 1, height: "1px", background: "#CEB5B7" }}></div>
+                    </div>
+
+                    <div style={{ display: "flex", justifyContent: "center" }}>
+                      <GoogleLogin
+                        onSuccess={handleGoogleSuccess}
+                        onError={() => setLoginError("Google Sign-In failed. Please try again.")}
+                        theme="filled_blue"
+                        shape="pill"
+                        text="signin_with"
+                        size="large"
+                        width="320px"
+                      />
+                    </div>
                   </div>
                 </div>
               )}

@@ -4,6 +4,9 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
 const { env }= require( "../config/env.js");
+const { OAuth2Client } = require("google-auth-library");
+
+const googleClient = new OAuth2Client(env.googleClientId);
 
 
 // =======================
@@ -363,10 +366,90 @@ const updateProfile = async (req, res, next) => {
 };
 
 
+const googleAuth = async (req, res, next) => {
+  const { token } = req.body;
+
+  try {
+    if (!token) {
+      return res.status(400).json({ message: "Google OAuth token is required" });
+    }
+
+    const ticket = await googleClient.verifyIdToken({
+      idToken: token,
+      audience: env.googleClientId,
+    });
+
+    const payload = ticket.getPayload();
+    if (!payload) {
+      return res.status(400).json({ message: "Invalid Google OAuth token payload" });
+    }
+
+    const { email, name, sub: googleId } = payload;
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      // Sign up a new user using Google details
+      user = await User.create({
+        name,
+        email,
+        googleId,
+        authProvider: "google",
+        role: "student", // default role is student
+      });
+      console.log(`New Google user registered successfully: ${user.email}`);
+    } else {
+      // If user exists but registered via local, link the Google account
+      let saveNeeded = false;
+      if (!user.googleId) {
+        user.googleId = googleId;
+        saveNeeded = true;
+      }
+      if (user.authProvider === "local") {
+        user.authProvider = "google";
+        saveNeeded = true;
+      }
+      if (saveNeeded) {
+        await user.save();
+        console.log(`Google account linked to existing local user: ${user.email}`);
+      }
+    }
+
+    // Generate JWT token
+    const jwtToken = jwt.sign(
+      { id: user._id, role: user.role },
+      env.jwtSecret,
+      { expiresIn: "1d" }
+    );
+
+    res.status(200).json({
+      token: jwtToken,
+      user: {
+        id: user._id,
+        email: user.email,
+        role: user.role,
+        name: user.name,
+        age: user.age,
+        gender: user.gender,
+        state: user.state,
+        city: user.city,
+        educationLevel: user.educationLevel,
+        stream: user.stream,
+        skills: user.skills || [],
+        interests: user.interests || [],
+      },
+    });
+  } catch (error) {
+    console.error("Google Auth failed:", error);
+    res.status(401).json({ message: "Google authentication failed" });
+  }
+};
+
 module.exports = {
   signup,
   login,
   forgotPassword,
   resetPassword,
   updateProfile,
+  googleAuth,
 };

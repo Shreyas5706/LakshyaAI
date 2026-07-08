@@ -14,6 +14,7 @@ const requiredEnvVars = [
   "ML_BACKEND_URL",
   "GEMINI_API_KEY",
   "GROQ_API_KEY",
+  "GOOGLE_CLIENT_ID",
 ];
 
 requiredEnvVars.forEach((key) => {
@@ -34,6 +35,7 @@ const env = {
 
   // Auth
   jwtSecret: process.env.JWT_SECRET,
+  googleClientId: process.env.GOOGLE_CLIENT_ID,
 
   // Email (optional – used only for reset password)
   email: {

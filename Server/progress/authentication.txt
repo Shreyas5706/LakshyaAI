@@ -111,6 +111,7 @@ Detailed description of what was implemented:
 Date: 08/07/2026
 ----------------
 Password Reset Flow Security & Real-World Email Integration
+Google oAuth Integration 
 
 Detailed description of what was implemented:
 
@@ -138,6 +139,15 @@ Detailed description of what was implemented:
    - Added a 5-minute cooldown limit per email address inside `forgotPassword` to block rapid consecutive requests.
    - Updated token verification error messages in `resetPassword` to explicitly prompt the user to generate a new link if their reset link is invalid or expired.
 
+6. Google OAuth 2.0 Integration (Auth.jsx, main.jsx, auth.controller.js, user.model.js)
+   - Installed frontend `@react-oauth/google` and backend `google-auth-library`.
+   - Configured `googleClientId` in backend `env.js` and validated the property inside `requiredEnvVars`.
+   - Modified `UserSchema` in `user.model.js` to support password-less accounts (optional password field) and track `googleId` and `authProvider`.
+   - Implemented `googleAuth` controller verifying Google JWT tokens, creating new accounts, linking existing local logins sharing the same email, and issuing backend JWT sessions.
+   - Registered `/google` route in `auth.routes.js`.
+   - Wrapped React client tree in `GoogleOAuthProvider` inside `main.jsx`.
+   - Placed `GoogleLogin` buttons on signup and login forms in `Auth.jsx` to write `lakshyaSession` cookies and trigger correct onboarding/dashboard redirects.
+
 STATUS:
 -------
-Password recovery token leakage is ELIMINATED, real-world Nodemailer Gmail SMTP dispatch is restored, and frontend UI confirmation controls are COMPLETE, verified, and STABLE.
+Password recovery token leakage is ELIMINATED, real-world Nodemailer Gmail SMTP dispatch is restored, frontend UI confirmation controls and Google OAuth 2.0 integration are COMPLETE, verified, and STABLE.

@@ -164,6 +164,18 @@ Work Done:
 - Ran frontend builds verifying flawless compiling and zero routing integration errors.
 
 --------------------------------------------------------
+Date: 08/07/2026
+Module: Google OAuth 2.0 Integration
+Work Done:
+- Installed frontend `@react-oauth/google` and backend `google-auth-library` libraries.
+- Modified UserSchema (user.model.js) to support password-less accounts (optional password field) and track `googleId` and `authProvider: 'google'`.
+- Implemented `googleAuth` in `auth.controller.js` to securely verify Google JWT credentials, perform automated signup/login, and link existing local accounts sharing the same email.
+- Mounted the `/google` POST authentication route inside `auth.routes.js`.
+- Wrapped the React tree with `<GoogleOAuthProvider>` in `main.jsx`.
+- Rendered Google login buttons inside both the signup and login cards in `Auth.jsx`, processing successfully generated cookies and routing to dashboards.
+- Ran client builds verifying flawless integration and zero warnings.
+
+--------------------------------------------------------
 
 Notes / Ideas (Optional):
 -------------------------

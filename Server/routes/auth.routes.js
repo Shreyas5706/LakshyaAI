@@ -7,6 +7,7 @@ const {
   forgotPassword,
   resetPassword,
   updateProfile,
+  googleAuth,
 } = require("../controllers/auth.controller");
 
 const {
@@ -20,6 +21,7 @@ router.post("/signup", signup);
 router.post("/login", loginLimiter , login);
 router.post("/forgot-password", forgotPasswordLimiter , forgotPassword);
 router.post("/reset-password/:token", resetPassword);
+router.post("/google", googleAuth);
 router.put("/profile", authMiddleware, updateProfile);
 
 
