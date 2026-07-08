@@ -106,6 +106,38 @@ Detailed description of what was implemented:
 7. Automated Integration Testing
    - Created and executed HTTP integration tests (test_e2e.js and test_cookie_auth.js) validating the entire registration, login, token retrieval, reset password, and new credential authentication flows.
 
+--------------------------------------------------------
+
+Date: 08/07/2026
+----------------
+Password Reset Flow Security & Real-World Email Integration
+
+Detailed description of what was implemented:
+
+1. Secured Password Recovery Flow (auth.controller.js)
+   - Refactored `forgotPassword` controller to completely exclude the generated `resetToken` from the JSON response to prevent client-side token exposure.
+   - Built a secure `resetUrl` (`${env.clientUrl}/reset-password/${resetToken}`) pointing to the React client's reset password page.
+
+2. Nodemailer Real-World Email Dispatch
+   - Integrated the `sendEmail` utility inside `forgotPassword` to dispatch actual recovery emails using Gmail SMTP credentials configured under `.env` variables (`EMAIL_SERVICE`, `EMAIL_USER`, `EMAIL_PASS`, etc.).
+   - Provided a professional, responsive HTML email template using the platform's color palette containing user greetings, safety notices, and a clear "Reset Password" button.
+   - Added database transaction rollback logic if Nodemailer delivery fails, cleaning up `resetPasswordToken` and `resetPasswordExpire` fields to maintain database state integrity.
+   - Added a graceful development fallback: if Nodemailer dispatch fails due to invalid/expired local SMTP credentials in development mode, it logs the password reset URL in the server terminal logs and returns success to the client.
+
+3. Frontend Recovery Redirect Removal (ForgotPassword.jsx)
+   - Updated `handleSubmit` to submit requests to `/auth/forgot-password`.
+   - Removed automatic token routing logic (`if (resetToken) { ... navigate(...) }`) that bypassed email validation.
+   - Configured the form to render a success notification instructing users to check their real-world inbox for the password reset URL.
+
+4. Auto-Login Integration (ResetPassword.jsx & auth.controller.js)
+   - Updated backend `resetPassword` controller to sign a JWT token and return complete user details upon successful reset.
+   - Refactored frontend `ResetPassword.jsx` to write session cookies (`lakshyaSession`) upon password update, automatically logging the user in and directing them to their dashboard home.
+
+5. Cooldown Rate-Limiting & Expired Link UX (user.model.js & auth.controller.js)
+   - Added `lastPasswordResetRequest` field to user.model.js to log request timestamps.
+   - Added a 5-minute cooldown limit per email address inside `forgotPassword` to block rapid consecutive requests.
+   - Updated token verification error messages in `resetPassword` to explicitly prompt the user to generate a new link if their reset link is invalid or expired.
+
 STATUS:
 -------
-Integration and Cookie-based Route Protection is COMPLETE, fully tested, and verified.
+Password recovery token leakage is ELIMINATED, real-world Nodemailer Gmail SMTP dispatch is restored, and frontend UI confirmation controls are COMPLETE, verified, and STABLE.

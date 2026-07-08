@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import API from "../../services/api";
+import { setCookie } from "../../utils/cookies";
 import logo from "../../assets/Logo.png";
 import "../styles/auth.css";
 
@@ -36,13 +37,52 @@ export default function ResetPassword() {
       const response = await API.post(`/auth/reset-password/${token}`, {
         password,
       });
-      setMessage(
-        response.data.message ||
-          "Password reset successful! Redirecting to login..."
+      const { token: jwtToken, user, message: resMessage } = response.data;
+
+      // Auto-login: set lakshyaSession cookie
+      const onboardingCompleted =
+        user.role === "student" && user.skills && user.skills.length > 0;
+
+      setCookie(
+        "lakshyaSession",
+        {
+          token: jwtToken,
+          role: user.role,
+          user: {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            age: user.age,
+            gender: user.gender,
+            state: user.state,
+            city: user.city,
+            educationLevel: user.educationLevel,
+            stream: user.stream,
+          },
+          onboardingCompleted,
+        },
+        1
       );
+
+      setMessage(
+        resMessage || "Password reset successful! Logging you in..."
+      );
+
       setTimeout(() => {
-        navigate("/auth");
-      }, 3000);
+        if (user.role === "student") {
+          if (onboardingCompleted) {
+            navigate("/student/dashboard");
+          } else {
+            navigate("/student/onboarding");
+          }
+        } else if (user.role === "counselor") {
+          navigate("/counselor/dashboard");
+        } else if (user.role === "admin") {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/");
+        }
+      }, 1500);
     } catch (err) {
       setError(
         err.response?.data?.message || "Invalid or expired reset token."

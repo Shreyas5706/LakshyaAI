@@ -148,6 +148,22 @@ Work Done:
 - Ran a test build verifying flawless syntax and compilation across the updated workspace.
 
 --------------------------------------------------------
+Date: 08/07/2026
+Module: Password Reset Flow Security & Nodemailer Integration
+Work Done:
+- Refactored backend forgotPassword controller to exclude resetToken from API response, eliminating a critical security vulnerability.
+- Re-enabled real-world email password recovery link dispatch via Nodemailer using config-loaded Gmail SMTP credentials.
+- Designed HTML recovery email styling featuring brand gradients, user greetings, expiration alerts (15 minutes), and interactive button controls.
+- Implemented transactional rollback of resetPasswordToken database state if Nodemailer delivery fails.
+- Added a graceful development fallback: if Nodemailer dispatch fails due to invalid/expired local SMTP credentials in development mode (`env.nodeEnv === 'development'`), it logs the password reset URL in the server terminal logs and returns success to the client.
+- Modified React client's ForgotPassword form submit handler to remove auto-redirect bypass token verification, showing a success message to check the user's inbox instead.
+- Refactored backend `resetPassword` controller to sign a JWT token and return user details on password update to enable auto-login.
+- Refactored frontend `ResetPassword.jsx` to process the auto-login token, save session cookies, and route users directly to their appropriate dashboard environment.
+- Added database field `lastPasswordResetRequest` in `UserSchema` to enforce a 5-minute request cooldown limit per email.
+- Implemented error message routing guiding users to request a new link if their reset link is invalid or expired.
+- Ran frontend builds verifying flawless compiling and zero routing integration errors.
+
+--------------------------------------------------------
 
 Notes / Ideas (Optional):
 -------------------------

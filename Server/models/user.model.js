@@ -56,6 +56,10 @@ const UserSchema = new mongoose.Schema({
   lastMlSkillsHash: {
     type: String,
     default: null
+  },
+  lastPasswordResetRequest: {
+    type: Date,
+    default: null
   }
 
 }, { timestamps: true });

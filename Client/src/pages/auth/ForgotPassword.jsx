@@ -25,18 +25,10 @@ export default function ForgotPassword() {
       const response = await API.post("/auth/forgot-password", {
         email: email.trim(),
       });
-      const { resetToken, message: resMessage } = response.data;
-
-      if (resetToken) {
-        setMessage(
-          "Password reset token generated! Redirecting to password reset screen..."
-        );
-        setTimeout(() => {
-          navigate(`/reset-password/${resetToken}`);
-        }, 1500);
-      } else {
-        setMessage(resMessage || "Request successful.");
-      }
+      setMessage(
+        response.data.message ||
+          "A password reset link has been sent to your email address."
+      );
     } catch (err) {
       setError(
         err.response?.data?.message || "Something went wrong. Please try again."
